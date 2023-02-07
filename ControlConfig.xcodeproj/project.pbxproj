@@ -14,6 +14,12 @@
 		D625E87B2991CD3300D5A5B0 /* ControlConfigTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D625E87A2991CD3300D5A5B0 /* ControlConfigTests.swift */; };
 		D625E8852991CD3300D5A5B0 /* ControlConfigUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D625E8842991CD3300D5A5B0 /* ControlConfigUITests.swift */; };
 		D625E8872991CD3300D5A5B0 /* ControlConfigUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D625E8862991CD3300D5A5B0 /* ControlConfigUITestsLaunchTests.swift */; };
+		D625E89D2991CF2A00D5A5B0 /* vm_unaligned_copy_switch_race.c in Sources */ = {isa = PBXBuildFile; fileRef = D625E8972991CF2A00D5A5B0 /* vm_unaligned_copy_switch_race.c */; };
+		D625E89E2991CF2A00D5A5B0 /* helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = D625E8992991CF2A00D5A5B0 /* helpers.m */; };
+		D625E89F2991CF2A00D5A5B0 /* grant_full_disk_access.m in Sources */ = {isa = PBXBuildFile; fileRef = D625E89C2991CF2A00D5A5B0 /* grant_full_disk_access.m */; };
+		D625E8A32991CF8600D5A5B0 /* Alert++.swift in Sources */ = {isa = PBXBuildFile; fileRef = D625E8A12991CF8600D5A5B0 /* Alert++.swift */; };
+		D625E8A42991CF8600D5A5B0 /* Haptic++.swift in Sources */ = {isa = PBXBuildFile; fileRef = D625E8A22991CF8600D5A5B0 /* Haptic++.swift */; };
+		D625E8A62991D02600D5A5B0 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = D625E8A52991D02600D5A5B0 /* Common.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +50,16 @@
 		D625E8802991CD3300D5A5B0 /* ControlConfigUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ControlConfigUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D625E8842991CD3300D5A5B0 /* ControlConfigUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlConfigUITests.swift; sourceTree = "<group>"; };
 		D625E8862991CD3300D5A5B0 /* ControlConfigUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlConfigUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		D625E8942991CF0C00D5A5B0 /* ControlConfig-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ControlConfig-Bridging-Header.h"; sourceTree = "<group>"; };
+		D625E8972991CF2A00D5A5B0 /* vm_unaligned_copy_switch_race.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = vm_unaligned_copy_switch_race.c; sourceTree = "<group>"; };
+		D625E8982991CF2A00D5A5B0 /* grant_full_disk_access.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = grant_full_disk_access.h; sourceTree = "<group>"; };
+		D625E8992991CF2A00D5A5B0 /* helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = helpers.m; sourceTree = "<group>"; };
+		D625E89A2991CF2A00D5A5B0 /* vm_unaligned_copy_switch_race.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vm_unaligned_copy_switch_race.h; sourceTree = "<group>"; };
+		D625E89B2991CF2A00D5A5B0 /* helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = helpers.h; sourceTree = "<group>"; };
+		D625E89C2991CF2A00D5A5B0 /* grant_full_disk_access.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = grant_full_disk_access.m; sourceTree = "<group>"; };
+		D625E8A12991CF8600D5A5B0 /* Alert++.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Alert++.swift"; sourceTree = "<group>"; };
+		D625E8A22991CF8600D5A5B0 /* Haptic++.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Haptic++.swift"; sourceTree = "<group>"; };
+		D625E8A52991D02600D5A5B0 /* Common.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +112,9 @@
 			children = (
 				D625E8692991CD3000D5A5B0 /* ControlConfigApp.swift */,
 				D625E86B2991CD3000D5A5B0 /* ContentView.swift */,
+				D625E8A52991D02600D5A5B0 /* Common.swift */,
+				D625E8A02991CF7D00D5A5B0 /* Extensions */,
+				D625E8932991CEFF00D5A5B0 /* Exploit */,
 				D625E86D2991CD3200D5A5B0 /* Assets.xcassets */,
 				D625E86F2991CD3200D5A5B0 /* Preview Content */,
 			);
@@ -125,6 +144,29 @@
 				D625E8862991CD3300D5A5B0 /* ControlConfigUITestsLaunchTests.swift */,
 			);
 			path = ControlConfigUITests;
+			sourceTree = "<group>";
+		};
+		D625E8932991CEFF00D5A5B0 /* Exploit */ = {
+			isa = PBXGroup;
+			children = (
+				D625E8982991CF2A00D5A5B0 /* grant_full_disk_access.h */,
+				D625E89C2991CF2A00D5A5B0 /* grant_full_disk_access.m */,
+				D625E89B2991CF2A00D5A5B0 /* helpers.h */,
+				D625E8992991CF2A00D5A5B0 /* helpers.m */,
+				D625E8972991CF2A00D5A5B0 /* vm_unaligned_copy_switch_race.c */,
+				D625E89A2991CF2A00D5A5B0 /* vm_unaligned_copy_switch_race.h */,
+				D625E8942991CF0C00D5A5B0 /* ControlConfig-Bridging-Header.h */,
+			);
+			path = Exploit;
+			sourceTree = "<group>";
+		};
+		D625E8A02991CF7D00D5A5B0 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				D625E8A12991CF8600D5A5B0 /* Alert++.swift */,
+				D625E8A22991CF8600D5A5B0 /* Haptic++.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -195,6 +237,7 @@
 				TargetAttributes = {
 					D625E8652991CD3000D5A5B0 = {
 						CreatedOnToolsVersion = 14.2;
+						LastSwiftMigration = 1420;
 					};
 					D625E8752991CD3300D5A5B0 = {
 						CreatedOnToolsVersion = 14.2;
@@ -257,8 +300,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D625E8A62991D02600D5A5B0 /* Common.swift in Sources */,
+				D625E8A42991CF8600D5A5B0 /* Haptic++.swift in Sources */,
 				D625E86C2991CD3000D5A5B0 /* ContentView.swift in Sources */,
 				D625E86A2991CD3000D5A5B0 /* ControlConfigApp.swift in Sources */,
+				D625E89F2991CF2A00D5A5B0 /* grant_full_disk_access.m in Sources */,
+				D625E89D2991CF2A00D5A5B0 /* vm_unaligned_copy_switch_race.c in Sources */,
+				D625E8A32991CF8600D5A5B0 /* Alert++.swift in Sources */,
+				D625E89E2991CF2A00D5A5B0 /* helpers.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -345,7 +394,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				INFOPLIST_KEY_NSAppleMusicUsageDescription = "Grant full disk access. Required for app functionality.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -399,7 +450,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				INFOPLIST_KEY_NSAppleMusicUsageDescription = "Grant full disk access. Required for app functionality.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -414,25 +467,30 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ControlConfig/Preview Content\"";
 				DEVELOPMENT_TEAM = 8JKVMYCRTJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = ca.bomberfish.ControlConfig;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "ControlConfig/Exploit/ControlConfig-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -443,25 +501,29 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ControlConfig/Preview Content\"";
 				DEVELOPMENT_TEAM = 8JKVMYCRTJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = ca.bomberfish.ControlConfig;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "ControlConfig/Exploit/ControlConfig-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
