@@ -26,7 +26,7 @@ struct ContentView: View {
                 Section {
                     Button(
                         action: {
-                            let success = overwriteModule(bundleVal: id, moduleName: module)
+                            let success = overwriteModule(bundleId: id, moduleName: module)
                             if success {
                                 UIApplication.shared.alert(title: "Success", body: "Successfully wrote to file!", withButton: true)
 
