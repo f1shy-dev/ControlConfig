@@ -9,10 +9,26 @@ import Foundation
 
 // MARK: - MagnifierModule
 // TODO: More CC Modules!
-func overwriteMagnifierModule(bundleId: String) -> Bool {
-    return plistChangeStr(plistPath: "/System/Library/ControlCenter/Bundles/MagnifierModule.bundle/Info.plist", key: "CCLaunchApplicationIdentifier", value: bundleId)
+func overwriteModule(bundleVal: String, moduleName: String) -> Bool {
+    return plistChangeStr(plistPath: "/System/Library/ControlCenter/Bundles/\(moduleName).bundle/Info.plist", key: "CCLaunchApplicationIdentifier", value: bundleVal) //custom module path
 }
-
+func PlistPadding(Plist_Data: Data, Default_URL_STR: String) -> Data? {
+    guard let Default_Data = try? Data(contentsOf: URL(fileURLWithPath: Default_URL_STR)) else { return nil }
+    if Plist_Data.count == Default_Data.count { return Plist_Data }
+    guard var Plist = try? PropertyListSerialization.propertyList(from: Plist_Data, format: nil) as? [String:Any] else { return nil }
+    var EditedDict = Plist as! [String: Any]
+    guard var newData = try? PropertyListSerialization.data(fromPropertyList: EditedDict, format: .binary, options: 0) else { return nil }
+    var count = 0
+    print("DefaultData - "+String(Default_Data.count))
+    while true {
+        newData = try! PropertyListSerialization.data(fromPropertyList: EditedDict, format: .binary, options: 0)
+        if newData.count >= Default_Data.count { break }
+        count += 1
+        EditedDict.updateValue(String(repeating:"0", count:count), forKey: "0")
+    }
+    print("ImportData - "+String(newData.count))
+    return newData
+}
 // MARK: - Plist editor
 func plistChangeStr(plistPath: String, key: String, value: String) ->  Bool {
     let stringsData = try! Data(contentsOf: URL(fileURLWithPath: plistPath))
@@ -29,13 +45,20 @@ func plistChangeStr(plistPath: String, key: String, value: String) ->  Bool {
         }
         return newDict
     }
-
     var newPlist = plist
     newPlist = changeValue(newPlist, key, value)
-
+    func cleanPlist(_ dict: [String: Any]) -> [String: Any] {
+        var newDict = dict
+        newDict.removeValue(forKey: "DTPlatformBuild")
+        newDict.removeValue(forKey: "DTSDKBuild")
+        newDict.removeValue(forKey: "DTXcodeBuild")
+        return newDict
+    }
+    newPlist = cleanPlist(newPlist)
     let newData = try! PropertyListSerialization.data(fromPropertyList: newPlist, format: .binary, options: 0)
-
-    return overwriteFileWithDataImpl(originPath: plistPath, replacementData: newData)
+    let padData = PlistPadding(Plist_Data: newData, Default_URL_STR: plistPath)! as Data
+     //newData = newPlist
+    return overwriteFileWithDataImpl(originPath: plistPath, replacementData: padData)
 }
 
 // MARK: - Overwrite file function

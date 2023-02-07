@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State var module = "MagnifierModule"
     @State var id = "com.apple.Magnifier"
     var body: some View {
         NavigationView {
@@ -15,12 +16,17 @@ struct ContentView: View {
                 Section {
                     TextField("Bundle ID: ", text: $id)
                 } header: {
-                    Label("Bundle ID", systemImage: "shippingbox")
+                    Label("Bundle", systemImage: "shippingbox")
+                }
+                Section {
+                    TextField("Module", text: $module)
+                } header: {
+                    Label("Module ID", systemImage: "shippingbox")
                 }
                 Section {
                     Button(
                         action: {
-                            let success = overwriteMagnifierModule(bundleId: id)
+                            let success = overwriteModule(bundleVal: id, moduleName: module)
                             if success {
                                 UIApplication.shared.alert(title: "Success", body: "Successfully wrote to file!", withButton: true)
 
