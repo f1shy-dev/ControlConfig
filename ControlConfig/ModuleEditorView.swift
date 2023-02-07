@@ -91,8 +91,7 @@ struct SheetView: View {
     @State var customisations: CustomisationList
 
     var body: some View {
-        VStack(alignment: .leading) {
-            Text("Add new module").font(.title)
+        NavigationView {
             List {
                 ForEach(getCCModules().filter { module in
                     if (customisations.list.contains { customisation in
@@ -105,14 +104,16 @@ struct SheetView: View {
                         customisations.addCustomisation(item: CCCustomisation(isEnabled: true, module: module))
                     }.buttonStyle(.plain)
                 }
+            }.navigationTitle("Add new module").toolbar {
+                ToolbarItem {
+                    Button(action: {
+                        dismiss()
+                    }, label: {
+                        Label("Close", systemImage: "xmark")
+                    })
+                }
             }
         }
-        Button("Press to dismiss") {
-            dismiss()
-        }
-        .font(.title)
-        .padding()
-        .background(.black)
     }
 }
 
