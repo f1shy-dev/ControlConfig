@@ -8,13 +8,19 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State var id = "com.apple.Magnifier"
     var body: some View {
         NavigationView {
             List {
                 Section {
+                    TextField("Bundle ID: ", text: $id)
+                } header: {
+                    Label("Bundle ID", systemImage: "shippingbox")
+                }
+                Section {
                     Button(
                         action: {
-                            let success = overwriteMagnifierModule(bundleId: "com.apple.")
+                            let success = overwriteMagnifierModule(bundleId: id)
                             if success {
                                 UIApplication.shared.alert(title: "Success", body: "Successfully wrote to file!", withButton: true)
 
