@@ -108,3 +108,20 @@ func overwriteFileWithDataImpl(originPath: String, replacementData: Data) -> Boo
     print("Successfully overwrote!")
     return true
 }
+
+func xpc_crash(_ serviceName: String) {
+    let buffer = UnsafeMutablePointer<CChar>.allocate(capacity: serviceName.utf8.count)
+    defer { buffer.deallocate() }
+    strcpy(buffer, serviceName)
+    xpc_crasher(buffer)
+}
+
+func respring() {
+    let processes = [
+                "com.apple.cfprefsd.daemon",
+                "com.apple.backboard.TouchDeliveryPolicyServer"
+            ]
+            for process in processes {
+                xpc_crash(process)
+            }
+}

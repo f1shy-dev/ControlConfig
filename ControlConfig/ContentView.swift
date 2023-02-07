@@ -36,8 +36,19 @@ struct ContentView: View {
                         }
                     )
                 }
+                
             }
             .navigationTitle("ControlConfig")
+            .toolbar {
+                Button(action:{
+                    respring()
+                    
+                }, label:{
+                    Label("Respring", systemImage: "arrow.counterclockwise.circle")
+                    Text("Respring")
+                    
+                })
+            }
         }
     }
 }
