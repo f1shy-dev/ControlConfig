@@ -10,7 +10,6 @@ import Foundation
 // MARK: - MagnifierModule
 // TODO: More CC Modules!
 func overwriteMagnifierModule(bundleId: String) -> Bool {
-    // FIXME: Placeholder
     return plistChangeStr(plistPath: "/System/Library/ControlCenter/Bundles/MagnifierModule.bundle/Info.plist", key: "CCLaunchApplicationIdentifier", value: bundleId)
 }
 
