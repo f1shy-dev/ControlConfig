@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 // MARK: - MagnifierModule
 
@@ -35,6 +36,31 @@ struct CCModule: Hashable, Identifiable, CustomStringConvertible {
         let name = "\(fileDict?["CFBundleDisplayName"] ?? fileDict?["CFBundleName"] ?? "Unknown Module")"
         return name.components(separatedBy: "Module").first ?? name
     }
+}
+
+struct CCCustomisation {
+    var isEnabled: Bool
+    var module: CCModule
+    var launchAppBundleID: String?
+    var customWidth: Int?
+    var customHeight: Int?
+    var description: String {
+        var str: [String] = []
+        if let app = launchAppBundleID {
+            str.append("Opens \(app)")
+        }
+
+        if (customWidth != nil) || (customHeight != nil) {
+            str.append("Custom W/H")
+        }
+
+        if str.count > 0 {
+            return str.joined(separator: ",")
+        }
+
+        return "Doesn't do anything..."
+    }
+//    var customIcon: SomeIconTypeIdk?
 }
 
 func overwriteModule(appBundleID: String, module: CCModule) -> Bool {

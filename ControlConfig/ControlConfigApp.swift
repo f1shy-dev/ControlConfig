@@ -13,7 +13,7 @@ var isUnsandboxed = false
 struct ControlConfigApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ModuleEditorView()
                 .onAppear {
                     if #available(iOS 16.2, *) {
                         #if targetEnvironment(simulator)
