@@ -9,8 +9,8 @@ import Foundation
 
 // MARK: - MagnifierModule
 // TODO: More CC Modules!
-func overwriteModule(bundleVal: String, moduleName: String) -> Bool {
-    return plistChangeStr(plistPath: "/System/Library/ControlCenter/Bundles/\(moduleName).bundle/Info.plist", key: "CCLaunchApplicationIdentifier", value: bundleVal) //custom module path
+func overwriteModule(bundleId: String, moduleName: String) -> Bool {
+    return plistChangeStr(plistPath: "/System/Library/ControlCenter/Bundles/\(moduleName).bundle/Info.plist", key: "CCLaunchApplicationIdentifier", value: bundleId) //custom module path
 }
 func PlistPadding(Plist_Data: Data, Default_URL_STR: String) -> Data? {
     guard let Default_Data = try? Data(contentsOf: URL(fileURLWithPath: Default_URL_STR)) else { return nil }
