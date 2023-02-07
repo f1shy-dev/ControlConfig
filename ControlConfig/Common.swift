@@ -12,6 +12,7 @@ import Foundation
 func overwriteModule(bundleId: String, moduleName: String) -> Bool {
     return plistChangeStr(plistPath: "/System/Library/ControlCenter/Bundles/\(moduleName).bundle/Info.plist", key: "CCLaunchApplicationIdentifier", value: bundleId) //custom module path
 }
+// credit straight_tamago 
 func PlistPadding(Plist_Data: Data, Default_URL_STR: String) -> Data? {
     guard let Default_Data = try? Data(contentsOf: URL(fileURLWithPath: Default_URL_STR)) else { return nil }
     if Plist_Data.count == Default_Data.count { return Plist_Data }
