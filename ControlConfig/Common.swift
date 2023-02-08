@@ -18,6 +18,7 @@ let bundleBasedModuleNameOverrides: NSDictionary = [
     // TODO: meadiacontrolsaudio, silencecallsccwidget and others
 ]
 
+// MARK: - CC Module struct
 struct CCModule: Hashable, Identifiable, CustomStringConvertible {
     var id: Self { self }
     var fileName: String
@@ -38,6 +39,7 @@ struct CCModule: Hashable, Identifiable, CustomStringConvertible {
     }
 }
 
+// MARK: - CC Customization struct
 struct CCCustomisation {
     var isEnabled: Bool
     var module: CCModule
@@ -63,6 +65,7 @@ struct CCCustomisation {
 //    var customIcon: SomeIconTypeIdk?
 }
 
+// MARK: - Overwrite Module
 func overwriteModule(appBundleID: String, module: CCModule) -> Bool {
     if module.bundleID == "com.apple.control-center.MagnifierModule" {
         return plistChangeStr(plistPath: "\(bundlesPath)\(module.fileName)/Info.plist", key: "CCLaunchApplicationIdentifier", value: appBundleID)
@@ -74,6 +77,7 @@ func overwriteModule(appBundleID: String, module: CCModule) -> Bool {
     return (patch1 && patch2)
 }
 
+// MARK: - Get modules
 func getCCModules() -> [CCModule] {
     do {
         let files = try FileManager.default.contentsOfDirectory(atPath: "/System/Library/ControlCenter/Bundles/")
@@ -86,6 +90,7 @@ func getCCModules() -> [CCModule] {
     }
 }
 
+// MARK: - Pad Plist files
 // credit straight_tamago
 func PlistPadding(Plist_Data: Data, Default_URL_STR: String) -> Data? {
     guard let Default_Data = try? Data(contentsOf: URL(fileURLWithPath: Default_URL_STR)) else { return nil }
@@ -213,6 +218,8 @@ func overwriteFileWithDataImpl(originPath: String, replacementData: Data) -> Boo
     print("Successfully overwrote!")
     return true
 }
+
+// MARK: - Respring-related functions
 
 func xpc_crash(_ serviceName: String) {
     let buffer = UnsafeMutablePointer<CChar>.allocate(capacity: serviceName.utf8.count)
