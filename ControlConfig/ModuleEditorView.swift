@@ -5,6 +5,7 @@
 //  Created by Hariz Shirazi on 2023-02-06.
 //
 
+import Combine
 import SwiftUI
 
 struct CheckToggleStyle: ToggleStyle {
@@ -27,6 +28,8 @@ struct CheckToggleStyle: ToggleStyle {
 
 struct CustomisationCard: View {
     @State var descString = ""
+    @State var showingEditSheet = false
+    @State var customisationList: CustomisationList
     @Binding var customisation: CCCustomisation
 
     var body: some View {
@@ -55,8 +58,12 @@ struct CustomisationCard: View {
             HStack {
                 Toggle("Enabled", isOn: $customisation.isEnabled).labelsHidden().toggleStyle(CheckToggleStyle())
                 Spacer()
-                Button(action: {}) { Label("Edit", systemImage: "pencil") }.buttonStyle(.bordered).clipShape(Capsule())
-                Button(action: {}) { Label("Delete", systemImage: "trash").foregroundColor(.red) }.buttonStyle(.bordered).clipShape(Capsule())
+                Button(action: {
+                    showingEditSheet.toggle()
+                }) { Label("Edit", systemImage: "pencil") }.buttonStyle(.bordered).clipShape(Capsule())
+                Button(action: {
+                    customisationList.deleteCustomisation(item: customisation)
+                }) { Label("Delete", systemImage: "trash").foregroundColor(.red) }.buttonStyle(.bordered).clipShape(Capsule())
 
             }.padding([.horizontal, .bottom]).frame(maxWidth: .infinity)
         }
@@ -68,11 +75,25 @@ struct CustomisationCard: View {
         )
         .padding([.top, .horizontal])
         .frame(maxWidth: .infinity)
+        .sheet(isPresented: $showingEditSheet) {
+            SingleModuleEditView(customisation: customisation)
+        }
+    }
+}
+
+extension UserDefaults {
+    @objc dynamic var customisations: String { // helper keypath
+        return string(forKey: "customisations") ?? ""
     }
 }
 
 class CustomisationList: ObservableObject {
-    @Published var list: [CCCustomisation]
+    @Published var list: [CCCustomisation] {
+        didSet {
+            self.saveToUserDefaults()
+        }
+    }
+
     init(list: [CCCustomisation]) {
         self.list = list
     }
@@ -84,15 +105,48 @@ class CustomisationList: ObservableObject {
     func addCustomisation(item: CCCustomisation) {
         self.list.append(item)
     }
+
+    func deleteCustomisation(item: CCCustomisation) {
+        if let index = self.list.firstIndex(where: { $0.module.bundleID == item.module.bundleID }) {
+            self.list.remove(at: index)
+        }
+    }
+
+    func saveToUserDefaults() {
+        let encoder = JSONEncoder()
+        if let encoded = try? encoder.encode(self.list) {
+            UserDefaults.standard.set(encoded, forKey: "customisationList")
+        }
+    }
+
+    static func loadFromUserDefaults() -> CustomisationList {
+        if let data = UserDefaults.standard.data(forKey: "customisationList"), let items = try? JSONDecoder().decode([CCCustomisation].self, from: data) {
+            return CustomisationList(list: items)
+        }
+        return CustomisationList()
+    }
 }
 
-struct SheetView: View {
+struct SingleModuleEditView: View {
+    @Environment(\.dismiss) var dismiss
+    @State var customisation: CCCustomisation
+
+    var body: some View {
+        List {
+            Section(header: Label("Helloworld", systemImage: "app.dashed")) {
+                Text("Hello!")
+            }
+        }
+    }
+}
+
+struct AddNewModuleView: View {
     @Environment(\.dismiss) var dismiss
     @State var customisations: CustomisationList
 
     var body: some View {
         NavigationView {
-            List {
+            Form {
                 ForEach(getCCModules().filter { module in
                     if (customisations.list.contains { customisation in
                         customisation.module == module
@@ -101,10 +155,11 @@ struct SheetView: View {
                 }) {
                     let module = $0
                     Button($0.description) {
-                        customisations.addCustomisation(item: CCCustomisation(isEnabled: true, module: module))
+                        customisations.addCustomisation(item: CCCustomisation(isEnabled: false, module: module))
+                        dismiss()
                     }.buttonStyle(.plain)
                 }
-            }.navigationTitle("Add new module").toolbar {
+            }.navigationTitle("New customisation").toolbar {
                 ToolbarItem {
                     Button(action: {
                         dismiss()
@@ -121,13 +176,13 @@ struct ModuleEditorView: View {
 //    @State var ccModule = CCModule(fileName: "NFCControlCenterModule.bundle")
 //    @State var id = ""
     @State private var showingAddNewSheet = false
-    @StateObject var customisations = CustomisationList()
+    @StateObject var customisations = CustomisationList.loadFromUserDefaults()
 
     var body: some View {
         NavigationView {
             ScrollView(.vertical) {
                 ForEach($customisations.list, id: \.module.bundleID) { item in
-                    CustomisationCard(customisation: item)
+                    CustomisationCard(customisationList: customisations, customisation: item)
                 }
             }
             .frame(maxWidth: .infinity)
@@ -161,13 +216,18 @@ struct ModuleEditorView: View {
                     })
 
                     Spacer()
+                    Button(action: {
+                        print("settings...")
+                    }, label: {
+                        Label("Add Module", systemImage: "gear")
+                    })
 
                     Button(action: {
                         showingAddNewSheet.toggle()
                     }, label: {
                         Label("Add Module", systemImage: "plus.app")
                     }).sheet(isPresented: $showingAddNewSheet) {
-                        SheetView(customisations: customisations)
+                        AddNewModuleView(customisations: customisations)
                     }
                 }
             }
