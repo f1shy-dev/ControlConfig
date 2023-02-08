@@ -13,15 +13,15 @@ var isUnsandboxed = false
 struct ControlConfigApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ModuleEditorView()
                 .onAppear {
                     if #available(iOS 16.2, *) {
-#if targetEnvironment(simulator)
-#else
+                        #if targetEnvironment(simulator)
+                        #else
                         // I'm sorry 16.2 dev beta 1 users, you are a vast minority.
                         print("Throwing not supported error (patched)")
                         UIApplication.shared.alert(title: "Not Supported", body: "This version of iOS is not supported.", withButton: false)
-#endif
+                        #endif
                     } else {
                         do {
                             // TrollStore method
@@ -34,8 +34,8 @@ struct ControlConfigApp: App {
                             // grant r/w access
                             if #available(iOS 15, *) {
                                 print("Trying sandbox escape...")
-                                grant_full_disk_access() { error in
-                                    if (error != nil) {
+                                grant_full_disk_access { error in
+                                    if error != nil {
                                         print("Unable to escape sandbox! Error: ", String(describing: error?.localizedDescription ?? "unknown?!"))
                                         UIApplication.shared.alert(title: "Access Error", body: "Error: \(String(describing: error?.localizedDescription))\nPlease close the app and retry.", withButton: false)
                                         isUnsandboxed = false
@@ -50,9 +50,9 @@ struct ControlConfigApp: App {
                         }
                     }
                     if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String, let url = URL(string: "https://api.github.com/repos/BomberFish/ControlConfig/releases/latest") {
-                        let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
+                        let task = URLSession.shared.dataTask(with: url) { data, _, _ in
                             guard let data = data else { return }
-                            
+
                             if let json = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
                                 if (json["tag_name"] as? String)?.replacingOccurrences(of: "v", with: "").compare(version, options: .numeric) == .orderedDescending {
                                     UIApplication.shared.confirmAlert(title: "Update available!", body: "A new app update is available, do you want to visit the releases page?", onOK: {

@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7D2DC3C82992C48400A6C234 /* ModuleEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D2DC3C72992C48400A6C234 /* ModuleEditorView.swift */; };
 		D625E86A2991CD3000D5A5B0 /* ControlConfigApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D625E8692991CD3000D5A5B0 /* ControlConfigApp.swift */; };
-		D625E86C2991CD3000D5A5B0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D625E86B2991CD3000D5A5B0 /* ContentView.swift */; };
 		D625E86E2991CD3200D5A5B0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D625E86D2991CD3200D5A5B0 /* Assets.xcassets */; };
 		D625E8712991CD3200D5A5B0 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D625E8702991CD3200D5A5B0 /* Preview Assets.xcassets */; };
 		D625E87B2991CD3300D5A5B0 /* ControlConfigTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D625E87A2991CD3300D5A5B0 /* ControlConfigTests.swift */; };
@@ -40,9 +40,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7D2DC3C72992C48400A6C234 /* ModuleEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModuleEditorView.swift; sourceTree = "<group>"; };
 		D625E8662991CD3000D5A5B0 /* ControlConfig.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ControlConfig.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D625E8692991CD3000D5A5B0 /* ControlConfigApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlConfigApp.swift; sourceTree = "<group>"; };
-		D625E86B2991CD3000D5A5B0 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D625E86D2991CD3200D5A5B0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D625E8702991CD3200D5A5B0 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		D625E8762991CD3300D5A5B0 /* ControlConfigTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ControlConfigTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -111,12 +111,12 @@
 			isa = PBXGroup;
 			children = (
 				D625E8692991CD3000D5A5B0 /* ControlConfigApp.swift */,
-				D625E86B2991CD3000D5A5B0 /* ContentView.swift */,
 				D625E8A52991D02600D5A5B0 /* Common.swift */,
 				D625E8A02991CF7D00D5A5B0 /* Extensions */,
 				D625E8932991CEFF00D5A5B0 /* Exploit */,
 				D625E86D2991CD3200D5A5B0 /* Assets.xcassets */,
 				D625E86F2991CD3200D5A5B0 /* Preview Content */,
+				7D2DC3C72992C48400A6C234 /* ModuleEditorView.swift */,
 			);
 			path = ControlConfig;
 			sourceTree = "<group>";
@@ -302,8 +302,8 @@
 			files = (
 				D625E8A62991D02600D5A5B0 /* Common.swift in Sources */,
 				D625E8A42991CF8600D5A5B0 /* Haptic++.swift in Sources */,
-				D625E86C2991CD3000D5A5B0 /* ContentView.swift in Sources */,
 				D625E86A2991CD3000D5A5B0 /* ControlConfigApp.swift in Sources */,
+				7D2DC3C82992C48400A6C234 /* ModuleEditorView.swift in Sources */,
 				D625E89F2991CF2A00D5A5B0 /* grant_full_disk_access.m in Sources */,
 				D625E89D2991CF2A00D5A5B0 /* vm_unaligned_copy_switch_race.c in Sources */,
 				D625E8A32991CF8600D5A5B0 /* Alert++.swift in Sources */,
@@ -471,10 +471,12 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ControlConfig/Preview Content\"";
-				DEVELOPMENT_TEAM = 8JKVMYCRTJ;
+				DEVELOPMENT_TEAM = ZV2PLXMRSB;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSAppleMusicUsageDescription = "Grant full disk access. Required for app functionality.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -486,7 +488,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = ca.bomberfish.ControlConfig;
+				PRODUCT_BUNDLE_IDENTIFIER = ca.f1shydev.ControlConfig;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "ControlConfig/Exploit/ControlConfig-Bridging-Header.h";
@@ -505,10 +507,12 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ControlConfig/Preview Content\"";
-				DEVELOPMENT_TEAM = 8JKVMYCRTJ;
+				DEVELOPMENT_TEAM = ZV2PLXMRSB;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSAppleMusicUsageDescription = "Grant full disk access. Required for app functionality.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -520,7 +524,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = ca.bomberfish.ControlConfig;
+				PRODUCT_BUNDLE_IDENTIFIER = ca.f1shydev.ControlConfig;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "ControlConfig/Exploit/ControlConfig-Bridging-Header.h";

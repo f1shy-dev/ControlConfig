@@ -5,3 +5,11 @@ build/*
 *.ipa
 .DS_Store
 */.DS_Store
+
+ControlConfig.xcodeproj/xcuserdata/*.xcuserdatad
+## User settings
+xcuserdata/
+
+## Xcode 8 and earlier
+*.xcscmblueprint
+*.xccheckout
