@@ -19,7 +19,7 @@ let bundleBasedModuleNameOverrides: NSDictionary = [
 ]
 
 // MARK: - CC Module struct
-struct CCModule: Hashable, Identifiable, CustomStringConvertible {
+struct CCModule: Hashable, Identifiable, CustomStringConvertible, Codable {
     var id: Self { self }
     var fileName: String
     var bundleID: String {
@@ -37,10 +37,14 @@ struct CCModule: Hashable, Identifiable, CustomStringConvertible {
         let name = "\(fileDict?["CFBundleDisplayName"] ?? fileDict?["CFBundleName"] ?? "Unknown Module")"
         return name.components(separatedBy: "Module").first ?? name
     }
+
+    enum CodingKeys: String, CodingKey {
+        case fileName
+    }
 }
 
 // MARK: - CC Customization struct
-struct CCCustomisation {
+struct CCCustomisation: Codable {
     var isEnabled: Bool
     var module: CCModule
     var launchAppBundleID: String?
@@ -62,7 +66,16 @@ struct CCCustomisation {
 
         return "Doesn't do anything..."
     }
+
 //    var customIcon: SomeIconTypeIdk?
+
+    enum CodingKeys: String, CodingKey {
+        case isEnabled
+        case module
+        case launchAppBundleID
+        case customWidth
+        case customHeight
+    }
 }
 
 // MARK: - Overwrite Module
@@ -230,8 +243,10 @@ func xpc_crash(_ serviceName: String) {
 
 func respring() {
     let processes = [
+        // only kill frontboard since killing backboard doesnt apply cc tweaks??
         "com.apple.cfprefsd.daemon",
-        "com.apple.backboard.TouchDeliveryPolicyServer"
+//        "com.apple.backboard.TouchDeliveryPolicyServer",
+        "com.apple.frontboard.systemappservices"
     ]
     for process in processes {
         xpc_crash(process)
