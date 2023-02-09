@@ -22,7 +22,7 @@ struct CheckToggleStyle: ToggleStyle {
                     .imageScale(.large)
             }
         }
-        .buttonStyle(.bordered).clipShape(Capsule()).foregroundColor(.white)
+        .buttonStyle(.bordered).clipShape(Capsule()).foregroundColor(.primary)
     }
 }
 
@@ -35,11 +35,10 @@ struct CustomisationCard: View {
     var body: some View {
         VStack(alignment: .leading) {
             HStack(alignment: .center) {
-                Image(systemName: "plus.magnifyingglass")
-                    .resizable()
-                    .frame(width: 20, height: 20)
-                    .aspectRatio(contentMode: .fit)
-
+                Group {
+                    Image(systemName: customisation.module.sfIcon)
+                        .font(.title2)
+                }.frame(width: 30)
                 Spacer().frame(width: 10)
                 VStack(alignment: .leading) {
                     Text(customisation.module.description)
@@ -81,61 +80,111 @@ struct CustomisationCard: View {
     }
 }
 
-extension UserDefaults {
-    @objc dynamic var customisations: String { // helper keypath
-        return string(forKey: "customisations") ?? ""
-    }
-}
-
-class CustomisationList: ObservableObject {
-    @Published var list: [CCCustomisation] {
-        didSet {
-            self.saveToUserDefaults()
-        }
-    }
-
-    init(list: [CCCustomisation]) {
-        self.list = list
-    }
-
-    init() {
-        self.list = []
-    }
-
-    func addCustomisation(item: CCCustomisation) {
-        self.list.append(item)
-    }
-
-    func deleteCustomisation(item: CCCustomisation) {
-        if let index = self.list.firstIndex(where: { $0.module.bundleID == item.module.bundleID }) {
-            self.list.remove(at: index)
-        }
-    }
-
-    func saveToUserDefaults() {
-        let encoder = JSONEncoder()
-        if let encoded = try? encoder.encode(self.list) {
-            UserDefaults.standard.set(encoded, forKey: "customisationList")
-        }
-    }
-
-    static func loadFromUserDefaults() -> CustomisationList {
-        if let data = UserDefaults.standard.data(forKey: "customisationList"), let items = try? JSONDecoder().decode([CCCustomisation].self, from: data) {
-            return CustomisationList(list: items)
-        }
-        return CustomisationList()
-    }
-}
-
 struct SingleModuleEditView: View {
     @Environment(\.dismiss) var dismiss
     @State var customisation: CCCustomisation
 
     var body: some View {
-        List {
-            Section(header: Label("Helloworld", systemImage: "app.dashed")) {
-                Text("Hello!")
+        var widthInt: Binding<Double> {
+            Binding<Double>(get: {
+                Double(customisation.customWidth ?? 2)
+            }, set: {
+                customisation.customWidth = Int($0)
+            })
+        }
+
+        var heightInt: Binding<Double> {
+            Binding<Double>(get: {
+                Double(customisation.customHeight ?? 2)
+            }, set: {
+                customisation.customHeight = Int($0)
+            })
+        }
+
+        return NavigationView {
+            List {
+                Picker("Action", selection: $customisation.mode) {
+                    Text("App Launcher").tag(CustomisationMode.AppLauncher)
+                    Text("CC Module").tag(CustomisationMode.ModuleFunction)
+                    Text("Run Shortcut").tag(CustomisationMode.WorkflowLauncher)
+                }.pickerStyle(.menu)
+
+                switch customisation.mode {
+                case .AppLauncher:
+                    Section(header: Label("App Launcher", systemImage: "app.badge.checkmark"), footer: Text("The URL Scheme is to launch to a specific section of an app, such as com.apple.tv://us/show")) {
+                        TextField("App Bundle ID", text: $customisation.launchAppBundleID.toUnwrapped(defaultValue: ""))
+                        TextField("URL Scheme (optional)", text: $customisation.launchAppURLScheme.toUnwrapped(defaultValue: ""))
+                    }
+                case .WorkflowLauncher:
+                    Section(header: Label("Open shortcut", systemImage: "arrow.up.forward.app"), footer: Text("Runs a specified Shortcut/Workflow when clicked. Note: Opens the shortcut app first (doesn't run in the background).")) {
+                        TextField("Shortcut Name", text: $customisation.launchShortcutName.toUnwrapped(defaultValue: ""))
+                    }
+                case .ModuleFunction:
+                    Section(header: Label("CC Module Functionality", systemImage: "square.on.square.intersection.dashed"), footer: Text("Set the module to have the function that it would have normally, or make it have the function of a different module")) {
+                        Text("Hello!")
+                    }
+                }
+
+                Section(header: Label("Looks", systemImage: "paintbrush")) {
+                    TextField("Name", text: $customisation.customName.toUnwrapped(defaultValue: ""))
+                }
+
+                if customisation.module.isDefaultModule {
+                    Section(header: Label("Sizing (Defualt Module)", systemImage: "ruler")) {
+                        HStack {
+                            Text("Width")
+                            Spacer()
+                            HStack {
+                                Slider(
+                                    value: widthInt,
+                                    in: 1...4,
+                                    step: 1
+                                ) {
+                                    Text("Width")
+                                } minimumValueLabel: {
+                                    Text("1")
+                                } maximumValueLabel: {
+                                    Text("4")
+                                }
+
+                            }.frame(width: 175)
+                        }
+
+                        HStack {
+                            Text("Height")
+                            Spacer()
+                            HStack {
+                                Slider(
+                                    value: heightInt,
+                                    in: 1...4,
+                                    step: 1
+                                ) {
+                                    Text("Height")
+                                } minimumValueLabel: {
+                                    Text("1")
+                                } maximumValueLabel: {
+                                    Text("4")
+                                }
+                            }.frame(width: 175)
+                        }
+                    }
+                }
+
+                Section(header: Label("Other", systemImage: "star"), footer: Text("Disables the menu that shows up when you force-touch/hold down certain modules.")) {
+                    Toggle("Disable Hold Menu", isOn: $customisation.disableOnHoldWidget.toUnwrapped(defaultValue: false))
+                }
             }
+
+            .navigationTitle("Edit \(customisation.module.description)")
+            .toolbar {
+                ToolbarItem {
+                    Button(action: {
+                        dismiss()
+                    }, label: {
+                        Label("Close", systemImage: "xmark")
+                    })
+                }
+            }.navigationBarTitleDisplayMode(.inline)
         }
     }
 }
@@ -145,21 +194,51 @@ struct AddNewModuleView: View {
     @State var customisations: CustomisationList
 
     var body: some View {
-        NavigationView {
+        let filteredModules = getCCModules().filter { module in
+            if (customisations.list.contains { customisation in
+                customisation.module == module
+            }) { return false }
+            return true
+        }
+
+        return NavigationView {
             Form {
-                ForEach(getCCModules().filter { module in
-                    if (customisations.list.contains { customisation in
-                        customisation.module == module
-                    }) { return false }
-                    return true
-                }) {
-                    let module = $0
-                    Button($0.description) {
-                        customisations.addCustomisation(item: CCCustomisation(isEnabled: false, module: module))
-                        dismiss()
-                    }.buttonStyle(.plain)
+                Section(header: Label("Default Modules", systemImage: "slider.horizontal.3")) {
+                    ForEach(filteredModules.filter { m in
+                        m.isDefaultModule
+                    }) {
+                        let module = $0
+                        HStack {
+                            Label(module.description, systemImage: module.sfIcon)
+                            Spacer()
+                        }
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            customisations.addCustomisation(item: CCCustomisation(isEnabled: false, module: module, mode: .AppLauncher))
+                            dismiss()
+                        }
+                    }
                 }
-            }.navigationTitle("New customisation").toolbar {
+
+                Section(header: Label("Movable Modules", systemImage: "slider.vertical.3")) {
+                    ForEach(filteredModules.filter { m in
+                        !m.isDefaultModule
+                    }) {
+                        let module = $0
+                        HStack {
+                            Label(module.description, systemImage: module.sfIcon)
+                            Spacer()
+                        }
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            customisations.addCustomisation(item: CCCustomisation(isEnabled: false, module: module, mode: .AppLauncher))
+                            dismiss()
+                        }
+                    }
+                }
+            }
+            .navigationTitle("New customisation")
+            .toolbar {
                 ToolbarItem {
                     Button(action: {
                         dismiss()
@@ -167,7 +246,7 @@ struct AddNewModuleView: View {
                         Label("Close", systemImage: "xmark")
                     })
                 }
-            }
+            }.navigationBarTitleDisplayMode(.inline)
         }
     }
 }
@@ -213,7 +292,6 @@ struct ModuleEditorView: View {
                     }, label: {
                         Label("Respring", systemImage: "arrow.counterclockwise.circle")
                         Text("Respring")
-                        
 
                     })
 
@@ -235,7 +313,6 @@ struct ModuleEditorView: View {
             }
         }.navigationViewStyle(StackNavigationViewStyle())
     }
-
 }
 
 struct ModuleEditorView_Previews: PreviewProvider {
