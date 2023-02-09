@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  ModuleEditorView.swift
 //  ControlConfig
 //
 //  Created by Hariz Shirazi on 2023-02-06.
@@ -190,6 +190,7 @@ struct ModuleEditorView: View {
             .toolbar {
                 ToolbarItemGroup(placement: .bottomBar) {
                     Button(action: {
+                        Haptic.shared.play(.soft)
 //                        let success = overwriteModule(appBundleID: id, module: ccModule)
 //                        if success {
 //                            UIApplication.shared.alert(title: "Success", body: "Successfully wrote to file!", withButton: true)
@@ -212,6 +213,7 @@ struct ModuleEditorView: View {
                     }, label: {
                         Label("Respring", systemImage: "arrow.counterclockwise.circle")
                         Text("Respring")
+                        
 
                     })
 
@@ -233,6 +235,7 @@ struct ModuleEditorView: View {
             }
         }.navigationViewStyle(StackNavigationViewStyle())
     }
+
 }
 
 struct ModuleEditorView_Previews: PreviewProvider {
