@@ -6,11 +6,11 @@
 //  Credits: cowabunga
 //
 
-import LocalConsole
+// import LocalConsole
 import SwiftUI
 
 var isUnsandboxed = false
-let consoleManager = LCManager.shared
+// let consoleManager = LCManager.shared
 
 @main
 struct ControlConfigApp: App {

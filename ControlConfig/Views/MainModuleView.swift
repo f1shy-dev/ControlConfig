@@ -55,7 +55,7 @@ struct MainModuleView: View {
 
                     Spacer()
                     Button(action: {
-                        consoleManager.isVisible.toggle()
+//                        consoleManager.isVisible.toggle()
                     }, label: {
                         Label("Settings", systemImage: "gear")
                     })

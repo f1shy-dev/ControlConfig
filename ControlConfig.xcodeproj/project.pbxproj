@@ -21,7 +21,6 @@
 		7D201BFE299C23860023D649 /* AddModuleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201BFD299C23860023D649 /* AddModuleView.swift */; };
 		7D201C00299C238D0023D649 /* EditModuleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201BFF299C238D0023D649 /* EditModuleView.swift */; };
 		7D201C02299C25190023D649 /* CustomisationCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201C01299C25190023D649 /* CustomisationCard.swift */; };
-		7D59D957299A935F0049302B /* LocalConsole in Frameworks */ = {isa = PBXBuildFile; productRef = 7D59D956299A935F0049302B /* LocalConsole */; };
 		7D59D959299A94370049302B /* CustomPrint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D59D958299A94370049302B /* CustomPrint.swift */; };
 		D625E86A2991CD3000D5A5B0 /* ControlConfigApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D625E8692991CD3000D5A5B0 /* ControlConfigApp.swift */; };
 		D625E86E2991CD3200D5A5B0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D625E86D2991CD3200D5A5B0 /* Assets.xcassets */; };
@@ -94,7 +93,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7D59D957299A935F0049302B /* LocalConsole in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -160,6 +158,13 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		7DDD2F8E29AD6FCF0064A7FC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		D625E85D2991CD3000D5A5B0 = {
 			isa = PBXGroup;
 			children = (
@@ -167,6 +172,7 @@
 				D625E8792991CD3300D5A5B0 /* ControlConfigTests */,
 				D625E8682991CD3000D5A5B0 /* ControlConfig */,
 				D625E8672991CD3000D5A5B0 /* Products */,
+				7DDD2F8E29AD6FCF0064A7FC /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -251,7 +257,6 @@
 			);
 			name = ControlConfig;
 			packageProductDependencies = (
-				7D59D956299A935F0049302B /* LocalConsole */,
 			);
 			productName = ControlConfig;
 			productReference = D625E8662991CD3000D5A5B0 /* ControlConfig.app */;
@@ -327,7 +332,6 @@
 			);
 			mainGroup = D625E85D2991CD3000D5A5B0;
 			packageReferences = (
-				7D59D955299A935F0049302B /* XCRemoteSwiftPackageReference "LocalConsole" */,
 			);
 			productRefGroup = D625E8672991CD3000D5A5B0 /* Products */;
 			projectDirPath = "";
@@ -733,25 +737,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		7D59D955299A935F0049302B /* XCRemoteSwiftPackageReference "LocalConsole" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/f1shy-dev/LocalConsole";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		7D59D956299A935F0049302B /* LocalConsole */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 7D59D955299A935F0049302B /* XCRemoteSwiftPackageReference "LocalConsole" */;
-			productName = LocalConsole;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D625E85E2991CD3000D5A5B0 /* Project object */;
 }
