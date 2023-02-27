@@ -3,17 +3,20 @@
 //  ControlConfig
 //
 //  Created by Hariz Shirazi on 2023-02-06.
+//  Credits: cowabunga
 //
 
+import LocalConsole
 import SwiftUI
 
 var isUnsandboxed = false
+let consoleManager = LCManager.shared
 
 @main
 struct ControlConfigApp: App {
     var body: some Scene {
         WindowGroup {
-            ModuleEditorView()
+            MainModuleView()
                 .onAppear {
                     if #available(iOS 16.2, *) {
                         #if targetEnvironment(simulator)

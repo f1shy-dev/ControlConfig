@@ -7,8 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7D09760D2995714D004E6087 /* Customisations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D09760C2995714D004E6087 /* Customisations.swift */; };
-		7D2DC3C82992C48400A6C234 /* ModuleEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D2DC3C72992C48400A6C234 /* ModuleEditorView.swift */; };
+		7D09760D2995714D004E6087 /* ModuleOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D09760C2995714D004E6087 /* ModuleOperations.swift */; };
+		7D201BE7299C19A20023D649 /* Module.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201BE6299C19A20023D649 /* Module.swift */; };
+		7D201BE9299C1A2B0023D649 /* Customisation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201BE8299C1A2B0023D649 /* Customisation.swift */; };
+		7D201BEB299C1AB60023D649 /* CustomisationsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201BEA299C1AB60023D649 /* CustomisationsList.swift */; };
+		7D201BEE299C1D1C0023D649 /* BindingExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201BED299C1D1C0023D649 /* BindingExtension.swift */; };
+		7D201BF0299C1D470023D649 /* MDCSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201BEF299C1D470023D649 /* MDCSwift.swift */; };
+		7D201BF2299C1DE30023D649 /* MDCWrappers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201BF1299C1DE30023D649 /* MDCWrappers.swift */; };
+		7D201BF4299C1E280023D649 /* PlistHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201BF3299C1E280023D649 /* PlistHelpers.swift */; };
+		7D201BF7299C1FAC0023D649 /* StaticCCMappings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201BF6299C1FAC0023D649 /* StaticCCMappings.swift */; };
+		7D201BF9299C22680023D649 /* TickToggleStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201BF8299C22680023D649 /* TickToggleStyle.swift */; };
+		7D201BFB299C23100023D649 /* MainModuleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201BFA299C23100023D649 /* MainModuleView.swift */; };
+		7D201BFE299C23860023D649 /* AddModuleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201BFD299C23860023D649 /* AddModuleView.swift */; };
+		7D201C00299C238D0023D649 /* EditModuleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201BFF299C238D0023D649 /* EditModuleView.swift */; };
+		7D201C02299C25190023D649 /* CustomisationCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201C01299C25190023D649 /* CustomisationCard.swift */; };
+		7D59D957299A935F0049302B /* LocalConsole in Frameworks */ = {isa = PBXBuildFile; productRef = 7D59D956299A935F0049302B /* LocalConsole */; };
+		7D59D959299A94370049302B /* CustomPrint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D59D958299A94370049302B /* CustomPrint.swift */; };
 		D625E86A2991CD3000D5A5B0 /* ControlConfigApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D625E8692991CD3000D5A5B0 /* ControlConfigApp.swift */; };
 		D625E86E2991CD3200D5A5B0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D625E86D2991CD3200D5A5B0 /* Assets.xcassets */; };
 		D625E8712991CD3200D5A5B0 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D625E8702991CD3200D5A5B0 /* Preview Assets.xcassets */; };
@@ -20,7 +34,6 @@
 		D625E89F2991CF2A00D5A5B0 /* grant_full_disk_access.m in Sources */ = {isa = PBXBuildFile; fileRef = D625E89C2991CF2A00D5A5B0 /* grant_full_disk_access.m */; };
 		D625E8A32991CF8600D5A5B0 /* Alert++.swift in Sources */ = {isa = PBXBuildFile; fileRef = D625E8A12991CF8600D5A5B0 /* Alert++.swift */; };
 		D625E8A42991CF8600D5A5B0 /* Haptic++.swift in Sources */ = {isa = PBXBuildFile; fileRef = D625E8A22991CF8600D5A5B0 /* Haptic++.swift */; };
-		D625E8A62991D02600D5A5B0 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D625E8A52991D02600D5A5B0 /* Helpers.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,8 +54,21 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		7D09760C2995714D004E6087 /* Customisations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Customisations.swift; sourceTree = "<group>"; };
-		7D2DC3C72992C48400A6C234 /* ModuleEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModuleEditorView.swift; sourceTree = "<group>"; };
+		7D09760C2995714D004E6087 /* ModuleOperations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModuleOperations.swift; sourceTree = "<group>"; };
+		7D201BE6299C19A20023D649 /* Module.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Module.swift; sourceTree = "<group>"; };
+		7D201BE8299C1A2B0023D649 /* Customisation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Customisation.swift; sourceTree = "<group>"; };
+		7D201BEA299C1AB60023D649 /* CustomisationsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomisationsList.swift; sourceTree = "<group>"; };
+		7D201BED299C1D1C0023D649 /* BindingExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BindingExtension.swift; sourceTree = "<group>"; };
+		7D201BEF299C1D470023D649 /* MDCSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MDCSwift.swift; sourceTree = "<group>"; };
+		7D201BF1299C1DE30023D649 /* MDCWrappers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MDCWrappers.swift; sourceTree = "<group>"; };
+		7D201BF3299C1E280023D649 /* PlistHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlistHelpers.swift; sourceTree = "<group>"; };
+		7D201BF6299C1FAC0023D649 /* StaticCCMappings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticCCMappings.swift; sourceTree = "<group>"; };
+		7D201BF8299C22680023D649 /* TickToggleStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TickToggleStyle.swift; sourceTree = "<group>"; };
+		7D201BFA299C23100023D649 /* MainModuleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainModuleView.swift; sourceTree = "<group>"; };
+		7D201BFD299C23860023D649 /* AddModuleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddModuleView.swift; sourceTree = "<group>"; };
+		7D201BFF299C238D0023D649 /* EditModuleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditModuleView.swift; sourceTree = "<group>"; };
+		7D201C01299C25190023D649 /* CustomisationCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomisationCard.swift; sourceTree = "<group>"; };
+		7D59D958299A94370049302B /* CustomPrint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPrint.swift; sourceTree = "<group>"; };
 		D625E8662991CD3000D5A5B0 /* ControlConfig.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ControlConfig.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D625E8692991CD3000D5A5B0 /* ControlConfigApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlConfigApp.swift; sourceTree = "<group>"; };
 		D625E86D2991CD3200D5A5B0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -61,7 +87,6 @@
 		D625E89C2991CF2A00D5A5B0 /* grant_full_disk_access.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = grant_full_disk_access.m; sourceTree = "<group>"; };
 		D625E8A12991CF8600D5A5B0 /* Alert++.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Alert++.swift"; sourceTree = "<group>"; };
 		D625E8A22991CF8600D5A5B0 /* Haptic++.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Haptic++.swift"; sourceTree = "<group>"; };
-		D625E8A52991D02600D5A5B0 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +94,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D59D957299A935F0049302B /* LocalConsole in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -89,12 +115,57 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7D201BE5299C19900023D649 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				7D201BE6299C19A20023D649 /* Module.swift */,
+				7D201BE8299C1A2B0023D649 /* Customisation.swift */,
+				7D201BEA299C1AB60023D649 /* CustomisationsList.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		7D201BEC299C1CF20023D649 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				7D59D958299A94370049302B /* CustomPrint.swift */,
+				7D201BED299C1D1C0023D649 /* BindingExtension.swift */,
+				7D201BEF299C1D470023D649 /* MDCSwift.swift */,
+				7D201BF1299C1DE30023D649 /* MDCWrappers.swift */,
+				D625E8A22991CF8600D5A5B0 /* Haptic++.swift */,
+				D625E8A12991CF8600D5A5B0 /* Alert++.swift */,
+				7D201BF3299C1E280023D649 /* PlistHelpers.swift */,
+				7D201BF8299C22680023D649 /* TickToggleStyle.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		7D201BF5299C1F7D0023D649 /* Control Center */ = {
+			isa = PBXGroup;
+			children = (
+				7D09760C2995714D004E6087 /* ModuleOperations.swift */,
+				7D201BF6299C1FAC0023D649 /* StaticCCMappings.swift */,
+			);
+			path = "Control Center";
+			sourceTree = "<group>";
+		};
+		7D201BFC299C23140023D649 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				7D201BFA299C23100023D649 /* MainModuleView.swift */,
+				7D201BFD299C23860023D649 /* AddModuleView.swift */,
+				7D201BFF299C238D0023D649 /* EditModuleView.swift */,
+				7D201C01299C25190023D649 /* CustomisationCard.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		D625E85D2991CD3000D5A5B0 = {
 			isa = PBXGroup;
 			children = (
-				D625E8682991CD3000D5A5B0 /* ControlConfig */,
-				D625E8792991CD3300D5A5B0 /* ControlConfigTests */,
 				D625E8832991CD3300D5A5B0 /* ControlConfigUITests */,
+				D625E8792991CD3300D5A5B0 /* ControlConfigTests */,
+				D625E8682991CD3000D5A5B0 /* ControlConfig */,
 				D625E8672991CD3000D5A5B0 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -112,14 +183,14 @@
 		D625E8682991CD3000D5A5B0 /* ControlConfig */ = {
 			isa = PBXGroup;
 			children = (
-				D625E8692991CD3000D5A5B0 /* ControlConfigApp.swift */,
-				D625E8A52991D02600D5A5B0 /* Helpers.swift */,
-				7D09760C2995714D004E6087 /* Customisations.swift */,
-				D625E8A02991CF7D00D5A5B0 /* Extensions */,
-				D625E8932991CEFF00D5A5B0 /* Exploit */,
 				D625E86D2991CD3200D5A5B0 /* Assets.xcassets */,
 				D625E86F2991CD3200D5A5B0 /* Preview Content */,
-				7D2DC3C72992C48400A6C234 /* ModuleEditorView.swift */,
+				D625E8932991CEFF00D5A5B0 /* Exploit */,
+				7D201BF5299C1F7D0023D649 /* Control Center */,
+				7D201BEC299C1CF20023D649 /* Helpers */,
+				7D201BE5299C19900023D649 /* Models */,
+				7D201BFC299C23140023D649 /* Views */,
+				D625E8692991CD3000D5A5B0 /* ControlConfigApp.swift */,
 			);
 			path = ControlConfig;
 			sourceTree = "<group>";
@@ -163,15 +234,6 @@
 			path = Exploit;
 			sourceTree = "<group>";
 		};
-		D625E8A02991CF7D00D5A5B0 /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-				D625E8A12991CF8600D5A5B0 /* Alert++.swift */,
-				D625E8A22991CF8600D5A5B0 /* Haptic++.swift */,
-			);
-			path = Extensions;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -188,6 +250,9 @@
 			dependencies = (
 			);
 			name = ControlConfig;
+			packageProductDependencies = (
+				7D59D956299A935F0049302B /* LocalConsole */,
+			);
 			productName = ControlConfig;
 			productReference = D625E8662991CD3000D5A5B0 /* ControlConfig.app */;
 			productType = "com.apple.product-type.application";
@@ -261,6 +326,9 @@
 				Base,
 			);
 			mainGroup = D625E85D2991CD3000D5A5B0;
+			packageReferences = (
+				7D59D955299A935F0049302B /* XCRemoteSwiftPackageReference "LocalConsole" */,
+			);
 			productRefGroup = D625E8672991CD3000D5A5B0 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -303,15 +371,27 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D625E8A62991D02600D5A5B0 /* Helpers.swift in Sources */,
 				D625E8A42991CF8600D5A5B0 /* Haptic++.swift in Sources */,
+				7D201BEB299C1AB60023D649 /* CustomisationsList.swift in Sources */,
 				D625E86A2991CD3000D5A5B0 /* ControlConfigApp.swift in Sources */,
-				7D2DC3C82992C48400A6C234 /* ModuleEditorView.swift in Sources */,
-				7D09760D2995714D004E6087 /* Customisations.swift in Sources */,
+				7D201BF2299C1DE30023D649 /* MDCWrappers.swift in Sources */,
+				7D201BFE299C23860023D649 /* AddModuleView.swift in Sources */,
+				7D201BE7299C19A20023D649 /* Module.swift in Sources */,
+				7D201BF0299C1D470023D649 /* MDCSwift.swift in Sources */,
+				7D201C00299C238D0023D649 /* EditModuleView.swift in Sources */,
+				7D201BF7299C1FAC0023D649 /* StaticCCMappings.swift in Sources */,
+				7D201C02299C25190023D649 /* CustomisationCard.swift in Sources */,
+				7D201BEE299C1D1C0023D649 /* BindingExtension.swift in Sources */,
+				7D201BE9299C1A2B0023D649 /* Customisation.swift in Sources */,
+				7D09760D2995714D004E6087 /* ModuleOperations.swift in Sources */,
 				D625E89F2991CF2A00D5A5B0 /* grant_full_disk_access.m in Sources */,
 				D625E89D2991CF2A00D5A5B0 /* vm_unaligned_copy_switch_race.c in Sources */,
 				D625E8A32991CF8600D5A5B0 /* Alert++.swift in Sources */,
+				7D201BF4299C1E280023D649 /* PlistHelpers.swift in Sources */,
+				7D201BFB299C23100023D649 /* MainModuleView.swift in Sources */,
+				7D59D959299A94370049302B /* CustomPrint.swift in Sources */,
 				D625E89E2991CF2A00D5A5B0 /* helpers.m in Sources */,
+				7D201BF9299C22680023D649 /* TickToggleStyle.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -653,6 +733,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		7D59D955299A935F0049302B /* XCRemoteSwiftPackageReference "LocalConsole" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/f1shy-dev/LocalConsole";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		7D59D956299A935F0049302B /* LocalConsole */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7D59D955299A935F0049302B /* XCRemoteSwiftPackageReference "LocalConsole" */;
+			productName = LocalConsole;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D625E85E2991CD3000D5A5B0 /* Project object */;
 }
