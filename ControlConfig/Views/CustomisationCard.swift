@@ -41,6 +41,7 @@ struct CustomisationCard: View {
             HStack {
 //                Toggle("Enabled", isOn: $customisation.isEnabled).labelsHidden().toggleStyle(CheckToggleStyle())
                 Button {
+                    customisation.objectWillChange.send()
                     customisation.isEnabled.toggle()
                     saveToUserDefaults()
                 } label: {

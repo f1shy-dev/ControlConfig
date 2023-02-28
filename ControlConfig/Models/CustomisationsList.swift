@@ -5,10 +5,11 @@
 //  Created by f1shy-dev on 14/02/2023.
 //
 
+import Combine
 import Foundation
 
 class CustomisationList: ObservableObject {
-    @Published var list: [Customisation] {
+    var list: [Customisation] {
         didSet {
             DispatchQueue(label: "UserDefaultsSaver", qos: .background).async {
                 print("saved something to USD")
@@ -26,12 +27,14 @@ class CustomisationList: ObservableObject {
     }
 
     func addCustomisation(item: Customisation) {
+        objectWillChange.send()
         list.append(item)
         print(item.module.isDefaultModule)
         saveToUserDefaults()
     }
 
     func deleteCustomisation(item: Customisation) {
+        objectWillChange.send()
         if let index = list.firstIndex(where: { $0.module.bundleID == item.module.bundleID }) {
             list.remove(at: index)
         }

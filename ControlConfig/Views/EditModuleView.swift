@@ -5,12 +5,19 @@
 //  Created by f1shy-dev on 14/02/2023
 //
 
+import Combine
 import Foundation
 import SwiftUI
 
 struct EditModuleView: View {
     @Environment(\.dismiss) var dismiss
     @ObservedObject var customisation: Customisation
+    @State private var selectedMode: CustomisationMode
+
+    init(customisation: Customisation) {
+        self.customisation = customisation
+        _selectedMode = State(initialValue: customisation.mode)
+    }
 
     var body: some View {
         var widthInt: Binding<Double> {
@@ -31,11 +38,30 @@ struct EditModuleView: View {
 
         return NavigationView {
             List {
-                Picker("Action", selection: $customisation.mode) {
-                    Text("App Launcher").tag(CustomisationMode.AppLauncher)
-                    Text("CC Module").tag(CustomisationMode.ModuleFunction)
-                    Text("Run Shortcut").tag(CustomisationMode.WorkflowLauncher)
-                }.pickerStyle(.menu).id(customisation)
+                if #available(iOS 16, *) {
+                    Picker("Action", selection: $customisation.mode) {
+                        Text("App Launcher").tag(CustomisationMode.AppLauncher)
+                        Text("CC Module").tag(CustomisationMode.ModuleFunction)
+                        Text("Run Shortcut").tag(CustomisationMode.WorkflowLauncher)
+                    }
+                    // im picky ok, it looks nice like this on 16, on 15 it doesnt look like a picker...
+                    .pickerStyle(.menu)
+                    .id(customisation)
+                    .onReceive(self.customisation.$mode) { _ in
+                        customisation.objectWillChange.send()
+                    }
+                } else {
+                    Picker("Action", selection: $customisation.mode) {
+                        Text("App Launcher").tag(CustomisationMode.AppLauncher)
+                        Text("CC Module").tag(CustomisationMode.ModuleFunction)
+                        Text("Run Shortcut").tag(CustomisationMode.WorkflowLauncher)
+                    }
+                    .pickerStyle(.automatic)
+                    .id(customisation)
+                    .onReceive(self.customisation.$mode) { _ in
+                        customisation.objectWillChange.send()
+                    }
+                }
 
                 switch customisation.mode {
                 case .AppLauncher:
@@ -48,8 +74,8 @@ struct EditModuleView: View {
                         TextField("Shortcut Name", text: $customisation.launchShortcutName.toUnwrapped(defaultValue: ""))
                     }
                 case .ModuleFunction:
-                    Section(header: Label("CC Module Functionality", systemImage: "square.on.square.intersection.dashed"), footer: Text("Set the module to have the function that it would have normally, or make it have the function of a different module")) {
-                        Text("Hello!")
+                    Section(header: Label("CC Module Functionality", systemImage: "square.on.square"), footer: Text("Set the module to have the function that it would have normally, or make it have the function of a different module")) {
+                        Text("Coming soon...")
                     }
                 }
 

@@ -575,8 +575,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = ca.f1shydev.ControlConfig;
+				MARKETING_VERSION = "0.0.1-alpha";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.f1shy-dev.ControlConfig";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "ControlConfig/Exploit/ControlConfig-Bridging-Header.h";
@@ -611,8 +611,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = ca.f1shydev.ControlConfig;
+				MARKETING_VERSION = "0.0.1-alpha";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.f1shy-dev.ControlConfig";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "ControlConfig/Exploit/ControlConfig-Bridging-Header.h";
