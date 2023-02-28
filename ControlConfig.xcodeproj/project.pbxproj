@@ -568,7 +568,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = Alpha;
 				DEVELOPMENT_ASSET_PATHS = "\"ControlConfig/Preview Content\"";
-				DEVELOPMENT_TEAM = 8JKVMYCRTJ;
+				DEVELOPMENT_TEAM = ZV2PLXMRSB;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
@@ -585,7 +585,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = ca.bomberfish.FileSwitcherConvert;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.f1shy-dev.ControlConfig";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "ControlConfig/Exploit/ControlConfig-Bridging-Header.h";
