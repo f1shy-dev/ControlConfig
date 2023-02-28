@@ -92,6 +92,6 @@ struct MainModuleView: View {
 
 struct MainModule_Previews: PreviewProvider {
     static var previews: some View {
-        MainModuleView()
+        MainModuleView( )
     }
 }
