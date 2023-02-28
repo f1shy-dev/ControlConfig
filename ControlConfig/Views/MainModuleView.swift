@@ -72,3 +72,9 @@ struct MainModuleView: View {
         }.navigationViewStyle(StackNavigationViewStyle())
     }
 }
+
+struct MainModule_Previews: PreviewProvider {
+    static var previews: some View {
+        MainModuleView()
+    }
+}
