@@ -51,18 +51,18 @@ func applyChanges(customisations: CustomisationList) -> Result<Bool, Error> {
         case .AppLauncher:
             infoPlist?.setValue("CCUIAppLauncherModule", forKey: "NSPrincipalClass")
             if let appBundleID = customisation.launchAppBundleID {
-                print("patching \(customisation.description) to \(appBundleID)")
+                print("patching \(customisation.module.description) to \(appBundleID)")
                 infoPlist?.setValue(appBundleID, forKey: "CCLaunchApplicationIdentifier")
                 infoPlist?.setValue(appBundleID, forKey: "CCAssociatedBundleIdentifier")
             }
             if let appURLScheme = customisation.launchAppURLScheme {
-                print("patching \(customisation.description) to app-url-scheme \(appURLScheme)")
+                print("patching \(customisation.module.description) to app-url-scheme \(appURLScheme)")
                 infoPlist?.setValue(appURLScheme, forKey: "CCLaunchURL")
             }
         case .WorkflowLauncher:
             infoPlist?.setValue("CCUIAppLauncherModule", forKey: "NSPrincipalClass")
             if let shortcutName = customisation.launchShortcutName {
-                print("patching \(customisation.description) to open workflow \(shortcutName)")
+                print("patching \(customisation.module.description) to open workflow \(shortcutName)")
                 infoPlist?.setValue("com.apple.shortcuts", forKey: "CCLaunchApplicationIdentifier")
                 infoPlist?.setValue("shortcuts://run-shortcut?name=" + shortcutName, forKey: "CCLaunchURL")
             }

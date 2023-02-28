@@ -21,7 +21,7 @@ class Module: Identifiable, CustomStringConvertible, Codable, ObservableObject, 
         self.fileName = fileName
 
         let dmsDict = NSDictionary(contentsOfFile: CCMappings().dmsPath)
-        print("dms-reader-called")
+//        print("dms-reader-called")
         let fileDict = NSDictionary(contentsOfFile: "\(CCMappings.bundlesPath)\(fileName)/Info.plist")
         let bundleID = "\(fileDict?["CFBundleIdentifier"] ?? "com.what.unknown")"
 
@@ -62,7 +62,7 @@ class Module: Identifiable, CustomStringConvertible, Codable, ObservableObject, 
         self.fileName = try container.decode(String.self, forKey: .fileName)
 
         let dmsDict = NSDictionary(contentsOfFile: CCMappings().dmsPath)
-        print("dms-reader-called")
+//        print("dms-reader-called")
         let fileDict = NSDictionary(contentsOfFile: "\(CCMappings.bundlesPath)\(fileName)/Info.plist")
         let bundleID = "\(fileDict?["CFBundleIdentifier"] ?? "com.what.unknown")"
 

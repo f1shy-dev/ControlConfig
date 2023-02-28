@@ -45,6 +45,7 @@ struct MainModuleView: View {
                     Button(action: {
                         Haptic.shared.play(.soft)
                         applyChanges(customisations: customisations)
+                        UIApplication.shared.confirmAlert(title: "Applied!", body: "might have worked who knows yet", onOK: {}, noCancel: false)
 //                        let success = overwriteModule(appBundleID: id, module: Module)
 //                        if success {
 //                            UIApplication.shared.alert(title: "Success", body: "Successfully wrote to file!", withButton: true)
@@ -72,7 +73,7 @@ struct MainModuleView: View {
 
                     Spacer()
                     Button(action: {
-//                        consoleManager.isVisible.toggle()
+                        consoleManager.isVisible.toggle()
                     }, label: {
                         Label("Settings", systemImage: "gear")
                     })
