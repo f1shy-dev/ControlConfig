@@ -17,14 +17,25 @@ struct MainModuleView: View {
 
         NavigationView {
             ScrollView(.vertical) {
-                if customisations.list.isEmpty {
-                    VStack {
-                        Text("Wow, such empty")
-                            .foregroundColor(Color(UIColor.secondaryLabel))
-                    }.padding()
-                }
                 ForEach(customisations.list, id: \.module.bundleID) { item in
                     CustomisationCard(customisation: item, deleteCustomisation: customisations.deleteCustomisation, saveToUserDefaults: customisations.saveToUserDefaults)
+                }
+                if customisations.list.isEmpty {
+                    VStack {
+                        Image(systemName: "app.dashed")
+                            .font(.system(size: 55))
+                        Spacer()
+                        Text("No Modules")
+                            .font(.system(size: 30))
+                            .fontWeight(.semibold)
+                        Spacer()
+                        HStack {
+                            Text("Press the")
+                            Image(systemName: "plus.app")
+                            Text("button to add one!")
+                        }
+                    }.padding()
+                        .foregroundColor(Color(UIColor.secondaryLabel))
                 }
             }
             .frame(maxWidth: .infinity)
