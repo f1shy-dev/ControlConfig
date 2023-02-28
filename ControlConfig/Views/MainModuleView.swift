@@ -17,6 +17,12 @@ struct MainModuleView: View {
 
         NavigationView {
             ScrollView(.vertical) {
+                if customisations.list.isEmpty {
+                    VStack {
+                        Text("Wow, such empty")
+                            .foregroundColor(Color(UIColor.secondaryLabel))
+                    }.padding()
+                }
                 ForEach(customisations.list, id: \.module.bundleID) { item in
                     CustomisationCard(customisation: item, deleteCustomisation: customisations.deleteCustomisation, saveToUserDefaults: customisations.saveToUserDefaults)
                 }
