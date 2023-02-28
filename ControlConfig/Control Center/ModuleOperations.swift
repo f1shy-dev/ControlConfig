@@ -30,7 +30,7 @@ func fetchModules() -> [Module] {
             return [Module(fileName: "FakeModule.module")]
         }
 
-        let files = try FileManager.default.contentsOfDirectory(atPath: "/System/Library/ControlCenter/Bundles/")
+        let files = try FileManager.default.contentsOfDirectory(atPath: CCMappings.bundlesPath)
         return files.map { file in
             Module(fileName: file)
         }
@@ -55,6 +55,17 @@ func applyChanges(customisations: CustomisationList) -> Result<Bool, Error> {
                 infoPlist?.setValue(appBundleID, forKey: "CCLaunchApplicationIdentifier")
                 infoPlist?.setValue(appBundleID, forKey: "CCAssociatedBundleIdentifier")
             }
+            if let appURLScheme = customisation.launchAppURLScheme {
+                print("patching \(customisation.description) to app-url-scheme \(appURLScheme)")
+                infoPlist?.setValue(appURLScheme, forKey: "CCLaunchURL")
+            }
+        case .WorkflowLauncher:
+            infoPlist?.setValue("CCUIAppLauncherModule", forKey: "NSPrincipalClass")
+            if let shortcutName = customisation.launchShortcutName {
+                print("patching \(customisation.description) to open workflow \(shortcutName)")
+                infoPlist?.setValue("com.apple.shortcuts", forKey: "CCLaunchApplicationIdentifier")
+                infoPlist?.setValue("shortcuts://run-shortcut?name=" + shortcutName, forKey: "CCLaunchURL")
+            }
 
         default:
             print("default")
@@ -65,7 +76,11 @@ func applyChanges(customisations: CustomisationList) -> Result<Bool, Error> {
         }
 
         if customisation.disableOnHoldWidget == true {
-//            let patch2 = plistChangeStr(plistPath: infoPlist, key: "CFBundleDisplayName", value: customName)
+            infoPlist?.setValue(false, forKey: "CCSupportsApplicationShortcuts")
+        }
+
+        if customisation.module.isDefaultModule {
+            print("isdefaultmodule, didnt do much tho...")
         }
 
         if let dict = infoPlist {

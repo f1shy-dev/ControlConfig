@@ -5,6 +5,7 @@
 //  Created by f1shy-dev on 14/02/2023.
 //
 
+import Combine
 import Foundation
 
 enum CustomisationMode: String, Codable {
@@ -14,7 +15,7 @@ enum CustomisationMode: String, Codable {
 class Customisation: Codable, ObservableObject, Hashable {
     var isEnabled: Bool
     var module: Module
-    var mode: CustomisationMode
+    @Published var mode: CustomisationMode
 
     init(module: Module) {
         self.module = module
@@ -27,7 +28,7 @@ class Customisation: Codable, ObservableObject, Hashable {
         hasher.combine(module.fileName)
         hasher.combine(module.bundleID)
     }
-    
+
     static func ==(lhs: Customisation, rhs: Customisation) -> Bool {
         return lhs.module == rhs.module
     }
@@ -60,7 +61,7 @@ class Customisation: Codable, ObservableObject, Hashable {
         }
 
         if str.count > 0 {
-            return str.joined(separator: ",")
+            return str.joined(separator: ", ")
         }
 
         return "Doesn't do anything..."
