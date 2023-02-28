@@ -16,26 +16,29 @@ struct MainModuleView: View {
         let _ = print("redrawing home editor view")
 
         NavigationView {
-            ScrollView(.vertical) {
-                ForEach(customisations.list, id: \.module.bundleID) { item in
-                    CustomisationCard(customisation: item, deleteCustomisation: customisations.deleteCustomisation, saveToUserDefaults: customisations.saveToUserDefaults)
-                }
+            VStack {
                 if customisations.list.isEmpty {
+                    Spacer()
                     VStack {
-                        Image(systemName: "app.dashed")
-                            .font(.system(size: 55))
-                        Spacer()
                         Text("No Modules")
                             .font(.system(size: 30))
                             .fontWeight(.semibold)
-                        Spacer()
+
                         HStack {
                             Text("Press the")
                             Image(systemName: "plus.app")
-                            Text("button to add one!")
+                            Text("button below to add one!")
                         }
-                    }.padding()
-                        .foregroundColor(Color(UIColor.secondaryLabel))
+                    }
+                    .padding()
+                    .foregroundColor(Color(UIColor.secondaryLabel))
+                    Spacer()
+                } else {
+                    ScrollView(.vertical) {
+                        ForEach(customisations.list, id: \.module.bundleID) { item in
+                            CustomisationCard(customisation: item, deleteCustomisation: customisations.deleteCustomisation, saveToUserDefaults: customisations.saveToUserDefaults)
+                        }
+                    }
                 }
             }
             .frame(maxWidth: .infinity)
@@ -45,7 +48,7 @@ struct MainModuleView: View {
                     Button(action: {
                         Haptic.shared.play(.soft)
                         applyChanges(customisations: customisations)
-                        UIApplication.shared.confirmAlert(title: "Applied!", body: "might have worked who knows yet", onOK: {}, noCancel: false)
+                        UIApplication.shared.confirmAlert(title: "Applied!", body: "Please respring to see any changes.", onOK: {}, noCancel: true)
 //                        let success = overwriteModule(appBundleID: id, module: Module)
 //                        if success {
 //                            UIApplication.shared.alert(title: "Success", body: "Successfully wrote to file!", withButton: true)
@@ -93,6 +96,6 @@ struct MainModuleView: View {
 
 struct MainModule_Previews: PreviewProvider {
     static var previews: some View {
-        MainModuleView( )
+        MainModuleView()
     }
 }

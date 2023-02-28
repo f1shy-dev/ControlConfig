@@ -31,7 +31,7 @@ class Module: Identifiable, CustomStringConvertible, Codable, ObservableObject, 
     }
 
     var sfIcon: String {
-        if let icon = CCMappings.bundleIDBasedSFIcons[bundleID] {
+        if let icon = CCMappings().bundleIDBasedSFIcons[bundleID] {
             return "\(icon)"
         }
         return "app.dashed"
