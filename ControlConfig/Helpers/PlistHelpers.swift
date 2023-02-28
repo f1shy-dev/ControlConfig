@@ -28,7 +28,16 @@ public enum PlistHelpers {
     }
 
     public static func writeDictToPlist(dict: NSMutableDictionary, path: String) -> Bool {
-        dict.removeObjects(forKeys: ["DTPlatformBuild", "DTSDKBuild", "DTXcodeBuild", "DTCompiler", "DTSDKName"])
+        dict.removeObjects(forKeys: [
+            "DTPlatformBuild",
+            "DTSDKBuild",
+            "DTXcodeBuild",
+            "DTCompiler",
+            "DTSDKName",
+            "DTXcode",
+            "BuildMachineOSBuild",
+            "0"
+        ])
         let newData = try! PropertyListSerialization.data(fromPropertyList: dict as! [String: Any], format: .binary, options: 0)
         let padData = plistPadding(Plist_Data: newData, Default_URL_STR: path)! as Data
         // newData = newPlist

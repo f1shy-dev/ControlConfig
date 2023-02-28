@@ -13,9 +13,11 @@ struct EditModuleView: View {
     @Environment(\.dismiss) var dismiss
     @ObservedObject var customisation: Customisation
     @State private var selectedMode: CustomisationMode
+    var saveToUserDefaults: () -> Void
 
-    init(customisation: Customisation) {
+    init(customisation: Customisation, saveToUserDefaults: @escaping () -> Void) {
         self.customisation = customisation
+        self.saveToUserDefaults = saveToUserDefaults
         _selectedMode = State(initialValue: customisation.mode)
     }
 
@@ -133,6 +135,7 @@ struct EditModuleView: View {
             .toolbar {
                 ToolbarItem {
                     Button(action: {
+                        saveToUserDefaults()
                         dismiss()
                     }, label: {
                         Label("Close", systemImage: "xmark")

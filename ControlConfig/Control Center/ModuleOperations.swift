@@ -64,6 +64,7 @@ func applyChanges(customisations: CustomisationList) -> Result<Bool, Error> {
             if let shortcutName = customisation.launchShortcutName {
                 print("patching \(customisation.module.description) to open workflow \(shortcutName)")
                 infoPlist?.setValue("com.apple.shortcuts", forKey: "CCLaunchApplicationIdentifier")
+                infoPlist?.setValue("com.apple.shortcuts", forKey: "CCAssociatedBundleIdentifier")
                 infoPlist?.setValue("shortcuts://run-shortcut?name=" + shortcutName, forKey: "CCLaunchURL")
             }
 

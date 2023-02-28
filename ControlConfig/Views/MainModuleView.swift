@@ -10,10 +10,13 @@ import SwiftUI
 
 struct MainModuleView: View {
     @State private var showingAddNewSheet = false
+    @State private var showingSettingsSheet = false
     @ObservedObject var customisations = CustomisationList.loadFromUserDefaults()
+    @ObservedObject var appState = AppState.loadFromUserDefaults()
 
     var body: some View {
         let _ = print("redrawing home editor view")
+        let _ = print(appState.enableConsole)
 
         NavigationView {
             VStack {
@@ -76,10 +79,15 @@ struct MainModuleView: View {
 
                     Spacer()
                     Button(action: {
-                        consoleManager.isVisible.toggle()
+                        showingSettingsSheet.toggle()
+//                        consoleManager.isVisible.toggle()
                     }, label: {
                         Label("Settings", systemImage: "gear")
-                    })
+                    }).sheet(isPresented: $showingSettingsSheet, onDismiss: {
+                        appState.saveToUserDefaults()
+                    }) {
+                        SettingsView(appState: appState)
+                    }
 
                     Button(action: {
                         showingAddNewSheet.toggle()

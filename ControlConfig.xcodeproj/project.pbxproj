@@ -23,6 +23,8 @@
 		7D201C02299C25190023D649 /* CustomisationCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201C01299C25190023D649 /* CustomisationCard.swift */; };
 		7D59D959299A94370049302B /* CustomPrint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D59D958299A94370049302B /* CustomPrint.swift */; };
 		7DDD2FA129AE9A300064A7FC /* LocalConsole in Frameworks */ = {isa = PBXBuildFile; productRef = 7DDD2FA029AE9A300064A7FC /* LocalConsole */; };
+		7DDD2FA329AEB2F90064A7FC /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DDD2FA229AEB2F90064A7FC /* SettingsView.swift */; };
+		7DDD2FA529AEB35E0064A7FC /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DDD2FA429AEB35E0064A7FC /* AppState.swift */; };
 		D625E86A2991CD3000D5A5B0 /* ControlConfigApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D625E8692991CD3000D5A5B0 /* ControlConfigApp.swift */; };
 		D625E86E2991CD3200D5A5B0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D625E86D2991CD3200D5A5B0 /* Assets.xcassets */; };
 		D625E8712991CD3200D5A5B0 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D625E8702991CD3200D5A5B0 /* Preview Assets.xcassets */; };
@@ -69,6 +71,8 @@
 		7D201BFF299C238D0023D649 /* EditModuleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditModuleView.swift; sourceTree = "<group>"; };
 		7D201C01299C25190023D649 /* CustomisationCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomisationCard.swift; sourceTree = "<group>"; };
 		7D59D958299A94370049302B /* CustomPrint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPrint.swift; sourceTree = "<group>"; };
+		7DDD2FA229AEB2F90064A7FC /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		7DDD2FA429AEB35E0064A7FC /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		D625E8662991CD3000D5A5B0 /* ControlConfig.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ControlConfig.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D625E8692991CD3000D5A5B0 /* ControlConfigApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlConfigApp.swift; sourceTree = "<group>"; };
 		D625E86D2991CD3200D5A5B0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -121,6 +125,7 @@
 				7D201BE6299C19A20023D649 /* Module.swift */,
 				7D201BE8299C1A2B0023D649 /* Customisation.swift */,
 				7D201BEA299C1AB60023D649 /* CustomisationsList.swift */,
+				7DDD2FA429AEB35E0064A7FC /* AppState.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -156,6 +161,7 @@
 				7D201BFD299C23860023D649 /* AddModuleView.swift */,
 				7D201BFF299C238D0023D649 /* EditModuleView.swift */,
 				7D201C01299C25190023D649 /* CustomisationCard.swift */,
+				7DDD2FA229AEB2F90064A7FC /* SettingsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -397,10 +403,12 @@
 				D625E89D2991CF2A00D5A5B0 /* vm_unaligned_copy_switch_race.c in Sources */,
 				D625E8A32991CF8600D5A5B0 /* Alert++.swift in Sources */,
 				7D201BF4299C1E280023D649 /* PlistHelpers.swift in Sources */,
+				7DDD2FA529AEB35E0064A7FC /* AppState.swift in Sources */,
 				7D201BFB299C23100023D649 /* MainModuleView.swift in Sources */,
 				7D59D959299A94370049302B /* CustomPrint.swift in Sources */,
 				D625E89E2991CF2A00D5A5B0 /* helpers.m in Sources */,
 				7D201BF9299C22680023D649 /* TickToggleStyle.swift in Sources */,
+				7DDD2FA329AEB2F90064A7FC /* SettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -584,7 +592,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.0.1;
+				MARKETING_VERSION = 0.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.f1shy-dev.ControlConfig";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -620,7 +628,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.0.1;
+				MARKETING_VERSION = 0.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.f1shy-dev.ControlConfig";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

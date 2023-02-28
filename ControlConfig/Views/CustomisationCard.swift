@@ -73,8 +73,10 @@ struct CustomisationCard: View {
         )
         .padding([.top, .horizontal])
         .frame(maxWidth: .infinity)
-        .sheet(isPresented: $showingEditSheet) {
-            EditModuleView(customisation: customisation)
+        .sheet(isPresented: $showingEditSheet, onDismiss: {
+            saveToUserDefaults()
+        }) {
+            EditModuleView(customisation: customisation, saveToUserDefaults: saveToUserDefaults)
         }
     }
 }

@@ -52,12 +52,24 @@ class Customisation: Codable, ObservableObject, Hashable {
 
     var description: String {
         var str: [String] = []
-        if let app = launchAppBundleID {
-            str.append("Opens \(app)")
+        if mode == .AppLauncher {
+            if let app = launchAppBundleID {
+                str.append("Opens \"\(app)\"")
+            }
+        }
+
+        if mode == .WorkflowLauncher {
+            if let shortcut = launchShortcutName {
+                str.append("Runs shortcut \"\(shortcut)\"")
+            }
         }
 
         if (customWidth != nil) || (customHeight != nil) {
             str.append("Custom W/H")
+        }
+
+        if !(customName?.isEmpty ?? true) || (disableOnHoldWidget ?? false) {
+            str.append("Extras")
         }
 
         if str.count > 0 {
