@@ -11,6 +11,7 @@ import SwiftUI
 struct SettingsView: View {
     @Environment(\.dismiss) var dismiss
     @ObservedObject var appState: AppState
+    @ObservedObject var customisations: CustomisationList
 
     let appVersion = ((Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown") + " (" + (Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown") + ")")
     var body: some View {
@@ -24,7 +25,17 @@ struct SettingsView: View {
                     Label("Only enable if respringing doesn't work.", systemImage: "info.circle")
                 }
                 Section(header: Label("Debug", systemImage: "ladybug"), footer: Label("Settings meant for people who know what they're doing. Only touch anything here if the developers explicitly told you to.", systemImage: "info.circle")) {
-                    Button("Copy app logs") {
+                    Button("Export app logs") {
+                        let encoder = JSONEncoder()
+                        encoder.outputFormatting = .prettyPrinted
+                        if let encoded = try? encoder.encode(customisations.list) {
+                            if customisations.list.isEmpty {
+                                print("customisation list EMPTY")
+                            } else {
+                                print("customisation list")
+                                print(String(data: encoded, encoding: .utf8)!)
+                            }
+                        }
                         consoleManager.systemReport()
                         consoleManager.copyToClipboard()
                         UIApplication.shared.confirmAlert(title: "Success", body: "Copied app logs to clipboard.", onOK: {}, noCancel: true)

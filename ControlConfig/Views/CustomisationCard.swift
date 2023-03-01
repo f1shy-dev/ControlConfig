@@ -16,6 +16,7 @@ struct CustomisationCard: View {
     @ObservedObject var appState: AppState
     var deleteCustomisation: (_ item: Customisation) -> Void
     var saveToUserDefaults: () -> Void
+    var sendUpdateToList: () -> Void
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -43,6 +44,7 @@ struct CustomisationCard: View {
 //                Toggle("Enabled", isOn: $customisation.isEnabled).labelsHidden().toggleStyle(CheckToggleStyle())
                 Button {
                     customisation.objectWillChange.send()
+                    sendUpdateToList()
                     customisation.isEnabled.toggle()
                     saveToUserDefaults()
                 } label: {

@@ -12,7 +12,7 @@ class CustomisationList: ObservableObject {
     var list: [Customisation] {
         didSet {
             DispatchQueue(label: "UserDefaultsSaver", qos: .background).async {
-                print("saved something to USD")
+//                print("saved something to USD")
                 self.saveToUserDefaults()
             }
         }
@@ -43,7 +43,7 @@ class CustomisationList: ObservableObject {
     }
 
     func saveToUserDefaults() {
-        print("saving to user defaults...")
+//        print("saving to user defaults...")
         let encoder = JSONEncoder()
         if let encoded = try? encoder.encode(list) {
             UserDefaults.standard.set(encoded, forKey: "customisationList")

@@ -47,7 +47,9 @@ func applyChanges(customisations: CustomisationList) -> Bool {
 
     var success: [Bool] = []
 
-    for customisation in customisations.list {
+    for customisation in customisations.list.filter({ c in
+        c.isEnabled
+    }) {
         let infoPath = "\(CCMappings.bundlesPath)\(customisation.module.fileName)/Info.plist"
         let infoPlist = PlistHelpers.plistToDict(path: infoPath)
         switch customisation.mode {

@@ -15,18 +15,13 @@ struct MainModuleView: View {
     @ObservedObject var appState = AppState.loadFromUserDefaults()
 
     var body: some View {
-        let _ = print("redrawing home editor view")
-        let _ = print(appState.enableConsole)
-
         NavigationView {
             VStack {
                 if customisations.list.isEmpty {
+//                    Spacer().frame(height: CGFloat(UIScreen.main.bounds.size.height / 3) - 100)
                     Spacer()
                     VStack {
-                        Image(systemName: "questionmark.app.dashed")
-                            .font(.system(size: 55))
-                            .padding()
-                        Text("No Modules")
+                        Text("\(Image(systemName: "questionmark.app")) No Modules")
                             .font(.system(size: 30, weight: .semibold))
                         Text("Press the \(Image(systemName: "plus.app")) button below to add one!")
                     }
@@ -36,7 +31,9 @@ struct MainModuleView: View {
                 } else {
                     ScrollView(.vertical) {
                         ForEach(customisations.list, id: \.module.bundleID) { item in
-                            CustomisationCard(customisation: item, appState: appState, deleteCustomisation: customisations.deleteCustomisation, saveToUserDefaults: customisations.saveToUserDefaults)
+                            CustomisationCard(customisation: item, appState: appState, deleteCustomisation: customisations.deleteCustomisation, saveToUserDefaults: customisations.saveToUserDefaults) {
+                                customisations.objectWillChange.send()
+                            }
                         }
                     }
                 }
@@ -52,7 +49,7 @@ struct MainModuleView: View {
                     }).sheet(isPresented: $showingSettingsSheet, onDismiss: {
                         appState.saveToUserDefaults()
                     }) {
-                        SettingsView(appState: appState)
+                        SettingsView(appState: appState, customisations: customisations)
                     }
                 }
             }
@@ -65,14 +62,14 @@ struct MainModuleView: View {
                             UIApplication.shared.confirmAlert(title: "Applied!", body: "Please respring to see any changes.", onOK: {}, noCancel: true)
                         } else {
                             Haptic.shared.notify(.error)
-                            UIApplication.shared.alert(body: "An error occurred when writing to the file(s).")
+                            UIApplication.shared.alert(body: "An error occurred when writing to the file(s). This might be due to custom width/heights, which might have made the file too large. Please try and re-arrange your custom width/heights first, and then try again, and if not, please report this to the developer.")
                         }
                     }, label: {
                         Label("Apply", systemImage: "seal")
                         Text("Apply")
 
                     })
-                    .disabled(customisations.list.isEmpty)
+                    .disabled(customisations.list.filter { c in c.isEnabled }.isEmpty)
 
                     Spacer()
 
