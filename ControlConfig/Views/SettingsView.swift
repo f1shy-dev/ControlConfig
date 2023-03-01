@@ -28,9 +28,9 @@ struct SettingsView: View {
                 } header: {
                     Label("Respring", systemImage: "arrow.counterclockwise")
                 } footer: {
-                    Label("Enable if respringing doesn't work.", systemImage: "info.circle")
+                    Label("Only enable if respringing doesn't work.", systemImage: "info.circle")
                 }
-                Section(header: Label("Debug", systemImage: "ladybug"), footer: Label("Settings meant for developers. Only touch anything here if the developers told you to.", systemImage: "info.circle")) {
+                Section(header: Label("Debug", systemImage: "ladybug"), footer: Label("Settings meant for people who know what they're doing. Only touch anything here if the developers explicitly told you to.", systemImage: "info.circle")) {
                     Toggle("Enable in-app console", isOn: $appState.enableConsole)
                 }
                 Section{}header:{
