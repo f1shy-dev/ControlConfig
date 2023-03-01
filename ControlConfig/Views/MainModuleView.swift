@@ -49,6 +49,19 @@ struct MainModuleView: View {
             .frame(maxWidth: .infinity)
             .navigationTitle("ControlConfig")
             .toolbar {
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        showingSettingsSheet.toggle()
+                    }, label: {
+                        Label("Settings", systemImage: "gear")
+                    }).sheet(isPresented: $showingSettingsSheet, onDismiss: {
+                        appState.saveToUserDefaults()
+                    }) {
+                        SettingsView(appState: appState)
+                    }
+                }
+            }
+            .toolbar {
                 ToolbarItemGroup(placement: .bottomBar) {
                     Button(action: {
                         Haptic.shared.play(.soft)
@@ -63,6 +76,20 @@ struct MainModuleView: View {
                         Text("Apply")
 
                     })
+                    
+                    Spacer()
+                    
+                    Button(action: {
+                        showingAddNewSheet.toggle()
+                    }, label: {
+                        Label("Add Module", systemImage: "plus.app")
+                    }).sheet(isPresented: $showingAddNewSheet) {
+                        AddModuleView(customisations: customisations)
+                    }
+
+
+                    Spacer()
+                    
 
                     Button(action: {
                         MDC.respring(useLegacyMethod: UserDefaults.standard.bool(forKey: "legacyRespringEnabled"))
@@ -72,27 +99,8 @@ struct MainModuleView: View {
                         Text("Respring")
 
                     })
-
-                    Spacer()
-                    Button(action: {
-                        showingSettingsSheet.toggle()
-//                        consoleManager.isVisible.toggle()
-                    }, label: {
-                        Label("Settings", systemImage: "gear")
-                    }).sheet(isPresented: $showingSettingsSheet, onDismiss: {
-                        appState.saveToUserDefaults()
-                    }) {
-                        SettingsView(appState: appState)
-                    }
-
-                    Button(action: {
-                        showingAddNewSheet.toggle()
-                    }, label: {
-                        Label("Add Module", systemImage: "plus.app")
-                    }).sheet(isPresented: $showingAddNewSheet) {
-                        AddModuleView(customisations: customisations)
-                    }
                 }
+                
             }
         }.navigationViewStyle(StackNavigationViewStyle())
     }
