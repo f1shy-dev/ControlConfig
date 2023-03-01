@@ -28,12 +28,7 @@ struct MainModuleView: View {
                             .padding()
                         Text("No Modules")
                             .font(.system(size: 30, weight: .semibold))
-
-                        HStack {
-                            Text("Press the")
-                            Image(systemName: "plus.app")
-                            Text("button below to add one!")
-                        }
+                            Text("Press the \(Image(systemName: "plus.app")) button below to add one!")
                     }
                     .padding()
                     .foregroundColor(Color(UIColor.secondaryLabel))

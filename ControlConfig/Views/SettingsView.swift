@@ -35,12 +35,7 @@ struct SettingsView: View {
                 }
                 Section{}header:{
                     VStack {
-                        Text("ControlConfig \(appVersion)")
-                        HStack{
-                            Text("  Made with")
-                            Image(systemName: "heart.fill")
-                            Text("by two fish")
-                        }
+                        Text("ControlConfig \(appVersion)\nMade with \(Image(systemName: "heart.fill")) by two fish.")
                     }
                 }.textCase(.none)
             }
