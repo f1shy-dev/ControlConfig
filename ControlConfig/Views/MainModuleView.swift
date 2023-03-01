@@ -52,8 +52,8 @@ struct MainModuleView: View {
                 ToolbarItemGroup(placement: .bottomBar) {
                     Button(action: {
                         Haptic.shared.play(.soft)
-                        applyChanges(customisations: customisations)
-                        UIApplication.shared.confirmAlert(title: "Applied!", body: "Please respring to see any changes.", onOK: {}, noCancel: true)
+                        let success = applyChanges(customisations: customisations)
+                            UIApplication.shared.confirmAlert(title: "Applied!", body: "Please respring to see any changes.", onOK: {}, noCancel: true)
 //                        let success = overwriteModule(appBundleID: id, module: Module)
 //                        if success {
 //                            UIApplication.shared.alert(title: "Success", body: "Successfully wrote to file!", withButton: true)

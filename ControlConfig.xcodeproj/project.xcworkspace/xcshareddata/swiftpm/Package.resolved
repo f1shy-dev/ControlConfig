@@ -3,10 +3,10 @@
     {
       "identity" : "localconsole",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/f1shy-dev/LocalConsole",
+      "location" : "https://github.com/BomberFish/LocalConsole",
       "state" : {
         "branch" : "main",
-        "revision" : "072ec79d3a77ed0e74a4ea1299f5848e20b05756"
+        "revision" : "fbb706dad02d87a76ea882f644ec534429722480"
       }
     }
   ],
