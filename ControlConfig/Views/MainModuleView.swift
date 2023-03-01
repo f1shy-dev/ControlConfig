@@ -71,7 +71,7 @@ struct MainModuleView: View {
                     })
 
                     Button(action: {
-                        MDC.respring()
+                        MDC.respring(useLegacyMethod: UserDefaults.standard.bool(forKey: "legacyRespringEnabled"))
 
                     }, label: {
                         Label("Respring", systemImage: "arrow.counterclockwise.circle")

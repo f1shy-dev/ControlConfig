@@ -7,21 +7,33 @@
 //
         
 import Foundation
+import UIKit
 
 public enum MDC {
     public static func overwriteFile(at path: String, with data: Data) -> Bool {
         return overwriteFileWithDataImpl(originPath: path, replacementData: data)
     }
     
-    public static func respring() {
-        let processes = [
-            // only kill frontboard since killing backboard doesnt apply cc tweaks??
-            "com.apple.cfprefsd.daemon",
-            //        "com.apple.backboard.TouchDeliveryPolicyServer",
-            "com.apple.frontboard.systemappservices"
-        ]
-        for process in processes {
-            xpc_crash(process)
+    public static func respring(useLegacyMethod: Bool) {
+        if useLegacyMethod {
+            print("Respringing... (legacy)")
+            Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { _ in
+                guard let window = UIApplication.shared.windows.first else { return }
+                while true {
+                    window.snapshotView(afterScreenUpdates: false)
+                }
+            }
+        } else {
+            print("Respringing... (xpc_crasher)")
+            let processes = [
+                // only kill frontboard since killing backboard doesnt apply cc tweaks??
+                "com.apple.cfprefsd.daemon",
+                //        "com.apple.backboard.TouchDeliveryPolicyServer",
+                "com.apple.frontboard.systemappservices"
+            ]
+            for process in processes {
+                xpc_crash(process)
+            }
         }
     }
     
