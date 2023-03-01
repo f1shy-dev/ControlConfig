@@ -5,7 +5,7 @@ build/*
 *.ipa
 .DS_Store
 */.DS_Store
-
+releases/
 ControlConfig.xcodeproj/xcuserdata/*.xcuserdatad
 ## User settings
 xcuserdata/
