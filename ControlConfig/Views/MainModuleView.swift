@@ -53,7 +53,11 @@ struct MainModuleView: View {
                     Button(action: {
                         Haptic.shared.play(.soft)
                         let success = applyChanges(customisations: customisations)
+                        if success {
                             UIApplication.shared.confirmAlert(title: "Applied!", body: "Please respring to see any changes.", onOK: {}, noCancel: true)
+                        } else {
+                            UIApplication.shared.alert(body: "An error occurred when writing to the file(s).")
+                        }
 //                        let success = overwriteModule(appBundleID: id, module: Module)
 //                        if success {
 //                            UIApplication.shared.alert(title: "Success", body: "Successfully wrote to file!", withButton: true)

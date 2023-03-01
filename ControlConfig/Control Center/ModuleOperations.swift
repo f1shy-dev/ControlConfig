@@ -41,7 +41,7 @@ func fetchModules() -> [Module] {
     }
 }
 
-func applyChanges(customisations: CustomisationList) -> Result<Bool, Error> {
+func applyChanges(customisations: CustomisationList) -> Bool {
     let dmsPlist = PlistHelpers.plistToDict(path: CCMappings().dmsPath)
 
     for customisation in customisations.list {
@@ -85,8 +85,8 @@ func applyChanges(customisations: CustomisationList) -> Result<Bool, Error> {
         }
 
         if let dict = infoPlist {
-            _ = PlistHelpers.writeDictToPlist(dict: dict, path: infoPath)
+            return PlistHelpers.writeDictToPlist(dict: dict, path: infoPath)
         }
     }
-    return .success(true)
+    return false
 }
