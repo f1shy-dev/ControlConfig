@@ -58,16 +58,6 @@ struct MainModuleView: View {
                         } else {
                             UIApplication.shared.alert(body: "An error occurred when writing to the file(s).")
                         }
-//                        let success = overwriteModule(appBundleID: id, module: Module)
-//                        if success {
-//                            UIApplication.shared.alert(title: "Success", body: "Successfully wrote to file!", withButton: true)
-//
-//                            Haptic.shared.notify(.success)
-//                        } else {
-//                            UIApplication.shared.alert(title: "Error", body: "An error occurred while writing to the file.", withButton: true)
-//
-//                            Haptic.shared.notify(.error)
-//                        }
                     }, label: {
                         Label("Apply", systemImage: "seal")
                         Text("Apply")
