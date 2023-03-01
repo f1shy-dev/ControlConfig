@@ -9,17 +9,31 @@ import Combine
 import Foundation
 
 class AppState: Codable, ObservableObject {
-    
     @Published var enableConsole: Bool {
         didSet {
+            saveToUserDefaults()
             consoleManager.isVisible = enableConsole
         }
     }
 
-    @Published var useLegacyRespring: Bool
+    @Published var useLegacyRespring: Bool {
+        didSet {
+            saveToUserDefaults()
+        }
+    }
 
-    init(enableConsole: Bool, useLegacyRespring: Bool) {
+    @Published var debugMode: Bool {
+        didSet {
+            saveToUserDefaults()
+            if debugMode == false {
+                enableConsole = false
+            }
+        }
+    }
+
+    init(enableConsole: Bool, useLegacyRespring: Bool, debugMode: Bool) {
         self.enableConsole = enableConsole
+        self.debugMode = debugMode
         self.useLegacyRespring = useLegacyRespring
         consoleManager.isVisible = enableConsole
     }
@@ -27,12 +41,14 @@ class AppState: Codable, ObservableObject {
     enum CodingKeys: String, CodingKey {
         case enableConsole
         case useLegacyRespring
+        case debugMode
     }
 
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.enableConsole = try container.decode(Bool.self, forKey: .enableConsole)
         self.useLegacyRespring = try container.decode(Bool.self, forKey: .useLegacyRespring)
+        self.debugMode = try container.decode(Bool.self, forKey: .debugMode)
         consoleManager.isVisible = enableConsole
     }
 
@@ -40,6 +56,7 @@ class AppState: Codable, ObservableObject {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(enableConsole, forKey: .enableConsole)
         try container.encode(useLegacyRespring, forKey: .useLegacyRespring)
+        try container.encode(debugMode, forKey: .debugMode)
     }
 
     func saveToUserDefaults() {
@@ -56,6 +73,6 @@ class AppState: Codable, ObservableObject {
         {
             return state
         }
-        return AppState(enableConsole: false, useLegacyRespring: false)
+        return AppState(enableConsole: false, useLegacyRespring: false, debugMode: false)
     }
 }

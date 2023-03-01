@@ -42,7 +42,10 @@ func fetchModules() -> [Module] {
 }
 
 func applyChanges(customisations: CustomisationList) -> Bool {
-    let dmsPlist = PlistHelpers.plistToDict(path: CCMappings().dmsPath)
+    let dmsPlistOriginal = PlistHelpers.plistToDict(path: CCMappings().dmsPath)
+    var dmsPlist = PlistHelpers.plistToDict(path: CCMappings().dmsPath)
+
+    var success: [Bool] = []
 
     for customisation in customisations.list {
         let infoPath = "\(CCMappings.bundlesPath)\(customisation.module.fileName)/Info.plist"
@@ -81,13 +84,37 @@ func applyChanges(customisations: CustomisationList) -> Bool {
         }
 
         if customisation.module.isDefaultModule {
-            
-            print("isdefaultmodule, didnt do much tho...")
+            if let unwrappedDMSPlist = dmsPlist, let moduleDMSDict = unwrappedDMSPlist[customisation.module.bundleID] as? NSMutableDictionary {
+                let sizes = customisation.module.sizesInDMSFile
+                let keysToEdit = sizes.filter { $0.hasPrefix("size.") }
+                let landscapeKeysToEdit = sizes.filter { $0.hasPrefix("landscape.size.") }
+                let portraitKeysToEdit = sizes.filter { $0.hasPrefix("portrait.size.") }
+
+                keysToEdit.forEach { key in
+                    moduleDMSDict.setValue(key == "size.height" ? customisation.customHeightBothWays : customisation.customWidthBothWays, forKeyPath: key)
+                }
+
+                landscapeKeysToEdit.forEach { key in
+                    moduleDMSDict.setValue(key == "landscape.size.height" ? customisation.customHeightLandscape : customisation.customWidthLandscape, forKeyPath: key)
+                }
+
+                portraitKeysToEdit.forEach { key in
+                    moduleDMSDict.setValue(key == "portrait.size.height" ? customisation.customHeightPortrait : customisation.customWidthPortrait, forKeyPath: key)
+                }
+
+                unwrappedDMSPlist.setValue(moduleDMSDict, forKey: customisation.module.bundleID)
+                dmsPlist = Optional(unwrappedDMSPlist)
+            }
         }
 
         if let dict = infoPlist {
-            return PlistHelpers.writeDictToPlist(dict: dict, path: infoPath)
+            success.append(PlistHelpers.writeDictToPlist(dict: dict, path: infoPath))
         }
     }
-    return false
+
+    if let new = dmsPlist {
+        success.append(PlistHelpers.writeDictToPlist(dict: new, path: CCMappings().dmsPath))
+    }
+    print("successmap", success)
+    return !success.contains { $0 == false }
 }

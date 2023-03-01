@@ -13,6 +13,7 @@ struct CustomisationCard: View {
     @State var showingEditSheet = false
 //    @State var customisationList: CustomisationList
     @ObservedObject var customisation: Customisation
+    @ObservedObject var appState: AppState
     var deleteCustomisation: (_ item: Customisation) -> Void
     var saveToUserDefaults: () -> Void
 
@@ -76,7 +77,7 @@ struct CustomisationCard: View {
         .sheet(isPresented: $showingEditSheet, onDismiss: {
             saveToUserDefaults()
         }) {
-            EditModuleView(customisation: customisation, saveToUserDefaults: saveToUserDefaults)
+            EditModuleView(customisation: customisation, appState: appState, saveToUserDefaults: saveToUserDefaults)
         }
     }
 }

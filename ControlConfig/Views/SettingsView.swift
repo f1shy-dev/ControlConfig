@@ -24,11 +24,14 @@ struct SettingsView: View {
                     Label("Only enable if respringing doesn't work.", systemImage: "info.circle")
                 }
                 Section(header: Label("Debug", systemImage: "ladybug"), footer: Label("Settings meant for people who know what they're doing. Only touch anything here if the developers explicitly told you to.", systemImage: "info.circle")) {
-                    Toggle("Enable in-app console", isOn: $appState.enableConsole)
                     Button("Copy app logs") {
                         consoleManager.systemReport()
                         consoleManager.copyToClipboard()
                         UIApplication.shared.confirmAlert(title: "Success", body: "Copied app logs to clipboard.", onOK: {}, noCancel: true)
+                    }
+                    Toggle("Enable debug mode", isOn: $appState.debugMode)
+                    if appState.debugMode {
+                        Toggle("Enable in-app console", isOn: $appState.enableConsole)
                     }
                 }
                 Section {} header: {

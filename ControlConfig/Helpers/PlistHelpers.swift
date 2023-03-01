@@ -47,7 +47,7 @@ public enum PlistHelpers {
     public static func plistToDict(path: String) -> NSMutableDictionary? {
         return NSMutableDictionary(contentsOfFile: path)
     }
-    
+
     // <3 chatgpt
     public static func getKeys(from dictionary: [String: Any], prefix: String = "") -> [String] {
         var keys: [String] = []
@@ -60,5 +60,21 @@ public enum PlistHelpers {
             }
         }
         return keys
+    }
+
+    public static func plistBytesSize(_ dictionary: NSMutableDictionary) -> Int {
+        let newData = try! PropertyListSerialization.data(fromPropertyList: dictionary as! [String: Any], format: .binary, options: 0)
+        return newData.count
+    }
+
+    public static func filePathBytesSize(_ filepath: String) -> Int? {
+        let fileManager = FileManager.default
+        guard let attributes = try? fileManager.attributesOfItem(atPath: filepath) else {
+            return nil
+        }
+        guard let size = attributes[FileAttributeKey.size] as? Int else {
+            return nil
+        }
+        return size
     }
 }

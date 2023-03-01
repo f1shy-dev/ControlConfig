@@ -21,6 +21,20 @@ class Customisation: Codable, ObservableObject, Hashable {
         self.module = module
         self.mode = .ModuleFunction
         self.isEnabled = false
+
+        if module.isDefaultModule {
+            if let dmsTemp = PlistHelpers.plistToDict(path: CCMappings().dmsPath), let moduleDMSDict = dmsTemp[module.bundleID] as? NSMutableDictionary {
+                let sizes = module.sizesInDMSFile
+                if sizes.contains("size.height"), let h = moduleDMSDict.value(forKeyPath: "size.height") as? Int { self.customHeightBothWays = h }
+                if sizes.contains("size.width"), let h = moduleDMSDict.value(forKeyPath: "size.width") as? Int { self.customWidthBothWays = h }
+
+                if sizes.contains("portrait.size.height"), let h = moduleDMSDict.value(forKeyPath: "portrait.size.height") as? Int { self.customHeightPortrait = h }
+                if sizes.contains("portrait.size.width"), let h = moduleDMSDict.value(forKeyPath: "portrait.size.width") as? Int { self.customWidthPortrait = h }
+
+                if sizes.contains("landscape.size.height"), let h = moduleDMSDict.value(forKeyPath: "landscape.size.height") as? Int { self.customHeightLandscape = h }
+                if sizes.contains("landscape.size.width"), let h = moduleDMSDict.value(forKeyPath: "landscape.size.width") as? Int { self.customWidthLandscape = h }
+            }
+        }
     }
 
     func hash(into hasher: inout Hasher) {
@@ -40,11 +54,13 @@ class Customisation: Codable, ObservableObject, Hashable {
     // shortcuts using urlscheme
     @Published var launchShortcutName: String?
 
-    // default modules - width/height
+    // default modules - width/height (Int because sliders are Ints...)
     @Published var customWidthPortrait: Int?
     @Published var customHeightPortrait: Int?
     @Published var customWidthLandscape: Int?
     @Published var customHeightLandscape: Int?
+    @Published var customWidthBothWays: Int?
+    @Published var customHeightBothWays: Int?
 
     // name/icon
     @Published var customName: String?
@@ -66,7 +82,7 @@ class Customisation: Codable, ObservableObject, Hashable {
             }
         }
 
-        if (customWidthPortrait != nil) || (customHeightPortrait != nil) || (customWidthLandscape != nil) || (customHeightLandscape != nil) {
+        if [customWidthPortrait, customHeightPortrait, customWidthLandscape, customHeightLandscape, customWidthBothWays, customHeightBothWays].contains(where: { $0 != nil }) {
             str.append("Custom W/H")
         }
 
@@ -90,10 +106,14 @@ class Customisation: Codable, ObservableObject, Hashable {
         case launchAppURLScheme
         case disableOnHoldWidget
         case launchShortcutName
+
         case customWidthPortrait
         case customHeightPortrait
         case customWidthLandscape
         case customHeightLandscape
+        case customWidthBothWays
+        case customHeightBothWays
+
         case customName
     }
 
@@ -111,6 +131,8 @@ class Customisation: Codable, ObservableObject, Hashable {
         self.customHeightPortrait = try? container.decode(Int.self, forKey: .customHeightPortrait)
         self.customWidthLandscape = try? container.decode(Int.self, forKey: .customWidthLandscape)
         self.customHeightLandscape = try? container.decode(Int.self, forKey: .customHeightLandscape)
+        self.customWidthBothWays = try? container.decode(Int.self, forKey: .customWidthBothWays)
+        self.customHeightBothWays = try? container.decode(Int.self, forKey: .customHeightBothWays)
         self.customName = try? container.decode(String.self, forKey: .customName)
     }
 
@@ -130,6 +152,10 @@ class Customisation: Codable, ObservableObject, Hashable {
 
         try? container.encode(customWidthLandscape, forKey: .customWidthLandscape)
         try? container.encode(customHeightLandscape, forKey: .customHeightLandscape)
+
+        try? container.encode(customWidthBothWays, forKey: .customWidthBothWays)
+        try? container.encode(customHeightBothWays, forKey: .customHeightBothWays)
+
         try? container.encode(customName, forKey: .customName)
     }
 }

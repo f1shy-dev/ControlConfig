@@ -48,7 +48,8 @@ class Module: Identifiable, CustomStringConvertible, Codable, ObservableObject, 
             bundleID == "\(key)"
         }) == true {
             if let module = dmsDict?[bundleID] {
-                print(PlistHelpers.getKeys(from: module as! [String: Any]))
+//                print(module)
+                return PlistHelpers.getKeys(from: module as! [String: Any])
             }
         }
         return []

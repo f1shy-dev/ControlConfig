@@ -7,7 +7,7 @@
 
 import Foundation
 
-public func print(_ items: String..., separator: String = " ", terminator: String = "\n") {
+public func print(_ items: Any..., separator: String = " ", terminator: String = "\n") {
     let data = items.map { "\($0)" }.joined(separator: separator)
     consoleManager.print(data)
     Swift.print(data, terminator: terminator)

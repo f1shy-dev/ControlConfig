@@ -36,7 +36,7 @@ struct MainModuleView: View {
                 } else {
                     ScrollView(.vertical) {
                         ForEach(customisations.list, id: \.module.bundleID) { item in
-                            CustomisationCard(customisation: item, deleteCustomisation: customisations.deleteCustomisation, saveToUserDefaults: customisations.saveToUserDefaults)
+                            CustomisationCard(customisation: item, appState: appState, deleteCustomisation: customisations.deleteCustomisation, saveToUserDefaults: customisations.saveToUserDefaults)
                         }
                     }
                 }

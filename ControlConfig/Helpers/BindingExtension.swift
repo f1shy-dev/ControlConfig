@@ -14,3 +14,16 @@ extension Binding {
         Binding<T>(get: { self.wrappedValue ?? defaultValue }, set: { self.wrappedValue = $0 })
     }
 }
+
+extension Binding where Value == Int? {
+    var doubleBinding: Binding<Double> {
+        Binding<Double>(
+            get: {
+                Double(self.wrappedValue ?? 0)
+            },
+            set: {
+                self.wrappedValue = Int($0)
+            }
+        )
+    }
+}
