@@ -23,6 +23,8 @@ struct MainModuleView: View {
                 if customisations.list.isEmpty {
                     Spacer()
                     VStack {
+                        Image(systemName: "app.dashed")
+                            .font(.system(size: 55))
                         Text("No Modules")
                             .font(.system(size: 30))
                             .fontWeight(.semibold)
