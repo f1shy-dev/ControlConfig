@@ -24,6 +24,7 @@
 		7D59D959299A94370049302B /* CustomPrint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D59D958299A94370049302B /* CustomPrint.swift */; };
 		7DDD2FA329AEB2F90064A7FC /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DDD2FA229AEB2F90064A7FC /* SettingsView.swift */; };
 		7DDD2FA529AEB35E0064A7FC /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DDD2FA429AEB35E0064A7FC /* AppState.swift */; };
+		7DDD2FA829AFD1020064A7FC /* LocalConsole in Frameworks */ = {isa = PBXBuildFile; productRef = 7DDD2FA729AFD1020064A7FC /* LocalConsole */; };
 		D625E86A2991CD3000D5A5B0 /* ControlConfigApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D625E8692991CD3000D5A5B0 /* ControlConfigApp.swift */; };
 		D625E86E2991CD3200D5A5B0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D625E86D2991CD3200D5A5B0 /* Assets.xcassets */; };
 		D625E8712991CD3200D5A5B0 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D625E8702991CD3200D5A5B0 /* Preview Assets.xcassets */; };
@@ -35,7 +36,6 @@
 		D625E89F2991CF2A00D5A5B0 /* grant_full_disk_access.m in Sources */ = {isa = PBXBuildFile; fileRef = D625E89C2991CF2A00D5A5B0 /* grant_full_disk_access.m */; };
 		D625E8A32991CF8600D5A5B0 /* Alert++.swift in Sources */ = {isa = PBXBuildFile; fileRef = D625E8A12991CF8600D5A5B0 /* Alert++.swift */; };
 		D625E8A42991CF8600D5A5B0 /* Haptic++.swift in Sources */ = {isa = PBXBuildFile; fileRef = D625E8A22991CF8600D5A5B0 /* Haptic++.swift */; };
-		D6BE5E6A29AEF54400ADDDCF /* LocalConsole in Frameworks */ = {isa = PBXBuildFile; productRef = D6BE5E6929AEF54400ADDDCF /* LocalConsole */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -98,7 +98,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D6BE5E6A29AEF54400ADDDCF /* LocalConsole in Frameworks */,
+				7DDD2FA829AFD1020064A7FC /* LocalConsole in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -266,7 +266,7 @@
 			);
 			name = ControlConfig;
 			packageProductDependencies = (
-				D6BE5E6929AEF54400ADDDCF /* LocalConsole */,
+				7DDD2FA729AFD1020064A7FC /* LocalConsole */,
 			);
 			productName = ControlConfig;
 			productReference = D625E8662991CD3000D5A5B0 /* ControlConfig.app */;
@@ -342,7 +342,7 @@
 			);
 			mainGroup = D625E85D2991CD3000D5A5B0;
 			packageReferences = (
-				D6BE5E6829AEF54400ADDDCF /* XCRemoteSwiftPackageReference "LocalConsole" */,
+				7DDD2FA629AFD1020064A7FC /* XCRemoteSwiftPackageReference "LocalConsole" */,
 			);
 			productRefGroup = D625E8672991CD3000D5A5B0 /* Products */;
 			projectDirPath = "";
@@ -576,7 +576,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = Alpha;
 				DEVELOPMENT_ASSET_PATHS = "\"ControlConfig/Preview Content\"";
-				DEVELOPMENT_TEAM = 8JKVMYCRTJ;
+				DEVELOPMENT_TEAM = ZV2PLXMRSB;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
@@ -593,7 +593,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.0.2;
-				PRODUCT_BUNDLE_IDENTIFIER = ca.bomberfish.FileSwitcherConvert;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.f1shy-dev.ControlConfig";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "ControlConfig/Exploit/ControlConfig-Bridging-Header.h";
@@ -612,7 +612,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = Alpha;
 				DEVELOPMENT_ASSET_PATHS = "\"ControlConfig/Preview Content\"";
-				DEVELOPMENT_TEAM = 8JKVMYCRTJ;
+				DEVELOPMENT_TEAM = ZV2PLXMRSB;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
@@ -764,9 +764,9 @@
 				kind = branch;
 			};
 		};
-		D6BE5E6829AEF54400ADDDCF /* XCRemoteSwiftPackageReference "LocalConsole" */ = {
+		7DDD2FA629AFD1020064A7FC /* XCRemoteSwiftPackageReference "LocalConsole" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/BomberFish/LocalConsole";
+			repositoryURL = "https://github.com/f1shy-dev/LocalConsole";
 			requirement = {
 				branch = main;
 				kind = branch;
@@ -780,9 +780,9 @@
 			package = 7DDD2F9B29AE9A1F0064A7FC /* XCRemoteSwiftPackageReference "LocalConsole" */;
 			productName = LocalConsole;
 		};
-		D6BE5E6929AEF54400ADDDCF /* LocalConsole */ = {
+		7DDD2FA729AFD1020064A7FC /* LocalConsole */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = D6BE5E6829AEF54400ADDDCF /* XCRemoteSwiftPackageReference "LocalConsole" */;
+			package = 7DDD2FA629AFD1020064A7FC /* XCRemoteSwiftPackageReference "LocalConsole" */;
 			productName = LocalConsole;
 		};
 /* End XCSwiftPackageProductDependency section */

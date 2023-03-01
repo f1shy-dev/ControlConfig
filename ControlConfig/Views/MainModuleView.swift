@@ -28,7 +28,7 @@ struct MainModuleView: View {
                             .padding()
                         Text("No Modules")
                             .font(.system(size: 30, weight: .semibold))
-                            Text("Press the \(Image(systemName: "plus.app")) button below to add one!")
+                        Text("Press the \(Image(systemName: "plus.app")) button below to add one!")
                     }
                     .padding()
                     .foregroundColor(Color(UIColor.secondaryLabel))
@@ -73,9 +73,9 @@ struct MainModuleView: View {
 
                     })
                     .disabled(customisations.list.isEmpty)
-                    
+
                     Spacer()
-                    
+
                     Button(action: {
                         Haptic.shared.play(.light)
                         showingAddNewSheet.toggle()
@@ -85,20 +85,16 @@ struct MainModuleView: View {
                         AddModuleView(customisations: customisations)
                     }
 
-
                     Spacer()
-                    
 
                     Button(action: {
-                        MDC.respring(useLegacyMethod: UserDefaults.standard.bool(forKey: "legacyRespringEnabled"))
+                        MDC.respring(useLegacyMethod: appState.useLegacyRespring)
 
                     }, label: {
                         Label("Respring", systemImage: "arrow.counterclockwise.circle")
                         Text("Respring")
-
                     })
                 }
-                
             }
         }.navigationViewStyle(StackNavigationViewStyle())
     }

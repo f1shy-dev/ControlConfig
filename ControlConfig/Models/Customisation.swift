@@ -90,8 +90,10 @@ class Customisation: Codable, ObservableObject, Hashable {
         case launchAppURLScheme
         case disableOnHoldWidget
         case launchShortcutName
-        case customWidth
-        case customHeight
+        case customWidthPortrait
+        case customHeightPortrait
+        case customWidthLandscape
+        case customHeightLandscape
         case customName
     }
 
@@ -105,8 +107,10 @@ class Customisation: Codable, ObservableObject, Hashable {
         self.launchAppURLScheme = try? container.decode(String.self, forKey: .launchAppURLScheme)
         self.disableOnHoldWidget = try? container.decode(Bool.self, forKey: .disableOnHoldWidget)
         self.launchShortcutName = try? container.decode(String.self, forKey: .launchShortcutName)
-        self.customWidth = try? container.decode(Int.self, forKey: .customWidth)
-        self.customHeight = try? container.decode(Int.self, forKey: .customHeight)
+        self.customWidthPortrait = try? container.decode(Int.self, forKey: .customWidthPortrait)
+        self.customHeightPortrait = try? container.decode(Int.self, forKey: .customHeightPortrait)
+        self.customWidthLandscape = try? container.decode(Int.self, forKey: .customWidthLandscape)
+        self.customHeightLandscape = try? container.decode(Int.self, forKey: .customHeightLandscape)
         self.customName = try? container.decode(String.self, forKey: .customName)
     }
 
@@ -120,8 +124,12 @@ class Customisation: Codable, ObservableObject, Hashable {
         try? container.encode(launchAppURLScheme, forKey: .launchAppURLScheme)
         try? container.encode(disableOnHoldWidget, forKey: .disableOnHoldWidget)
         try? container.encode(launchShortcutName, forKey: .launchShortcutName)
-        try? container.encode(customWidth, forKey: .customWidth)
-        try? container.encode(customHeight, forKey: .customHeight)
+
+        try? container.encode(customWidthPortrait, forKey: .customWidthPortrait)
+        try? container.encode(customHeightPortrait, forKey: .customHeightPortrait)
+
+        try? container.encode(customWidthLandscape, forKey: .customWidthLandscape)
+        try? container.encode(customHeightLandscape, forKey: .customHeightLandscape)
         try? container.encode(customName, forKey: .customName)
     }
 }

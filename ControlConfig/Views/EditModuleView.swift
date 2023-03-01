@@ -24,17 +24,17 @@ struct EditModuleView: View {
     var body: some View {
         var widthInt: Binding<Double> {
             Binding<Double>(get: {
-                Double(customisation.customWidth ?? 2)
+                Double(customisation.customWidthPortrait ?? 2)
             }, set: {
-                customisation.customWidth = Int($0)
+                customisation.customWidthPortrait = Int($0)
             })
         }
 
         var heightInt: Binding<Double> {
             Binding<Double>(get: {
-                Double(customisation.customHeight ?? 2)
+                Double(customisation.customHeightPortrait ?? 2)
             }, set: {
-                customisation.customHeight = Int($0)
+                customisation.customHeightPortrait = Int($0)
             })
         }
 
