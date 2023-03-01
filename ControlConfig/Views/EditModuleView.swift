@@ -86,7 +86,7 @@ struct EditModuleView: View {
                 }
 
                 if customisation.module.isDefaultModule {
-                    Section(header: Label("Sizing (Defualt Module)", systemImage: "ruler")) {
+                    Section(header: Label("Sizing (Default Module)", systemImage: "ruler")) {
                         HStack {
                             Text("Width")
                             Spacer()
