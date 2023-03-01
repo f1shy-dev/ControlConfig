@@ -72,6 +72,7 @@ struct MainModuleView: View {
                         Text("Apply")
 
                     })
+                    .disabled(customisations.list.isEmpty)
                     
                     Spacer()
                     
