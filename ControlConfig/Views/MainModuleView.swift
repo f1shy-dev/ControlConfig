@@ -23,15 +23,12 @@ struct MainModuleView: View {
                 if customisations.list.isEmpty {
                     Spacer()
                     VStack {
+                        Image(systemName: "questionmark.app.dashed")
+                            .font(.system(size: 55))
+                            .padding()
                         Text("No Modules")
-                            .font(.system(size: 30))
-                            .fontWeight(.semibold)
-
-                        HStack {
-                            Text("Press the")
-                            Image(systemName: "plus.app")
-                            Text("button below to add one!")
-                        }
+                            .font(.system(size: 30, weight: .semibold))
+                            Text("Press the \(Image(systemName: "plus.app")) button below to add one!")
                     }
                     .padding()
                     .foregroundColor(Color(UIColor.secondaryLabel))
@@ -47,40 +44,9 @@ struct MainModuleView: View {
             .frame(maxWidth: .infinity)
             .navigationTitle("ControlConfig")
             .toolbar {
-                ToolbarItemGroup(placement: .bottomBar) {
-                    Button(action: {
-                        Haptic.shared.play(.soft)
-                        applyChanges(customisations: customisations)
-                        UIApplication.shared.confirmAlert(title: "Applied!", body: "Please respring to see any changes.", onOK: {}, noCancel: true)
-//                        let success = overwriteModule(appBundleID: id, module: Module)
-//                        if success {
-//                            UIApplication.shared.alert(title: "Success", body: "Successfully wrote to file!", withButton: true)
-//
-//                            Haptic.shared.notify(.success)
-//                        } else {
-//                            UIApplication.shared.alert(title: "Error", body: "An error occurred while writing to the file.", withButton: true)
-//
-//                            Haptic.shared.notify(.error)
-//                        }
-                    }, label: {
-                        Label("Apply", systemImage: "seal")
-                        Text("Apply")
-
-                    })
-
-                    Button(action: {
-                        MDC.respring()
-
-                    }, label: {
-                        Label("Respring", systemImage: "arrow.counterclockwise.circle")
-                        Text("Respring")
-
-                    })
-
-                    Spacer()
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
                     Button(action: {
                         showingSettingsSheet.toggle()
-//                        consoleManager.isVisible.toggle()
                     }, label: {
                         Label("Settings", systemImage: "gear")
                     }).sheet(isPresented: $showingSettingsSheet, onDismiss: {
@@ -88,15 +54,51 @@ struct MainModuleView: View {
                     }) {
                         SettingsView(appState: appState)
                     }
-
+                }
+            }
+            .toolbar {
+                ToolbarItemGroup(placement: .bottomBar) {
                     Button(action: {
+                        let success = applyChanges(customisations: customisations)
+                        if success {
+                            Haptic.shared.notify(.success)
+                            UIApplication.shared.confirmAlert(title: "Applied!", body: "Please respring to see any changes.", onOK: {}, noCancel: true)
+                        } else {
+                            Haptic.shared.notify(.error)
+                            UIApplication.shared.alert(body: "An error occurred when writing to the file(s).")
+                        }
+                    }, label: {
+                        Label("Apply", systemImage: "seal")
+                        Text("Apply")
+
+                    })
+                    .disabled(customisations.list.isEmpty)
+                    
+                    Spacer()
+                    
+                    Button(action: {
+                        Haptic.shared.play(.light)
                         showingAddNewSheet.toggle()
                     }, label: {
                         Label("Add Module", systemImage: "plus.app")
                     }).sheet(isPresented: $showingAddNewSheet) {
                         AddModuleView(customisations: customisations)
                     }
+
+
+                    Spacer()
+                    
+
+                    Button(action: {
+                        MDC.respring(useLegacyMethod: UserDefaults.standard.bool(forKey: "legacyRespringEnabled"))
+
+                    }, label: {
+                        Label("Respring", systemImage: "arrow.counterclockwise.circle")
+                        Text("Respring")
+
+                    })
                 }
+                
             }
         }.navigationViewStyle(StackNavigationViewStyle())
     }

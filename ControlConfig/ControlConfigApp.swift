@@ -22,7 +22,7 @@ struct ControlConfigApp: App {
                         #if targetEnvironment(simulator)
                         #else
                         // I'm sorry 16.2 dev beta 1 users, you are a vast minority.
-                        print("Throwing not supported error (patched)")
+                        print("Throwing not supported error (mdc patched)")
                         UIApplication.shared.alert(title: "Not Supported", body: "This version of iOS is not supported.", withButton: false)
                         #endif
                     } else {
@@ -30,6 +30,7 @@ struct ControlConfigApp: App {
                             // TrollStore method
                             print("Checking if installed with TrollStore...")
                             try FileManager.default.contentsOfDirectory(at: URL(fileURLWithPath: "/var/mobile/Library/Caches"), includingPropertiesForKeys: nil)
+                            print("99% probably installed with trollstore")
                             isUnsandboxed = true
                         } catch {
                             isUnsandboxed = false
@@ -39,9 +40,11 @@ struct ControlConfigApp: App {
                                 print("Trying sandbox escape...")
                                 grant_full_disk_access { error in
                                     if error != nil {
-                                        print("Unable to escape sandbox! Error: ", String(describing: error?.localizedDescription ?? "unknown?!"))
+                                        print("Unable to escape sandbox!! Error: ", String(describing: error?.localizedDescription ?? "unknown?!"))
                                         UIApplication.shared.alert(title: "Access Error", body: "Error: \(String(describing: error?.localizedDescription))\nPlease close the app and retry.", withButton: false)
                                         isUnsandboxed = false
+                                    } else {
+                                        print("successfully escaped sandbox!")
                                     }
                                 }
                                 isUnsandboxed = true
