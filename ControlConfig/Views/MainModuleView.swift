@@ -59,11 +59,12 @@ struct MainModuleView: View {
             .toolbar {
                 ToolbarItemGroup(placement: .bottomBar) {
                     Button(action: {
-                        Haptic.shared.play(.soft)
                         let success = applyChanges(customisations: customisations)
                         if success {
+                            Haptic.shared.notify(.success)
                             UIApplication.shared.confirmAlert(title: "Applied!", body: "Please respring to see any changes.", onOK: {}, noCancel: true)
                         } else {
+                            Haptic.shared.notify(.error)
                             UIApplication.shared.alert(body: "An error occurred when writing to the file(s).")
                         }
                     }, label: {
@@ -75,6 +76,7 @@ struct MainModuleView: View {
                     Spacer()
                     
                     Button(action: {
+                        Haptic.shared.play(.light)
                         showingAddNewSheet.toggle()
                     }, label: {
                         Label("Add Module", systemImage: "plus.app")

@@ -30,6 +30,7 @@ class CustomisationList: ObservableObject {
         objectWillChange.send()
         list.append(item)
         print(item.module.isDefaultModule)
+        Haptic.shared.play(.soft)
         saveToUserDefaults()
     }
 
