@@ -42,6 +42,18 @@ class Module: Identifiable, CustomStringConvertible, Codable, ObservableObject, 
         return "\(fileDict?["CFBundleIdentifier"] ?? "com.what.unknown")"
     }
 
+    var sizesInDMSFile: [String] {
+        let dmsDict = PlistHelpers.plistToDict(path: CCMappings().dmsPath)
+        if dmsDict?.allKeys.contains(where: { key in
+            bundleID == "\(key)"
+        }) == true {
+            if let module = dmsDict?[bundleID] {
+                print(PlistHelpers.getKeys(from: module as! [String: Any]))
+            }
+        }
+        return []
+    }
+
     var description: String {
         let fileDict = NSDictionary(contentsOfFile: "\(CCMappings.bundlesPath)\(fileName)/Info.plist")
 

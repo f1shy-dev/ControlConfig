@@ -47,4 +47,18 @@ public enum PlistHelpers {
     public static func plistToDict(path: String) -> NSMutableDictionary? {
         return NSMutableDictionary(contentsOfFile: path)
     }
+    
+    // <3 chatgpt
+    public static func getKeys(from dictionary: [String: Any], prefix: String = "") -> [String] {
+        var keys: [String] = []
+        for (key, value) in dictionary {
+            let newPrefix = prefix.isEmpty ? key : "\(prefix).\(key)"
+            if let subDict = value as? [String: Any] {
+                keys += getKeys(from: subDict, prefix: newPrefix)
+            } else {
+                keys.append(newPrefix)
+            }
+        }
+        return keys
+    }
 }

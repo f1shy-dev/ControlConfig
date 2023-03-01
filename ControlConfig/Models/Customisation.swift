@@ -41,8 +41,10 @@ class Customisation: Codable, ObservableObject, Hashable {
     @Published var launchShortcutName: String?
 
     // default modules - width/height
-    @Published var customWidth: Int?
-    @Published var customHeight: Int?
+    @Published var customWidthPortrait: Int?
+    @Published var customHeightPortrait: Int?
+    @Published var customWidthLandscape: Int?
+    @Published var customHeightLandscape: Int?
 
     // name/icon
     @Published var customName: String?
@@ -64,7 +66,7 @@ class Customisation: Codable, ObservableObject, Hashable {
             }
         }
 
-        if (customWidth != nil) || (customHeight != nil) {
+        if (customWidthPortrait != nil) || (customHeightPortrait != nil) || (customWidthLandscape != nil) || (customHeightLandscape != nil) {
             str.append("Custom W/H")
         }
 
