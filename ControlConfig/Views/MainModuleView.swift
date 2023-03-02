@@ -21,9 +21,12 @@ struct MainModuleView: View {
 //                    Spacer().frame(height: CGFloat(UIScreen.main.bounds.size.height / 3) - 100)
                     Spacer()
                     VStack {
-                        Text("\(Image(systemName: "questionmark.app")) No Modules")
-                            .font(.system(size: 30, weight: .semibold))
+                        Image(systemName: "questionmark.app.dashed")
+                            .font(.system(size: 90, weight: .light))
+                        Text("No Modules")
+                            .font(.system(size: 40, weight: .semibold))
                         Text("Press the \(Image(systemName: "plus.app")) button below to add one!")
+                            .font(.system(size: 20))
                     }
                     .padding()
                     .foregroundColor(Color(UIColor.secondaryLabel))
