@@ -60,6 +60,7 @@ struct MainModuleView: View {
             .toolbar {
                 ToolbarItemGroup(placement: .bottomBar) {
                     Button(action: {
+                        print(customisations)
                         let success = applyChanges(customisations: customisations)
                         if success {
                             Haptic.shared.notify(.success)
