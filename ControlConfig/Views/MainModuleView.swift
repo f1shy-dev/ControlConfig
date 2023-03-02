@@ -22,12 +22,12 @@ struct MainModuleView: View {
                     Spacer()
                     VStack {
                         Image(systemName: "questionmark.app.dashed")
-                            .font(.system(size: 70, weight: .light))
+                            .font(.system(size: 60, weight: .light))
                             .padding(.vertical, -8)
                         Text("No Modules")
-                            .font(.system(size: 40, weight: .semibold))
+                            .font(.system(size: 30, weight: .semibold))
                         Text("Press the \(Image(systemName: "plus.app")) button below to add one!")
-                            .font(.system(size: 20))
+                            .font(.system(size: 15))
                     }
                     .padding()
                     .foregroundColor(Color(UIColor.secondaryLabel))
