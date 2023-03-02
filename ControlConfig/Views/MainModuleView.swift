@@ -22,7 +22,8 @@ struct MainModuleView: View {
                     Spacer()
                     VStack {
                         Image(systemName: "questionmark.app.dashed")
-                            .font(.system(size: 90, weight: .light))
+                            .font(.system(size: 70, weight: .light))
+                            .padding(.vertical, -8)
                         Text("No Modules")
                             .font(.system(size: 40, weight: .semibold))
                         Text("Press the \(Image(systemName: "plus.app")) button below to add one!")
@@ -81,7 +82,6 @@ struct MainModuleView: View {
                         showingAddNewSheet.toggle()
                     }, label: {
                         Label("Add Module", systemImage: "plus.app")
-                            .scaleEffect(1.5)
                             
                     }).sheet(isPresented: $showingAddNewSheet) {
                         AddModuleView(customisations: customisations)
