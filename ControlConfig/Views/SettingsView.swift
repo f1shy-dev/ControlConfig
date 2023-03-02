@@ -18,7 +18,7 @@ struct SettingsView: View {
         NavigationView {
             Form {
                 Section {
-                    Toggle("Use Old Respring", isOn: $appState.useLegacyRespring)
+                    Toggle("Use old respring", isOn: $appState.useLegacyRespring)
                 } header: {
                     Label("Respring", systemImage: "arrow.counterclockwise")
                 } footer: {
