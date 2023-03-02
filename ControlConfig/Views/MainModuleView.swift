@@ -81,6 +81,8 @@ struct MainModuleView: View {
                         showingAddNewSheet.toggle()
                     }, label: {
                         Label("Add Module", systemImage: "plus.app")
+                            .scaleEffect(1.5)
+                            
                     }).sheet(isPresented: $showingAddNewSheet) {
                         AddModuleView(customisations: customisations)
                     }
