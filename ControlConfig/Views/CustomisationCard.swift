@@ -81,5 +81,18 @@ struct CustomisationCard: View {
         }) {
             EditModuleView(customisation: customisation, appState: appState, saveToUserDefaults: saveToUserDefaults)
         }
+        // TODO: Drag and drop?
+        .contextMenu {
+            Button {
+                showingEditSheet.toggle()
+            } label: {
+                Label("Edit", systemImage: "pencil")
+            }
+            Button(role: .destructive) {
+                deleteCustomisation(customisation.self)
+            } label: {
+                Label("Delete", systemImage: "trash")
+            }
+        }
     }
 }
