@@ -9,30 +9,46 @@
 import Foundation
 import UIKit
 
+public enum RespringMethod {
+    case backboard, frontboard, legacy
+}
+
 public enum MDC {
     public static func overwriteFile(at path: String, with data: Data) -> Bool {
         return overwriteFileWithDataImpl(originPath: path, replacementData: data)
     }
     
-    public static func respring(useLegacyMethod: Bool) {
-        if useLegacyMethod {
+    public static func respring(method: RespringMethod) {
+        switch method {
+        case .backboard:
+            print("Respringing... (xpc_crasher backboard)")
+            let processes = [
+                // idk this is only for that cc action ig
+//                "com.apple.cfprefsd.daemon",
+                "com.apple.backboard.TouchDeliveryPolicyServer",
+//                "com.apple.frontboard.systemappservices"
+            ]
+            for process in processes {
+                xpc_crash(process)
+            }
+        case .frontboard:
+            print("Respringing... (xpc_crasher frontboard)")
+            let processes = [
+                // only kill frontboard since killing backboard doesnt apply cc tweaks??
+                "com.apple.cfprefsd.daemon",
+                //        "com.apple.backboard.TouchDeliveryPolicyServer",
+                "com.apple.frontboard.systemappservices",
+            ]
+            for process in processes {
+                xpc_crash(process)
+            }
+        case .legacy:
             print("Respringing... (legacy)")
             Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { _ in
                 guard let window = UIApplication.shared.windows.first else { return }
                 while true {
                     window.snapshotView(afterScreenUpdates: false)
                 }
-            }
-        } else {
-            print("Respringing... (xpc_crasher)")
-            let processes = [
-                // only kill frontboard since killing backboard doesnt apply cc tweaks??
-                "com.apple.cfprefsd.daemon",
-                //        "com.apple.backboard.TouchDeliveryPolicyServer",
-                "com.apple.frontboard.systemappservices"
-            ]
-            for process in processes {
-                xpc_crash(process)
             }
         }
     }

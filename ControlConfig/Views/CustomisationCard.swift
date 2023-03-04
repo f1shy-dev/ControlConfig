@@ -36,8 +36,9 @@ struct CustomisationCard: View {
                         .foregroundColor(.gray)
                 }
                 Spacer()
-
-            }.padding([.horizontal, .top]).frame(maxWidth: .infinity)
+            }
+//            .padding([.horizontal, .top]).frame(maxWidth: .infinity)
+            .padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 0))
 
             Spacer().frame(height: 10)
             HStack {
@@ -57,25 +58,29 @@ struct CustomisationCard: View {
                             .imageScale(.large)
                     }
                 }
-                .buttonStyle(.bordered).clipShape(Capsule()).foregroundColor(.primary)
+                .buttonStyle(.bordered).clipShape(Capsule()).foregroundColor(.primary).tint(.black)
                 Spacer()
                 Button(action: {
                     showingEditSheet.toggle()
-                }) { Label("Edit", systemImage: "pencil") }.buttonStyle(.bordered).clipShape(Capsule())
+                }) { Label("Edit", systemImage: "pencil").foregroundColor(.accentColor) }.buttonStyle(.bordered).clipShape(Capsule()).tint(.black)
                 Button(action: {
                     deleteCustomisation(customisation.self)
-                }) { Label("Delete", systemImage: "trash").foregroundColor(.red) }.buttonStyle(.bordered).clipShape(Capsule())
-
-            }.padding([.horizontal, .bottom]).frame(maxWidth: .infinity)
+                }) { Image(systemName: "trash").foregroundColor(.red) }.buttonStyle(.bordered).clipShape(Capsule()).tint(.black)
+            }
+            .padding(EdgeInsets(top: 0, leading: 0, bottom: 12, trailing: 0))
+//            .padding([.horizontal, .bottom])
+//                .frame(maxWidth: .infinity)
         }
-        .background(.regularMaterial)
-        .cornerRadius(10)
-        .overlay(
-            RoundedRectangle(cornerRadius: 10)
-                .stroke(Color(.sRGB, red: 150/255, green: 150/255, blue: 150/255, opacity: 0.1), lineWidth: 1)
-        )
-        .padding([.top, .horizontal])
-        .frame(maxWidth: .infinity)
+//        .frame(maxWidth: .infinity, alignment: .leading)
+//        .contentShape(Rectangle())
+//        .background(.regularMaterial)
+//        .cornerRadius(10)
+//        .overlay(
+//            RoundedRectangle(cornerRadius: 10)
+//                .stroke(Color(.sRGB, red: 150/255, green: 150/255, blue: 150/255, opacity: 0.1), lineWidth: 1)
+//        )
+//        .padding([.top])
+//        .frame(maxWidth: .infinity)
         .sheet(isPresented: $showingEditSheet, onDismiss: {
             saveToUserDefaults()
         }) {

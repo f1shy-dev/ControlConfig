@@ -72,6 +72,26 @@ func applyChanges(customisations: CustomisationList) -> Bool {
                 infoPlist?.setValue("com.apple.shortcuts", forKey: "CCAssociatedBundleIdentifier")
                 infoPlist?.setValue("shortcuts://run-shortcut?name=" + shortcutName, forKey: "CCLaunchURL")
             }
+        case .CustomAction:
+            infoPlist?.setValue("CCUIAppLauncherModule", forKey: "NSPrincipalClass")
+            print("customaction")
+
+            print("patching \(customisation.module.description) to custom action")
+            infoPlist?.setValue(Bundle.main.bundleIdentifier, forKey: "CCLaunchApplicationIdentifier")
+            infoPlist?.setValue(Bundle.main.bundleIdentifier, forKey: "CCAssociatedBundleIdentifier")
+            switch customisation.customAction {
+            case .Respring:
+                infoPlist?.setValue("controlconfig://respring", forKey: "CCLaunchURL")
+            case .FrontboardRespring:
+                if AppState.shared.debugMode { infoPlist?.setValue("controlconfig://respring?type=frontboard", forKey: "CCLaunchURL") }
+                else { infoPlist?.setValue("controlconfig://respring", forKey: "CCLaunchURL") }
+            case .BackboardRespring:
+                if AppState.shared.debugMode { infoPlist?.setValue("controlconfig://respring?type=backboard", forKey: "CCLaunchURL") }
+                else { infoPlist?.setValue("controlconfig://respring", forKey: "CCLaunchURL") }
+            case .LegacyRespring:
+                if AppState.shared.debugMode { infoPlist?.setValue("controlconfig://respring?type=legacy", forKey: "CCLaunchURL") }
+                else { infoPlist?.setValue("controlconfig://respring", forKey: "CCLaunchURL") }
+            }
 
         default:
             print("default")

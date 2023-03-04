@@ -9,7 +9,11 @@ import Combine
 import Foundation
 
 enum CustomisationMode: String, Codable {
-    case AppLauncher, ModuleFunction, WorkflowLauncher
+    case AppLauncher, ModuleFunction, WorkflowLauncher, CustomAction
+}
+
+enum CustomAction: String, Codable {
+    case Respring, BackboardRespring, FrontboardRespring, LegacyRespring
 }
 
 class Customisation: Codable, ObservableObject, Hashable {
@@ -68,6 +72,8 @@ class Customisation: Codable, ObservableObject, Hashable {
 
     @Published var disableOnHoldWidget: Bool?
 
+    @Published var customAction: CustomAction = .Respring
+
     var description: String {
         var str: [String] = []
         if mode == .AppLauncher {
@@ -115,6 +121,7 @@ class Customisation: Codable, ObservableObject, Hashable {
         case customHeightBothWays
 
         case customName
+        case customAction
     }
 
     required init(from decoder: Decoder) throws {
@@ -134,6 +141,7 @@ class Customisation: Codable, ObservableObject, Hashable {
         self.customWidthBothWays = try? container.decode(Int.self, forKey: .customWidthBothWays)
         self.customHeightBothWays = try? container.decode(Int.self, forKey: .customHeightBothWays)
         self.customName = try? container.decode(String.self, forKey: .customName)
+        self.customAction = try container.decode(CustomAction.self, forKey: .customAction)
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -157,5 +165,6 @@ class Customisation: Codable, ObservableObject, Hashable {
         try? container.encode(customHeightBothWays, forKey: .customHeightBothWays)
 
         try? container.encode(customName, forKey: .customName)
+        try? container.encode(customAction, forKey: .customAction)
     }
 }

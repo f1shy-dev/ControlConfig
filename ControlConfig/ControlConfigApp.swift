@@ -11,11 +11,28 @@ import SwiftUI
 
 var isUnsandboxed = false
 let consoleManager = LCManager.shared
+let isiOSSixteen = ProcessInfo().operatingSystemVersion.majorVersion == 16
 
 @main
 struct ControlConfigApp: App {
     var body: some Scene {
         WindowGroup {
+//            TabView {
+//                MainModuleView()
+//                    .tabItem {
+//                        Label("Customisations", systemImage: "square.grid.3x3.square")
+//                    }
+//
+//                MainModuleView()
+//                    .tabItem {
+//                        Label("Options", systemImage: "paintbrush")
+//                    }
+//
+            ////                OrderView()
+            ////                    .tabItem {
+            ////                        Label("Order", systemImage: "square.and.pencil")
+            ////                    }
+//            }
             MainModuleView()
                 .onAppear {
                     if #available(iOS 16.2, *) {
@@ -72,6 +89,40 @@ struct ControlConfigApp: App {
 
                     Haptic.shared.notify(.success)
                     UIApplication.shared.alert(title: "Please read", body: "This app is still in alpha. Some features will not work. Please report any issues you run into to the developer, with logs exported from the settings menu.")
+                }
+                .onOpenURL { url in
+
+                    if let host = url.host,
+                       let components = URLComponents(
+                           url: url,
+                           resolvingAgainstBaseURL: false
+                       )
+                    {
+                        let path = url.path
+
+                        // controlconfig://respring(?type=[backboard|frontboard|legacy])
+                        if host == "respring" {
+                            // Extract any parameters from the URL query string
+                            let params = components.queryItems
+
+                            if let typeParam = params?.first(where: { $0.name == "type" })?.value {
+                                print("Respring action triggered with type parameter: \(typeParam)")
+                                switch typeParam {
+                                case "backboard":
+                                    MDC.respring(method: .backboard)
+                                case "legacy":
+                                    MDC.respring(method: .legacy)
+                                default:
+                                    MDC.respring(method: .frontboard)
+                                }
+
+                            } else {
+                                // TODO: make appstate shared structure
+                                print("Respring action triggered!")
+                                MDC.respring(method: AppState.shared.useLegacyRespring ? .legacy : .frontboard)
+                            }
+                        }
+                    }
                 }
         }
     }

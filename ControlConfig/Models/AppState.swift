@@ -9,6 +9,8 @@ import Combine
 import Foundation
 
 class AppState: Codable, ObservableObject {
+    static let shared = AppState.loadFromUserDefaults()
+
     @Published var enableConsole: Bool {
         didSet {
             saveToUserDefaults()
@@ -31,7 +33,7 @@ class AppState: Codable, ObservableObject {
         }
     }
 
-    init(enableConsole: Bool, useLegacyRespring: Bool, debugMode: Bool) {
+    private init(enableConsole: Bool, useLegacyRespring: Bool, debugMode: Bool) {
         self.enableConsole = enableConsole
         self.debugMode = debugMode
         self.useLegacyRespring = useLegacyRespring
@@ -67,7 +69,7 @@ class AppState: Codable, ObservableObject {
         }
     }
 
-    static func loadFromUserDefaults() -> AppState {
+    private static func loadFromUserDefaults() -> AppState {
         if let data = UserDefaults.standard.data(forKey: "appState"),
            let state = try? JSONDecoder().decode(AppState.self, from: data)
         {

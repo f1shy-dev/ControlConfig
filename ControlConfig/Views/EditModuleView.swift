@@ -31,6 +31,7 @@ struct EditModuleView: View {
                         Text("App Launcher").tag(CustomisationMode.AppLauncher)
                         Text("CC Module").tag(CustomisationMode.ModuleFunction)
                         Text("Run Shortcut").tag(CustomisationMode.WorkflowLauncher)
+                        Text("Custom Action").tag(CustomisationMode.CustomAction)
                     }
                     // im picky ok, it looks nice like this on 16, on 15 it doesnt look like a picker...
                     .pickerStyle(.menu)
@@ -43,6 +44,7 @@ struct EditModuleView: View {
                         Text("App Launcher").tag(CustomisationMode.AppLauncher)
                         Text("CC Module").tag(CustomisationMode.ModuleFunction)
                         Text("Run Shortcut").tag(CustomisationMode.WorkflowLauncher)
+                        Text("Custom Action").tag(CustomisationMode.CustomAction)
                     }
                     .pickerStyle(.automatic)
                     .id(customisation)
@@ -65,6 +67,39 @@ struct EditModuleView: View {
                     Section(header: Label("CC Module Functionality", systemImage: "square.on.square"), footer: Text("Set the module to have the function that it would have normally, or make it have the function of a different module")) {
                         Text("Coming soon...")
                     }
+                case .CustomAction:
+                    Section(header: Label("Custom Actions", systemImage: "terminal"), footer: Text("Make the module run a in-built custom action on click, mainly stuff you can't normally do. \(appState.debugMode ? "Only use advanced actions if you know what you're doing..." : "")")) {
+                        if #available(iOS 16, *) {
+                            Picker("Action", selection: $customisation.customAction) {
+                                Text("Respring").tag(CustomAction.Respring)
+                                if appState.debugMode {
+                                    Text("(Advanced) Frontboard Respring").tag(CustomAction.FrontboardRespring)
+                                    Text("(Advanced) Backboard Respring").tag(CustomAction.BackboardRespring)
+                                    Text("(Advanced) Legacy Respring").tag(CustomAction.LegacyRespring)
+                                }
+                            }
+                            // im picky ok, it looks nice like this on 16, on 15 it doesnt look like a picker...
+                            .pickerStyle(.menu)
+                            .id(customisation)
+                            .onReceive(self.customisation.$customAction) { _ in
+                                customisation.objectWillChange.send()
+                            }
+                        } else {
+                            Picker("Action", selection: $customisation.customAction) {
+                                Text("Respring").tag(CustomAction.Respring)
+                                if appState.debugMode {
+                                    Text("(Advanced) Frontboard Respring").tag(CustomAction.FrontboardRespring)
+                                    Text("(Advanced) Backboard Respring").tag(CustomAction.BackboardRespring)
+                                    Text("(Advanced) Legacy Respring").tag(CustomAction.LegacyRespring)
+                                }
+                            }
+                            .pickerStyle(.automatic)
+                            .id(customisation)
+                            .onReceive(self.customisation.$customAction) { _ in
+                                customisation.objectWillChange.send()
+                            }
+                        }
+                    }
                 }
 
                 Section(header: Label("Looks", systemImage: "paintbrush")) {
@@ -73,89 +108,89 @@ struct EditModuleView: View {
 
                 if customisation.module.isDefaultModule {
                     let sizes = customisation.module.sizesInDMSFile
-                    if sizes.contains("size.height") || sizes.contains("size.width") {
-                        Section(header: Label("Sizing (All Orientations)", systemImage: "ruler")) {
-                            if sizes.contains("size.height") {
-                                HStack {
-                                    Text("Height")
-                                    Spacer()
-                                    HStack {
-                                        Slider(value: $customisation.customHeightBothWays.doubleBinding, in: 1...4, step: 1) {
-                                            Text("Height")
-                                        } minimumValueLabel: { Text("1") } maximumValueLabel: { Text("4") }
-                                    }.frame(width: 175)
-                                }
-                            }
-
-                            if sizes.contains("size.width") {
-                                HStack {
-                                    Text("Width")
-                                    Spacer()
-                                    HStack {
-                                        Slider(value: $customisation.customWidthBothWays.doubleBinding, in: 1...4, step: 1) {
-                                            Text("Width")
-                                        } minimumValueLabel: { Text("1") } maximumValueLabel: { Text("4") }
-                                    }.frame(width: 175)
-                                }
-                            }
-                        }
-                    }
+//                    if sizes.contains("size.height") || sizes.contains("size.width") {
+//                        Section(header: Label("Sizing (All Orientations)", systemImage: "ruler")) {
+//                            if sizes.contains("size.height") {
+//                                HStack {
+//                                    Text("Height")
+//                                    Spacer()
+//                                    HStack {
+//                                        Slider(value: $customisation.customHeightBothWays.doubleBinding, in: 1...4, step: 1) {
+//                                            Text("Height")
+//                                        } minimumValueLabel: { Text("1") } maximumValueLabel: { Text("4") }
+//                                    }.frame(width: 175)
+//                                }
+//                            }
 //
-                    if sizes.contains("landscape.size.height") || sizes.contains("landscape.size.width") {
-                        Section(header: Label("Sizing (Landscape)", systemImage: "ruler")) {
-                            if sizes.contains("landscape.size.height") {
-                                HStack {
-                                    Text("Width")
-                                    Spacer()
-                                    HStack {
-                                        Slider(value: $customisation.customWidthLandscape.doubleBinding, in: 1...4, step: 1) {
-                                            Text("Width")
-                                        } minimumValueLabel: { Text("1") } maximumValueLabel: { Text("4") }
-                                    }.frame(width: 175)
-                                }
-                            }
+//                            if sizes.contains("size.width") {
+//                                HStack {
+//                                    Text("Width")
+//                                    Spacer()
+//                                    HStack {
+//                                        Slider(value: $customisation.customWidthBothWays.doubleBinding, in: 1...4, step: 1) {
+//                                            Text("Width")
+//                                        } minimumValueLabel: { Text("1") } maximumValueLabel: { Text("4") }
+//                                    }.frame(width: 175)
+//                                }
+//                            }
+//                        }
+//                    }
+                    //
+//                    if sizes.contains("landscape.size.height") || sizes.contains("landscape.size.width") {
+//                        Section(header: Label("Sizing (Landscape)", systemImage: "ruler")) {
+//                            if sizes.contains("landscape.size.height") {
+//                                HStack {
+//                                    Text("Width")
+//                                    Spacer()
+//                                    HStack {
+//                                        Slider(value: $customisation.customWidthLandscape.doubleBinding, in: 1...4, step: 1) {
+//                                            Text("Width")
+//                                        } minimumValueLabel: { Text("1") } maximumValueLabel: { Text("4") }
+//                                    }.frame(width: 175)
+//                                }
+//                            }
+//
+//                            if sizes.contains("landscape.size.width") {
+//                                HStack {
+//                                    Text("Height")
+//                                    Spacer()
+//                                    HStack {
+//                                        Slider(value: $customisation.customHeightLandscape.doubleBinding, in: 1...4, step: 1) {
+//                                            Text("Height")
+//                                        } minimumValueLabel: { Text("1") } maximumValueLabel: { Text("4") }
+//                                    }.frame(width: 175)
+//                                }
+//                            }
+//                        }
+//                    }
 
-                            if sizes.contains("landscape.size.width") {
-                                HStack {
-                                    Text("Height")
-                                    Spacer()
-                                    HStack {
-                                        Slider(value: $customisation.customHeightLandscape.doubleBinding, in: 1...4, step: 1) {
-                                            Text("Height")
-                                        } minimumValueLabel: { Text("1") } maximumValueLabel: { Text("4") }
-                                    }.frame(width: 175)
-                                }
-                            }
-                        }
-                    }
-
-                    if sizes.contains("portrait.size.height") || sizes.contains("portrait.size.width") {
-                        Section(header: Label("Sizing (Portrait)", systemImage: "ruler")) {
-                            if sizes.contains("portrait.size.height") {
-                                HStack {
-                                    Text("Width")
-                                    Spacer()
-                                    HStack {
-                                        Slider(value: $customisation.customWidthPortrait.doubleBinding, in: 1...4, step: 1) {
-                                            Text("Width")
-                                        } minimumValueLabel: { Text("1") } maximumValueLabel: { Text("4") }
-                                    }.frame(width: 175)
-                                }
-                            }
-
-                            if sizes.contains("portrait.size.width") {
-                                HStack {
-                                    Text("Height")
-                                    Spacer()
-                                    HStack {
-                                        Slider(value: $customisation.customHeightPortrait.doubleBinding, in: 1...4, step: 1) {
-                                            Text("Height")
-                                        } minimumValueLabel: { Text("1") } maximumValueLabel: { Text("4") }
-                                    }.frame(width: 175)
-                                }
-                            }
-                        }
-                    }
+//                    if sizes.contains("portrait.size.height") || sizes.contains("portrait.size.width") {
+//                        Section(header: Label("Sizing (Portrait)", systemImage: "ruler")) {
+//                            if sizes.contains("portrait.size.height") {
+//                                HStack {
+//                                    Text("Width")
+//                                    Spacer()
+//                                    HStack {
+//                                        Slider(value: $customisation.customWidthPortrait.doubleBinding, in: 1...4, step: 1) {
+//                                            Text("Width")
+//                                        } minimumValueLabel: { Text("1") } maximumValueLabel: { Text("4") }
+//                                    }.frame(width: 175)
+//                                }
+//                            }
+//
+//                            if sizes.contains("portrait.size.width") {
+//                                HStack {
+//                                    Text("Height")
+//                                    Spacer()
+//                                    HStack {
+//                                        Slider(value: $customisation.customHeightPortrait.doubleBinding, in: 1...4, step: 1) {
+//                                            Text("Height")
+//                                        } minimumValueLabel: { Text("1") } maximumValueLabel: { Text("4") }
+//                                    }.frame(width: 175)
+//                                }
+//                            }
+//                        }
+//                    }
                 }
 
                 Section(header: Label("Other", systemImage: "star"), footer: Text("Disables the menu that shows up when you force-touch/hold down certain modules.")) {

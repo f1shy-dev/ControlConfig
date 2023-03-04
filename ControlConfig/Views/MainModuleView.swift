@@ -12,7 +12,8 @@ struct MainModuleView: View {
     @State private var showingAddNewSheet = false
     @State private var showingSettingsSheet = false
     @ObservedObject var customisations = CustomisationList.loadFromUserDefaults()
-    @ObservedObject var appState = AppState.loadFromUserDefaults()
+    @ObservedObject var appState = AppState.shared
+    @State private var test = Color(.gray)
 
     var body: some View {
         NavigationView {
@@ -29,17 +30,47 @@ struct MainModuleView: View {
                     .foregroundColor(Color(UIColor.secondaryLabel))
                     Spacer()
                 } else {
-                    ScrollView(.vertical) {
-                        ForEach(customisations.list, id: \.module.bundleID) { item in
-                            CustomisationCard(customisation: item, appState: appState, deleteCustomisation: customisations.deleteCustomisation, saveToUserDefaults: customisations.saveToUserDefaults) {
-                                customisations.objectWillChange.send()
+                    // scrollview (.vertical)
+                    List {
+//                        List {
+                        Section(header: Label("Options", systemImage: "paintbrush")) {
+                            ColorPicker("Module Colour", selection: $test)
+                        }
+
+//                        }
+                        Section(header: Label("Customisations", systemImage: "app.dashed")) {
+                            ForEach(customisations.list, id: \.module.bundleID) { item in
+
+                                CustomisationCard(customisation: item, appState: appState, deleteCustomisation: customisations.deleteCustomisation, saveToUserDefaults: customisations.saveToUserDefaults) {
+                                    customisations.objectWillChange.send()
+                                }
+                                //                            .listRowSeparator(.hidden)
+
+                                //                            .listRowBackground(RoundedRectangle(cornerRadius: 10).foregroundColor(.black))
                             }
                         }
+//                        Form {
+//                            Section(header: Label("Options", systemImage: "pencil")) {
+//                                Button("What about here?") {
+//                                    print("Hello world")
+//                                }
+//                            }
+//                        }
+//
+//                        Button("What about here?") {
+//                            print("Hello world")
+//                        }
+//                        .buttonStyle(.bordered)
                     }
+                    .listRowInsets(.none)
+//                    .listStyle(.insetGrouped)
+//                        .padding(EdgeInsets(top: 44, leading: 0, bottom: 24, trailing: 0))
+//                    .edgesIgnoringSafeArea(.all)
                 }
             }
             .frame(maxWidth: .infinity)
             .navigationTitle("ControlConfig")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     Button(action: {
@@ -85,7 +116,7 @@ struct MainModuleView: View {
                     Spacer()
 
                     Button(action: {
-                        MDC.respring(useLegacyMethod: appState.useLegacyRespring)
+                        MDC.respring(method: appState.useLegacyRespring ? .legacy : .frontboard)
 
                     }, label: {
                         Label("Respring", systemImage: "arrow.counterclockwise.circle")
