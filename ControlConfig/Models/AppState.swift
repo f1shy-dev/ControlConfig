@@ -24,6 +24,12 @@ class AppState: Codable, ObservableObject {
         }
     }
 
+    @Published var enableExperimentalFeatures: Bool {
+        didSet {
+            saveToUserDefaults()
+        }
+    }
+
     @Published var debugMode: Bool {
         didSet {
             saveToUserDefaults()
@@ -33,10 +39,11 @@ class AppState: Codable, ObservableObject {
         }
     }
 
-    private init(enableConsole: Bool, useLegacyRespring: Bool, debugMode: Bool) {
+    private init(enableConsole: Bool, useLegacyRespring: Bool, debugMode: Bool, enableExperimentalFeatures: Bool) {
         self.enableConsole = enableConsole
         self.debugMode = debugMode
         self.useLegacyRespring = useLegacyRespring
+        self.enableExperimentalFeatures = enableExperimentalFeatures
         consoleManager.isVisible = enableConsole
     }
 
@@ -44,6 +51,7 @@ class AppState: Codable, ObservableObject {
         case enableConsole
         case useLegacyRespring
         case debugMode
+        case enableExperimentalFeatures
     }
 
     required init(from decoder: Decoder) throws {
@@ -51,6 +59,7 @@ class AppState: Codable, ObservableObject {
         self.enableConsole = try container.decode(Bool.self, forKey: .enableConsole)
         self.useLegacyRespring = try container.decode(Bool.self, forKey: .useLegacyRespring)
         self.debugMode = try container.decode(Bool.self, forKey: .debugMode)
+        self.enableExperimentalFeatures = try container.decode(Bool.self, forKey: .enableExperimentalFeatures)
         consoleManager.isVisible = enableConsole
     }
 
@@ -59,6 +68,7 @@ class AppState: Codable, ObservableObject {
         try container.encode(enableConsole, forKey: .enableConsole)
         try container.encode(useLegacyRespring, forKey: .useLegacyRespring)
         try container.encode(debugMode, forKey: .debugMode)
+        try container.encode(enableExperimentalFeatures, forKey: .enableExperimentalFeatures)
     }
 
     func saveToUserDefaults() {
@@ -75,6 +85,6 @@ class AppState: Codable, ObservableObject {
         {
             return state
         }
-        return AppState(enableConsole: false, useLegacyRespring: false, debugMode: false)
+        return AppState(enableConsole: false, useLegacyRespring: false, debugMode: false, enableExperimentalFeatures: false)
     }
 }
