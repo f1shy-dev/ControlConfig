@@ -18,7 +18,7 @@ struct SettingsView: View {
         NavigationView {
             Form {
                 Section {
-                    Toggle("Use Old Respring", isOn: $appState.useLegacyRespring)
+                    Toggle("Use old respring", isOn: $appState.useLegacyRespring)
                 } header: {
                     Label("Respring", systemImage: "arrow.counterclockwise")
                 } footer: {
@@ -47,7 +47,7 @@ struct SettingsView: View {
                 }
                 Section {} header: {
                     VStack {
-                        Text("ControlConfig \(appVersion)\nMade with \(Image(systemName: "heart.fill")) by two fish.")
+                        Text("ControlConfig \(appVersion)\nMade with \(Image(systemName: "heart.fill")) by sneakyf1shy & BomberFish.")
                     }
                 }.textCase(.none)
             }

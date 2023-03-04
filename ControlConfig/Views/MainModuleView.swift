@@ -22,9 +22,13 @@ struct MainModuleView: View {
 //                    Spacer().frame(height: CGFloat(UIScreen.main.bounds.size.height / 3) - 100)
                     Spacer()
                     VStack {
-                        Text("\(Image(systemName: "questionmark.app")) No Modules")
+                        Image(systemName: "questionmark.app.dashed")
+                            .font(.system(size: 60, weight: .light))
+                            .padding(.vertical, -8)
+                        Text("No Modules")
                             .font(.system(size: 30, weight: .semibold))
                         Text("Press the \(Image(systemName: "plus.app")) button below to add one!")
+                            .font(.system(size: 15))
                     }
                     .padding()
                     .foregroundColor(Color(UIColor.secondaryLabel))
@@ -87,6 +91,7 @@ struct MainModuleView: View {
             .toolbar {
                 ToolbarItemGroup(placement: .bottomBar) {
                     Button(action: {
+                        print(customisations)
                         let success = applyChanges(customisations: customisations)
                         if success {
                             Haptic.shared.notify(.success)
@@ -109,6 +114,7 @@ struct MainModuleView: View {
                         showingAddNewSheet.toggle()
                     }, label: {
                         Label("Add Module", systemImage: "plus.app")
+                            
                     }).sheet(isPresented: $showingAddNewSheet) {
                         AddModuleView(customisations: customisations)
                     }
