@@ -11,6 +11,7 @@ import SwiftUI
 struct CustomisationCard: View {
     @State var descString = ""
     @State var showingEditSheet = false
+    @State var showingDeleteConfirmation = false
 //    @State var customisationList: CustomisationList
     @ObservedObject var customisation: Customisation
     @ObservedObject var appState: AppState
@@ -64,7 +65,8 @@ struct CustomisationCard: View {
                     showingEditSheet.toggle()
                 }) { Label("Edit", systemImage: "pencil").foregroundColor(.accentColor) }.buttonStyle(.bordered).clipShape(Capsule()).tint(.black)
                 Button(action: {
-                    deleteCustomisation(customisation.self)
+                    showingDeleteConfirmation = true
+//                    deleteCustomisation(customisation.self)
                 }) { Image(systemName: "trash").foregroundColor(.red) }.buttonStyle(.bordered).clipShape(Capsule()).tint(.black)
             }
             .padding(EdgeInsets(top: 0, leading: 0, bottom: 12, trailing: 0))
@@ -86,6 +88,15 @@ struct CustomisationCard: View {
         }) {
             EditModuleView(customisation: customisation, appState: appState, saveToUserDefaults: saveToUserDefaults)
         }
+        .confirmationDialog("Are you sure you want to delete the customisation \(customisation.module.description)?", isPresented: $showingDeleteConfirmation, titleVisibility: .visible) {
+            Button("Yes", role: .destructive) {
+                withAnimation {
+                    deleteCustomisation(customisation.self)
+                }
+            }
+
+            Button("No", role: .cancel) {}
+        }
         // TODO: Drag and drop?
         .contextMenu {
             Button {
@@ -94,7 +105,7 @@ struct CustomisationCard: View {
                 Label("Edit", systemImage: "pencil")
             }
             Button(role: .destructive) {
-                deleteCustomisation(customisation.self)
+                showingDeleteConfirmation = true
             } label: {
                 Label("Delete", systemImage: "trash")
             }

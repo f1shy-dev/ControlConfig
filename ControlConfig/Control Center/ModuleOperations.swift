@@ -137,6 +137,9 @@ func applyChanges(customisations: CustomisationList) -> Bool {
     if let new = dmsPlist {
         success.append(PlistHelpers.writeDictToPlist(dict: new, path: CCMappings().dmsPath))
     }
+
+    ColorTools.applyMaterialRecipe(filePath: CCMappings.moduleMaterialRecipePath, color: customisations.otherCustomisations.moduleColor, blur: customisations.otherCustomisations.moduleBlur, includeSpecificsForCCModules: true)
+
     print("successmap", success)
     return !success.contains { $0 == false }
 }

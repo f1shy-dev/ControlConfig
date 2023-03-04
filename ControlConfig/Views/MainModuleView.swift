@@ -13,65 +13,38 @@ struct MainModuleView: View {
     @State private var showingSettingsSheet = false
     @ObservedObject var customisations = CustomisationList.loadFromUserDefaults()
     @ObservedObject var appState = AppState.shared
-    @State private var test = Color(.gray)
 
     var body: some View {
         NavigationView {
             VStack {
-                if customisations.list.isEmpty {
-//                    Spacer().frame(height: CGFloat(UIScreen.main.bounds.size.height / 3) - 100)
-                    Spacer()
-                    VStack {
-                        Image(systemName: "questionmark.app.dashed")
-                            .font(.system(size: 60, weight: .light))
-                            .padding(.vertical, -8)
-                        Text("No Modules")
-                            .font(.system(size: 30, weight: .semibold))
-                        Text("Press the \(Image(systemName: "plus.app")) button below to add one!")
-                            .font(.system(size: 15))
-                    }
-                    .padding()
-                    .foregroundColor(Color(UIColor.secondaryLabel))
-                    Spacer()
-                } else {
-                    // scrollview (.vertical)
-                    List {
-//                        List {
-                        Section(header: Label("Options", systemImage: "paintbrush")) {
-                            ColorPicker("Module Colour", selection: $test)
+                List {
+                    Section(header: Label("Colour Options", systemImage: "paintbrush")) {
+                        ColorPicker("Module Colour", selection: $customisations.otherCustomisations.moduleColor)
+                        HStack {
+                            Text("Module Blur (\(customisations.otherCustomisations.moduleBlur))")
+                            Spacer()
+                            Slider(value: $customisations.otherCustomisations.moduleBlur.doubleBinding, in: 1 ... 150, step: 1) {
+                                Text("Module Blur")
+                            } minimumValueLabel: { Text("1") } maximumValueLabel: { Text("150") }.frame(width: 150)
                         }
+                    }
 
-//                        }
+                    if customisations.list.isEmpty {
+                        Section(header: Label("Customisations", systemImage: "app.dashed"), footer: Text("You don't have any customisations, Press the \(Image(systemName: "plus.app")) button below to add one!")) {}
+                    } else {
                         Section(header: Label("Customisations", systemImage: "app.dashed")) {
                             ForEach(customisations.list, id: \.module.bundleID) { item in
 
                                 CustomisationCard(customisation: item, appState: appState, deleteCustomisation: customisations.deleteCustomisation, saveToUserDefaults: customisations.saveToUserDefaults) {
                                     customisations.objectWillChange.send()
                                 }
-                                //                            .listRowSeparator(.hidden)
-
-                                //                            .listRowBackground(RoundedRectangle(cornerRadius: 10).foregroundColor(.black))
                             }
                         }
-//                        Form {
-//                            Section(header: Label("Options", systemImage: "pencil")) {
-//                                Button("What about here?") {
-//                                    print("Hello world")
-//                                }
-//                            }
-//                        }
-//
-//                        Button("What about here?") {
-//                            print("Hello world")
-//                        }
-//                        .buttonStyle(.bordered)
                     }
-                    .listRowInsets(.none)
-//                    .listStyle(.insetGrouped)
-//                        .padding(EdgeInsets(top: 44, leading: 0, bottom: 24, trailing: 0))
-//                    .edgesIgnoringSafeArea(.all)
                 }
+                .listRowInsets(.none)
             }
+//            }
             .frame(maxWidth: .infinity)
             .navigationTitle("ControlConfig")
             .navigationBarTitleDisplayMode(.inline)
@@ -114,7 +87,7 @@ struct MainModuleView: View {
                         showingAddNewSheet.toggle()
                     }, label: {
                         Label("Add Module", systemImage: "plus.app")
-                            
+
                     }).sheet(isPresented: $showingAddNewSheet) {
                         AddModuleView(customisations: customisations)
                     }

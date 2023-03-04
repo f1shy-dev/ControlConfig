@@ -11,6 +11,7 @@ import UIKit
 public struct CCMappings {
     public static let bundlesPath = "/System/Library/ControlCenter/Bundles/"
     public static let privFrameworksPath = "/System/Library/PrivateFrameworks/"
+    public static let moduleMaterialRecipePath = "/System/Library/PrivateFrameworks/CoreMaterial.framework/modules.materialrecipe"
     public var dmsPath: String {
         let dmsBase = CCMappings.privFrameworksPath + "ControlCenterUI.framework/DefaultModuleSettings~"
         if UIDevice.current.userInterfaceIdiom == .pad {

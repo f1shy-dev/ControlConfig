@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import LocalConsole
 import SwiftUI
 
 struct SettingsView: View {
@@ -36,8 +37,19 @@ struct SettingsView: View {
                                 print(String(data: encoded, encoding: .utf8)!)
                             }
                         }
-                        consoleManager.systemReport()
-                        consoleManager.copyToClipboard()
+
+                        print("""
+                        Model Name:         \(SystemReport.shared.gestaltMarketingName)
+                        Model Identifier:   \(SystemReport.shared.gestaltModelIdentifier)
+                        Architecture:       \(SystemReport.shared.gestaltArchitecture)
+                        Firmware:           \(SystemReport.shared.gestaltFirmwareVersion)
+                        Kernel Version:     \(SystemReport.shared.kernel) \(SystemReport.shared.kernelVersion)
+                        System Version:     \(SystemReport.shared.versionString)
+                        OS Compile Date:    \(SystemReport.shared.compileDate)
+                        Memory:             \(round(100 * Double(ProcessInfo.processInfo.physicalMemory) * pow(10, -9)) / 100) GB
+                        Processor Cores:    \(Int(ProcessInfo.processInfo.processorCount))
+                        """)
+                        UIPasteboard.general.string = consoleManager.getCurrentText()
                         UIApplication.shared.confirmAlert(title: "Success", body: "Copied app logs to clipboard.", onOK: {}, noCancel: true)
                     }
                     Toggle("Enable debug mode", isOn: $appState.debugMode)

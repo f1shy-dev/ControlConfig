@@ -88,6 +88,10 @@ class Customisation: Codable, ObservableObject, Hashable {
             }
         }
 
+        if mode == .CustomAction {
+            str.append("Runs custom action")
+        }
+
         if [customWidthPortrait, customHeightPortrait, customWidthLandscape, customHeightLandscape, customWidthBothWays, customHeightBothWays].contains(where: { $0 != nil }) {
             str.append("Custom W/H")
         }

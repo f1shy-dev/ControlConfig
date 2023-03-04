@@ -27,3 +27,16 @@ extension Binding where Value == Int? {
         )
     }
 }
+
+extension Binding where Value == Int {
+    var doubleBinding: Binding<Double> {
+        Binding<Double>(
+            get: {
+                Double(self.wrappedValue)
+            },
+            set: {
+                self.wrappedValue = Int($0)
+            }
+        )
+    }
+}

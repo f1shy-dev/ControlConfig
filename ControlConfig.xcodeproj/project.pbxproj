@@ -21,6 +21,7 @@
 		7D201BFE299C23860023D649 /* AddModuleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201BFD299C23860023D649 /* AddModuleView.swift */; };
 		7D201C00299C238D0023D649 /* EditModuleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201BFF299C238D0023D649 /* EditModuleView.swift */; };
 		7D201C02299C25190023D649 /* CustomisationCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201C01299C25190023D649 /* CustomisationCard.swift */; };
+		7D3BAB7729B3855A0024C9C9 /* ColorTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D3BAB7629B3855A0024C9C9 /* ColorTools.swift */; };
 		7D59D959299A94370049302B /* CustomPrint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D59D958299A94370049302B /* CustomPrint.swift */; };
 		7DDD2FA329AEB2F90064A7FC /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DDD2FA229AEB2F90064A7FC /* SettingsView.swift */; };
 		7DDD2FA529AEB35E0064A7FC /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DDD2FA429AEB35E0064A7FC /* AppState.swift */; };
@@ -71,6 +72,7 @@
 		7D201BFF299C238D0023D649 /* EditModuleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditModuleView.swift; sourceTree = "<group>"; };
 		7D201C01299C25190023D649 /* CustomisationCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomisationCard.swift; sourceTree = "<group>"; };
 		7D3BAB7529B35F820024C9C9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		7D3BAB7629B3855A0024C9C9 /* ColorTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorTools.swift; sourceTree = "<group>"; };
 		7D59D958299A94370049302B /* CustomPrint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPrint.swift; sourceTree = "<group>"; };
 		7DDD2FA229AEB2F90064A7FC /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		7DDD2FA429AEB35E0064A7FC /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
@@ -142,6 +144,7 @@
 				D625E8A12991CF8600D5A5B0 /* Alert++.swift */,
 				7D201BF3299C1E280023D649 /* PlistHelpers.swift */,
 				7D201BF8299C22680023D649 /* TickToggleStyle.swift */,
+				7D3BAB7629B3855A0024C9C9 /* ColorTools.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -391,6 +394,7 @@
 				D625E8A42991CF8600D5A5B0 /* Haptic++.swift in Sources */,
 				7D201BEB299C1AB60023D649 /* CustomisationsList.swift in Sources */,
 				D625E86A2991CD3000D5A5B0 /* ControlConfigApp.swift in Sources */,
+				7D3BAB7729B3855A0024C9C9 /* ColorTools.swift in Sources */,
 				7D201BF2299C1DE30023D649 /* MDCWrappers.swift in Sources */,
 				7D201BFE299C23860023D649 /* AddModuleView.swift in Sources */,
 				7D201BE7299C19A20023D649 /* Module.swift in Sources */,
@@ -579,7 +583,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = Alpha;
 				DEVELOPMENT_ASSET_PATHS = "\"ControlConfig/Preview Content\"";
-				DEVELOPMENT_TEAM = 8JKVMYCRTJ;
+				DEVELOPMENT_TEAM = ZV2PLXMRSB;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ControlConfig/Info.plist;
@@ -597,7 +601,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.0.3;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.f1shy-dev.ControlConfig2";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.f1shy-dev.ControlConfig";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -618,7 +622,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = Alpha;
 				DEVELOPMENT_ASSET_PATHS = "\"ControlConfig/Preview Content\"";
-				DEVELOPMENT_TEAM = 8JKVMYCRTJ;
+				DEVELOPMENT_TEAM = ZV2PLXMRSB;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ControlConfig/Info.plist;
@@ -636,7 +640,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.0.3;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.f1shy-dev.ControlConfig2";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.f1shy-dev.ControlConfig";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
