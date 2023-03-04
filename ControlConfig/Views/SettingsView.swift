@@ -13,7 +13,6 @@ struct SettingsView: View {
     @ObservedObject var appState: AppState
     @ObservedObject var customisations: CustomisationList
 
-    let appVersion = ((Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown") + " (" + (Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown") + ")")
     var body: some View {
         NavigationView {
             Form {
@@ -43,6 +42,7 @@ struct SettingsView: View {
                     Toggle("Enable debug mode", isOn: $appState.debugMode)
                     if appState.debugMode {
                         Toggle("Enable in-app console", isOn: $appState.enableConsole)
+                        Toggle("Enable Experimental Features", isOn: $appState.enableExperimentalFeatures)
                     }
                 }
                 Section {} header: {
