@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import MarqueeText
 
 struct AppListView: View {
     @State private var searchText = ""
@@ -23,24 +24,34 @@ struct AppListView: View {
                     } else {
                         // TODO: icons!
                         ForEach(apps) { app in
-                            AppCell(imagePath: app.bundleURL.appendingPathComponent(app.pngIconPaths.first ?? "this-app-does-not-have-an-icon-i-mean-how-could-anything-have-this-string-lmao").path, bundleid: app.bundleIdentifier, name: app.name)
-                                .onAppear {
-                                    print("===")
-                                    print((app.bundleURL.appendingPathComponent(app.pngIconPaths.first ?? "this-app-does-not-have-an-icon-i-mean-how-could-anything-have-this-string-lmao")).path)
-                                    print(((app.bundleURL.appendingPathComponent(app.pngIconPaths.first ?? "this-app-does-not-have-an-icon-i-mean-how-could-anything-have-this-string-lmao")).path).contains("this-app-does-not-have-an-icon-i-mean-how-could-anything-have-this-string-lmao"))
-                                    print("=====")
-                                    print(app.bundleURL)
-                                    print("=======")
-                                    print(app.pngIconPaths)
-                                    print("=========")
+                            HStack(alignment: .center) {
+                                Group {
+                                    if app.bundleURL.appendingPathComponent(app.pngIconPaths.first ?? "this-app-does-not-have-an-icon-i-mean-how-could-anything-have-this-string-lmao").path.contains("this-app-does-not-have-an-icon-i-mean-how-could-anything-have-this-string-lmao") {
+                                        Image("Placeholder")
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                    } else {
+                                        let image = UIImage(contentsOfFile: app.bundleURL.appendingPathComponent(app.pngIconPaths.first ?? "this-app-does-not-have-an-icon-i-mean-how-could-anything-have-this-string-lmao").path)
+                                        Image(uiImage: image ?? UIImage(named: "Placeholder")!)
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                    }
                                 }
+                                .cornerRadius(6)
+                                .frame(width: 30, height: 30)
+
+                                VStack {
+                                    HStack {
+                                        MarqueeText(text: app.name, font: UIFont.preferredFont(forTextStyle: .subheadline), leftFade: 16, rightFade: 16, startDelay: 0.5)
+                                            .padding(.horizontal, 6)
+                                        Spacer()
+                                    }
+                                }
+                            }
                         }
                     }
                 } header: {
                     Label("Apps", systemImage: "square.grid.2x2")
-                } footer: {
-                    // haha take that suslocation!
-                    Text("You've come a long way, traveler. Have a :lungs:.\n🫁")
                 }
             }
             .navigationTitle("Pick app")
