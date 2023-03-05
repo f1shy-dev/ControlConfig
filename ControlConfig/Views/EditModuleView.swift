@@ -57,17 +57,17 @@ struct EditModuleView: View {
                 switch customisation.mode {
                 case .AppLauncher:
                     Section(header: Label("App Launcher", systemImage: "app.badge.checkmark"), footer: Text("The URL Scheme is to launch to a specific section of an app, such as com.apple.tv://us/show")) {
-                        TextField("App Bundle ID", text: $customisation.launchAppBundleID.toUnwrapped(defaultValue: ""))
-                        TextField("URL Scheme (optional)", text: $customisation.launchAppURLScheme.toUnwrapped(defaultValue: ""))
                         if appState.enableExperimentalFeatures {
                             Button(action: {
                                 self.isModal = true
                             }) {
-                                Text("[EXPERIMENTAL] Pick app from list")
+                                Text("[Pick app from list (Beta)")
                             } .sheet(isPresented: $isModal, content: {
                                 AppListView(customisation: customisation)
                             })
                         }
+                        TextField("App Bundle ID", text: $customisation.launchAppBundleID.toUnwrapped(defaultValue: ""))
+                        TextField("URL Scheme (optional)", text: $customisation.launchAppURLScheme.toUnwrapped(defaultValue: ""))
                     }
                 case .WorkflowLauncher:
                     Section(header: Label("Open shortcut", systemImage: "arrow.up.forward.app"), footer: Text("Runs a specified Shortcut/Workflow when clicked. Note: Opens the shortcut app first (doesn't run in the background).")) {
