@@ -93,7 +93,10 @@ struct ControlConfigApp: App {
                     }
 
                     Haptic.shared.notify(.success)
-                    UIApplication.shared.alert(title: "Please read", body: "This app is still in alpha. Some features will not work. Please report any issues you run into to the developer, with logs exported from the settings menu.")
+                    if !UserDefaults.standard.bool(forKey: "shownFirstOpen") {
+                        UIApplication.shared.alert(title: "Please read", body: "This app is still in alpha. Some features will not work. Please report any issues you run into to the developer, with logs exported from the settings menu.")
+                        UserDefaults.standard.set(true, forKey: "shownFirstOpen")
+                    }
                 }
                 .onOpenURL { url in
 

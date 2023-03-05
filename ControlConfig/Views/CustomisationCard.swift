@@ -39,7 +39,7 @@ struct CustomisationCard: View {
                 Spacer()
             }
 //            .padding([.horizontal, .top]).frame(maxWidth: .infinity)
-            .padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 0))
+            .padding(EdgeInsets(top: 9, leading: 0, bottom: 0, trailing: 0))
 
             Spacer().frame(height: 10)
             HStack {
@@ -69,7 +69,7 @@ struct CustomisationCard: View {
 //                    deleteCustomisation(customisation.self)
                 }) { Image(systemName: "trash").foregroundColor(.red) }.buttonStyle(.bordered).clipShape(Capsule()).tint(.black)
             }
-            .padding(EdgeInsets(top: 0, leading: 0, bottom: 12, trailing: 0))
+            .padding(EdgeInsets(top: 0, leading: 0, bottom: 9, trailing: 0))
 //            .padding([.horizontal, .bottom])
 //                .frame(maxWidth: .infinity)
         }

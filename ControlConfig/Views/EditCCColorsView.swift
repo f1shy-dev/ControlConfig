@@ -32,8 +32,10 @@ struct SingleBlurModule: View {
 struct EditCCColorsView: View {
     @State private var selectedWallpaper = "iPhone SE"
     @ObservedObject var state: OtherCustomisations
+    var saveOCToUserDefaults: () -> Void
 
     var body: some View {
+        let _ = saveOCToUserDefaults()
         List {
             Section(header: Label("Preview", systemImage: "eye")) {
                 HStack {

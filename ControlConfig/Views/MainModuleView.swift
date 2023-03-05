@@ -20,7 +20,7 @@ struct MainModuleView: View {
                 List {
                     Section(header: Label("General Customisations", systemImage: "paintbrush.pointed")) {
                         NavigationLink {
-                            EditCCColorsView(state: customisations.otherCustomisations)
+                            EditCCColorsView(state: customisations.otherCustomisations, saveOCToUserDefaults: customisations.saveToUserDefaults)
                         } label: {
                             Label("Edit CC Colours", systemImage: "paintbrush")
                         }
