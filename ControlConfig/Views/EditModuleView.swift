@@ -65,7 +65,7 @@ struct EditModuleView: View {
                             }) {
                                 Text("[EXPERIMENTAL] Pick app from list")
                             } .sheet(isPresented: $isModal, content: {
-                                AppListView()
+                                AppListView(customisation: customisation)
                             })
                         }
                     }
