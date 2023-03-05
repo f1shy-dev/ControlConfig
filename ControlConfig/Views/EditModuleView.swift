@@ -64,7 +64,7 @@ struct EditModuleView: View {
                                 self.isModal = true
                             }) {
                                 Text("[EXPERIMENTAL] Pick app from list")
-                            } .sheet(isPresented: $isModal, content: {
+                            }.sheet(isPresented: $isModal, content: {
                                 AppListView()
                             })
                         }
@@ -97,7 +97,7 @@ struct EditModuleView: View {
                         } else {
                             Picker("Action", selection: $customisation.customAction) {
                                 Text("Respring").tag(CustomAction.Respring)
-                                if appState.debugMode {
+                                if appState.enableExperimentalFeatures {
                                     Text("(Advanced) Frontboard Respring").tag(CustomAction.FrontboardRespring)
                                     Text("(Advanced) Backboard Respring").tag(CustomAction.BackboardRespring)
                                     Text("(Advanced) Legacy Respring").tag(CustomAction.LegacyRespring)
@@ -145,7 +145,7 @@ struct EditModuleView: View {
                             }
                         }
                     }
-                    
+
                     if sizes.contains("landscape.size.height") || sizes.contains("landscape.size.width") {
                         Section(header: Label("Sizing (Landscape)", systemImage: "ruler")) {
                             if sizes.contains("landscape.size.height") {

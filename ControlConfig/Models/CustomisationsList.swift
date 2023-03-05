@@ -12,27 +12,37 @@ import SwiftUI
 class OtherCustomisations: ObservableObject, Codable {
     @Published var moduleColor: Color
     @Published var moduleBlur: Int
+    @Published var moduleBGColor: Color
+    @Published var moduleBGBlur: Int
 
-    init(moduleColor: Color, moduleBlur: Int) {
+    init(moduleColor: Color, moduleBlur: Int, moduleBGColor: Color, moduleBGBlur: Int) {
         self.moduleColor = moduleColor
         self.moduleBlur = moduleBlur
+        self.moduleBGColor = moduleBGColor
+        self.moduleBGBlur = moduleBGBlur
     }
 
     enum CodingKeys: String, CodingKey {
         case moduleColor
         case moduleBlur
+        case moduleBGColor
+        case moduleBGBlur
     }
 
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.moduleColor = try container.decode(Color.self, forKey: .moduleColor)
         self.moduleBlur = try container.decode(Int.self, forKey: .moduleBlur)
+        self.moduleBGColor = try container.decode(Color.self, forKey: .moduleBGColor)
+        self.moduleBGBlur = try container.decode(Int.self, forKey: .moduleBGBlur)
     }
 
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(moduleColor, forKey: .moduleColor)
         try container.encode(moduleBlur, forKey: .moduleBlur)
+        try container.encode(moduleBGColor, forKey: .moduleBGColor)
+        try container.encode(moduleBGBlur, forKey: .moduleBGBlur)
     }
 }
 
@@ -62,7 +72,7 @@ class CustomisationList: ObservableObject {
 
     init() {
         self.list = []
-        self.otherCustomisations = OtherCustomisations(moduleColor: ColorTools.getMaterialRecipeColor(filePath: CCMappings.moduleMaterialRecipePath), moduleBlur: ColorTools.getMaterialRecipeBlur(filePath: CCMappings.moduleMaterialRecipePath))
+        self.otherCustomisations = OtherCustomisations(moduleColor: ColorTools.getMaterialRecipeColor(filePath: CCMappings.moduleMaterialRecipePath), moduleBlur: ColorTools.getMaterialRecipeBlur(filePath: CCMappings.moduleMaterialRecipePath), moduleBGColor: .gray, moduleBGBlur: 100)
     }
 
     func addCustomisation(item: Customisation) {

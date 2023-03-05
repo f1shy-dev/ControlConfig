@@ -18,21 +18,18 @@ struct MainModuleView: View {
         NavigationView {
             VStack {
                 List {
-                    Section(header: Label("Colour Options", systemImage: "paintbrush")) {
-                        ColorPicker("Module Colour", selection: $customisations.otherCustomisations.moduleColor)
-                        HStack {
-                            Text("Module Blur (\(customisations.otherCustomisations.moduleBlur))")
-                            Spacer()
-                            Slider(value: $customisations.otherCustomisations.moduleBlur.doubleBinding, in: 1 ... 150, step: 1) {
-                                Text("Module Blur")
-                            } minimumValueLabel: { Text("1") } maximumValueLabel: { Text("150") }.frame(width: 150)
+                    Section(header: Label("General Customisations", systemImage: "paintbrush.pointed")) {
+                        NavigationLink {
+                            EditCCColorsView(state: customisations.otherCustomisations)
+                        } label: {
+                            Label("Edit CC Colours", systemImage: "paintbrush")
                         }
                     }
 
                     if customisations.list.isEmpty {
-                        Section(header: Label("Customisations", systemImage: "app.dashed"), footer: Text("You don't have any customisations, Press the \(Image(systemName: "plus.app")) button below to add one!")) {}
+                        Section(header: Label("Module Customisations", systemImage: "app.dashed"), footer: Text("You don't have any customisations, Press the \(Image(systemName: "plus.app")) button below to add one!")) {}
                     } else {
-                        Section(header: Label("Customisations", systemImage: "app.dashed")) {
+                        Section(header: Label("Module Customisations", systemImage: "app.dashed")) {
                             ForEach(customisations.list, id: \.module.bundleID) { item in
 
                                 CustomisationCard(customisation: item, appState: appState, deleteCustomisation: customisations.deleteCustomisation, saveToUserDefaults: customisations.saveToUserDefaults) {

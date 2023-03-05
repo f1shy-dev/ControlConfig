@@ -22,6 +22,8 @@
 		7D201C00299C238D0023D649 /* EditModuleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201BFF299C238D0023D649 /* EditModuleView.swift */; };
 		7D201C02299C25190023D649 /* CustomisationCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201C01299C25190023D649 /* CustomisationCard.swift */; };
 		7D3BAB7729B3855A0024C9C9 /* ColorTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D3BAB7629B3855A0024C9C9 /* ColorTools.swift */; };
+		7D3BAB7929B4BE2E0024C9C9 /* UIViewBlurEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D3BAB7829B4BE2E0024C9C9 /* UIViewBlurEffect.swift */; };
+		7D3BAB7B29B4BE760024C9C9 /* EditCCColorsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D3BAB7A29B4BE760024C9C9 /* EditCCColorsView.swift */; };
 		7D59D959299A94370049302B /* CustomPrint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D59D958299A94370049302B /* CustomPrint.swift */; };
 		7DDD2FA329AEB2F90064A7FC /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DDD2FA229AEB2F90064A7FC /* SettingsView.swift */; };
 		7DDD2FA529AEB35E0064A7FC /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DDD2FA429AEB35E0064A7FC /* AppState.swift */; };
@@ -77,6 +79,8 @@
 		7D201C01299C25190023D649 /* CustomisationCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomisationCard.swift; sourceTree = "<group>"; };
 		7D3BAB7529B35F820024C9C9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		7D3BAB7629B3855A0024C9C9 /* ColorTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorTools.swift; sourceTree = "<group>"; };
+		7D3BAB7829B4BE2E0024C9C9 /* UIViewBlurEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewBlurEffect.swift; sourceTree = "<group>"; };
+		7D3BAB7A29B4BE760024C9C9 /* EditCCColorsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCCColorsView.swift; sourceTree = "<group>"; };
 		7D59D958299A94370049302B /* CustomPrint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPrint.swift; sourceTree = "<group>"; };
 		7DDD2FA229AEB2F90064A7FC /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		7DDD2FA429AEB35E0064A7FC /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
@@ -155,6 +159,7 @@
 				7D201BF3299C1E280023D649 /* PlistHelpers.swift */,
 				7D201BF8299C22680023D649 /* TickToggleStyle.swift */,
 				7D3BAB7629B3855A0024C9C9 /* ColorTools.swift */,
+				7D3BAB7829B4BE2E0024C9C9 /* UIViewBlurEffect.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -172,6 +177,7 @@
 			isa = PBXGroup;
 			children = (
 				7D201BFA299C23100023D649 /* MainModuleView.swift */,
+				7D3BAB7A29B4BE760024C9C9 /* EditCCColorsView.swift */,
 				7D201BFD299C23860023D649 /* AddModuleView.swift */,
 				7D201BFF299C238D0023D649 /* EditModuleView.swift */,
 				D6E552D829B3E7760083E6A5 /* AppListView.swift */,
@@ -412,6 +418,7 @@
 				7D201BFE299C23860023D649 /* AddModuleView.swift in Sources */,
 				D6E552D629B3E3890083E6A5 /* AppCell.swift in Sources */,
 				7D201BE7299C19A20023D649 /* Module.swift in Sources */,
+				7D3BAB7929B4BE2E0024C9C9 /* UIViewBlurEffect.swift in Sources */,
 				7D201BF0299C1D470023D649 /* MDCSwift.swift in Sources */,
 				7D201C00299C238D0023D649 /* EditModuleView.swift in Sources */,
 				7D201BF7299C1FAC0023D649 /* StaticCCMappings.swift in Sources */,
@@ -422,6 +429,7 @@
 				D625E89F2991CF2A00D5A5B0 /* grant_full_disk_access.m in Sources */,
 				D625E89D2991CF2A00D5A5B0 /* vm_unaligned_copy_switch_race.c in Sources */,
 				D625E8A32991CF8600D5A5B0 /* Alert++.swift in Sources */,
+				7D3BAB7B29B4BE760024C9C9 /* EditCCColorsView.swift in Sources */,
 				7D201BF4299C1E280023D649 /* PlistHelpers.swift in Sources */,
 				7DDD2FA529AEB35E0064A7FC /* AppState.swift in Sources */,
 				D6E552D129B3E3300083E6A5 /* ApplicationManager.swift in Sources */,

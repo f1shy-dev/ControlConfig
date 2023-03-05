@@ -35,6 +35,7 @@ class AppState: Codable, ObservableObject {
             saveToUserDefaults()
             if debugMode == false {
                 enableConsole = false
+                enableExperimentalFeatures = false
             }
         }
     }
