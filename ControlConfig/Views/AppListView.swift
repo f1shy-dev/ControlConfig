@@ -11,6 +11,7 @@ import MarqueeText
 struct AppListView: View {
     @ObservedObject var customisation: Customisation
     @State private var searchText = ""
+    @ObservedObject var appState: AppState
     @Environment(\.dismiss) var dismiss
     @State var allApps = [SBApp(bundleIdentifier: "", name: "", bundleURL: URL(string: "/")!, pngIconPaths: ["this-app-does-not-have-an-icon-i-mean-how-could-anything-have-this-string-lmao"], hiddenFromSpringboard: false)]
     @State var apps = [SBApp(bundleIdentifier: "", name: "", bundleURL: URL(string: "/")!, pngIconPaths: ["this-app-does-not-have-an-icon-i-mean-how-could-anything-have-this-string-lmao"], hiddenFromSpringboard: false)]
@@ -25,6 +26,15 @@ struct AppListView: View {
                     } else {
                         ForEach(apps) { app in
                             Button(action: {
+                                if appState.debugMode {
+                                    print("=====APP DETAILS=====")
+                                    print("Name: \(app.name)")
+                                    print("Bundle ID: \(app.bundleIdentifier)")
+                                    print("Bundle Path: \(app.bundleURL)")
+                                    print("Hidden from springboard (broken): \(app.hiddenFromSpringboard)")
+                                    print("Icon paths: \(app.pngIconPaths)")
+                                    print("=====================")
+                                }
                                 customisation.launchAppBundleID = app.bundleIdentifier
                                 dismiss()
                             }, label: {
