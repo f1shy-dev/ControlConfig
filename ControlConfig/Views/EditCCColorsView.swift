@@ -17,7 +17,7 @@ struct SingleBlurModule: View {
 
     var body: some View {
         ZStack {
-            CIVisualEffectView(effect: UIBlurEffect(style: .dark), intensity: $intensity.doubleBinding)
+            CIVisualEffectView(effect: UIBlurEffect(style: .light), intensity: $intensity.doubleBinding)
                 .frame(width: oneSide, height: oneSide)
                 .cornerRadius(cornerR)
             color

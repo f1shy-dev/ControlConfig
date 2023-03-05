@@ -11,7 +11,7 @@
 		7D201BE7299C19A20023D649 /* Module.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201BE6299C19A20023D649 /* Module.swift */; };
 		7D201BE9299C1A2B0023D649 /* Customisation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201BE8299C1A2B0023D649 /* Customisation.swift */; };
 		7D201BEB299C1AB60023D649 /* CustomisationsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201BEA299C1AB60023D649 /* CustomisationsList.swift */; };
-		7D201BEE299C1D1C0023D649 /* BindingExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201BED299C1D1C0023D649 /* BindingExtension.swift */; };
+		7D201BEE299C1D1C0023D649 /* TypeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201BED299C1D1C0023D649 /* TypeExtensions.swift */; };
 		7D201BF0299C1D470023D649 /* MDCSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201BEF299C1D470023D649 /* MDCSwift.swift */; };
 		7D201BF2299C1DE30023D649 /* MDCWrappers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201BF1299C1DE30023D649 /* MDCWrappers.swift */; };
 		7D201BF4299C1E280023D649 /* PlistHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201BF3299C1E280023D649 /* PlistHelpers.swift */; };
@@ -67,7 +67,7 @@
 		7D201BE6299C19A20023D649 /* Module.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Module.swift; sourceTree = "<group>"; };
 		7D201BE8299C1A2B0023D649 /* Customisation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Customisation.swift; sourceTree = "<group>"; };
 		7D201BEA299C1AB60023D649 /* CustomisationsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomisationsList.swift; sourceTree = "<group>"; };
-		7D201BED299C1D1C0023D649 /* BindingExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BindingExtension.swift; sourceTree = "<group>"; };
+		7D201BED299C1D1C0023D649 /* TypeExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeExtensions.swift; sourceTree = "<group>"; };
 		7D201BEF299C1D470023D649 /* MDCSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MDCSwift.swift; sourceTree = "<group>"; };
 		7D201BF1299C1DE30023D649 /* MDCWrappers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MDCWrappers.swift; sourceTree = "<group>"; };
 		7D201BF3299C1E280023D649 /* PlistHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlistHelpers.swift; sourceTree = "<group>"; };
@@ -150,7 +150,7 @@
 			isa = PBXGroup;
 			children = (
 				7D59D958299A94370049302B /* CustomPrint.swift */,
-				7D201BED299C1D1C0023D649 /* BindingExtension.swift */,
+				7D201BED299C1D1C0023D649 /* TypeExtensions.swift */,
 				7D201BEF299C1D470023D649 /* MDCSwift.swift */,
 				7D201BF1299C1DE30023D649 /* MDCWrappers.swift */,
 				D6E552D029B3E32F0083E6A5 /* ApplicationManager.swift */,
@@ -423,7 +423,7 @@
 				7D201C00299C238D0023D649 /* EditModuleView.swift in Sources */,
 				7D201BF7299C1FAC0023D649 /* StaticCCMappings.swift in Sources */,
 				7D201C02299C25190023D649 /* CustomisationCard.swift in Sources */,
-				7D201BEE299C1D1C0023D649 /* BindingExtension.swift in Sources */,
+				7D201BEE299C1D1C0023D649 /* TypeExtensions.swift in Sources */,
 				7D201BE9299C1A2B0023D649 /* Customisation.swift in Sources */,
 				7D09760D2995714D004E6087 /* ModuleOperations.swift in Sources */,
 				D625E89F2991CF2A00D5A5B0 /* grant_full_disk_access.m in Sources */,

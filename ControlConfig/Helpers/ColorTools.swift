@@ -90,7 +90,7 @@ enum ColorTools {
                 ]) { current, _ in current }
             }
 
-            return (PlistHelpers.writeDictToPlist(dict: NSMutableDictionary(dictionary: plistDict), path: CCMappings.moduleMaterialRecipePath))
+            return (PlistHelpers.writeDictToPlist(dict: NSMutableDictionary(dictionary: plistDict), path: filePath))
         }
         return false
     }

@@ -59,7 +59,7 @@ class CustomisationList: ObservableObject {
     @Published var otherCustomisations: OtherCustomisations {
         didSet {
             DispatchQueue(label: "UserDefaultsSaver", qos: .background).async {
-//                print("saved something to USD")
+                print("saved something to USD")
                 self.saveToUserDefaults()
             }
         }
@@ -72,7 +72,14 @@ class CustomisationList: ObservableObject {
 
     init() {
         self.list = []
-        self.otherCustomisations = OtherCustomisations(moduleColor: ColorTools.getMaterialRecipeColor(filePath: CCMappings.moduleMaterialRecipePath), moduleBlur: ColorTools.getMaterialRecipeBlur(filePath: CCMappings.moduleMaterialRecipePath), moduleBGColor: .gray, moduleBGBlur: 100)
+        let mpath = CCMappings.moduleMaterialRecipePath
+        let mc = ColorTools.getMaterialRecipeColor(filePath: mpath)
+        let mb = ColorTools.getMaterialRecipeBlur(filePath: mpath)
+
+        let mBGpath = CCMappings.moduleBackgroundMaterialRecipePath
+        let mBGc = ColorTools.getMaterialRecipeColor(filePath: mBGpath)
+        let mBGb = ColorTools.getMaterialRecipeBlur(filePath: mBGpath)
+        self.otherCustomisations = OtherCustomisations(moduleColor: mc, moduleBlur: mb, moduleBGColor: mBGc, moduleBGBlur: mBGb)
     }
 
     func addCustomisation(item: Customisation) {
