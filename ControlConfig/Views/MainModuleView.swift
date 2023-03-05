@@ -75,7 +75,11 @@ struct MainModuleView: View {
                         Text("Apply")
 
                     })
-                    .disabled(customisations.list.filter { c in c.isEnabled }.isEmpty)
+//                    .disabled(
+//                        customisations.list.filter { c in c.isEnabled }.isEmpty &&
+//                            [customisations.otherCustomisations.moduleBlur, customisations.otherCustomisations.moduleBGBlur].allSatisfy { ($0 as Int?) == nil } &&
+//                            [customisations.otherCustomisations.moduleColor, customisations.otherCustomisations.moduleBGColor].allSatisfy { ($0 as Color?) == nil }
+//                    )
 
                     Spacer()
 

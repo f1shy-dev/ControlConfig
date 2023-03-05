@@ -138,9 +138,12 @@ func applyChanges(customisations: CustomisationList) -> Bool {
         success.append(PlistHelpers.writeDictToPlist(dict: new, path: CCMappings().dmsPath))
     }
 
-    success.append(ColorTools.applyMaterialRecipe(filePath: CCMappings.moduleMaterialRecipePath, color: customisations.otherCustomisations.moduleColor, blur: customisations.otherCustomisations.moduleBlur, includeSpecificsForCCModules: true))
-
-    success.append(ColorTools.applyMaterialRecipe(filePath: CCMappings.moduleBackgroundMaterialRecipePath, color: customisations.otherCustomisations.moduleBGColor, blur: customisations.otherCustomisations.moduleBGBlur, includeSpecificsForCCModules: false))
+    if let c = customisations.otherCustomisations.moduleColor, let b = customisations.otherCustomisations.moduleBlur {
+        success.append(ColorTools.applyMaterialRecipe(filePath: CCMappings.moduleMaterialRecipePath, color: c, blur: b, includeSpecificsForCCModules: true))
+    }
+    if let cB = customisations.otherCustomisations.moduleBGColor, let bB = customisations.otherCustomisations.moduleBGBlur {
+        success.append(ColorTools.applyMaterialRecipe(filePath: CCMappings.moduleBackgroundMaterialRecipePath, color: cB, blur: bB, includeSpecificsForCCModules: false))
+    }
 
     print("successmap", success)
     return !success.contains { $0 == false }

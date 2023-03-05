@@ -10,10 +10,10 @@ import Foundation
 import SwiftUI
 
 class OtherCustomisations: ObservableObject, Codable {
-    @Published var moduleColor: Color
-    @Published var moduleBlur: Int
-    @Published var moduleBGColor: Color
-    @Published var moduleBGBlur: Int
+    @Published var moduleColor: Color?
+    @Published var moduleBlur: Int?
+    @Published var moduleBGColor: Color?
+    @Published var moduleBGBlur: Int?
 
     init(moduleColor: Color, moduleBlur: Int, moduleBGColor: Color, moduleBGBlur: Int) {
         self.moduleColor = moduleColor
@@ -21,6 +21,8 @@ class OtherCustomisations: ObservableObject, Codable {
         self.moduleBGColor = moduleBGColor
         self.moduleBGBlur = moduleBGBlur
     }
+
+    init() {}
 
     enum CodingKeys: String, CodingKey {
         case moduleColor
@@ -31,10 +33,10 @@ class OtherCustomisations: ObservableObject, Codable {
 
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.moduleColor = try container.decode(Color.self, forKey: .moduleColor)
-        self.moduleBlur = try container.decode(Int.self, forKey: .moduleBlur)
-        self.moduleBGColor = try container.decode(Color.self, forKey: .moduleBGColor)
-        self.moduleBGBlur = try container.decode(Int.self, forKey: .moduleBGBlur)
+        self.moduleColor = try? container.decode(Color.self, forKey: .moduleColor)
+        self.moduleBlur = try? container.decode(Int.self, forKey: .moduleBlur)
+        self.moduleBGColor = try? container.decode(Color.self, forKey: .moduleBGColor)
+        self.moduleBGBlur = try? container.decode(Int.self, forKey: .moduleBGBlur)
     }
 
     func encode(to encoder: Encoder) throws {

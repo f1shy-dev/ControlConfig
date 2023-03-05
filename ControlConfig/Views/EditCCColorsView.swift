@@ -11,16 +11,16 @@ import SwiftUI
 struct SingleBlurModule: View {
     let cornerR: CGFloat = 17.5
     let oneSide: CGFloat = 68
-    let color: Color
+    let color: Color?
     let image: String
-    @Binding var intensity: Int
+    @Binding var intensity: Int?
 
     var body: some View {
         ZStack {
-            CIVisualEffectView(effect: UIBlurEffect(style: .light), intensity: $intensity.doubleBinding)
+            CIVisualEffectView(effect: UIBlurEffect(style: .light), intensity: $intensity.toUnwrapped(defaultValue: 50).doubleBinding)
                 .frame(width: oneSide, height: oneSide)
                 .cornerRadius(cornerR)
-            color
+            (color ?? Color.gray)
                 .cornerRadius(cornerR)
                 .frame(width: oneSide, height: oneSide)
 
@@ -37,7 +37,7 @@ struct EditCCColorsView: View {
     var body: some View {
         let _ = saveOCToUserDefaults()
         List {
-            Section(header: Label("Preview", systemImage: "eye")) {
+            Section(header: Label("Preview", systemImage: "eye"), footer: Text("Note: This preview isn't 100% accurate to what the actual control center will look like.")) {
                 HStack {
                     Spacer()
 //                    Spacer(minLength: 0)
@@ -53,7 +53,7 @@ struct EditCCColorsView: View {
                     Image("PreviewWall \(selectedWallpaper)")
                         .resizable()
                         .scaledToFill()
-                        .blur(radius: CGFloat(state.moduleBGBlur))
+                        .blur(radius: CGFloat(state.moduleBGBlur ?? 50))
                     state.moduleBGColor
 
                 })
@@ -65,26 +65,26 @@ struct EditCCColorsView: View {
                 }
             }.listRowSeparator(.hidden)
             Section(header: Label("Control Center Background", systemImage: "paintbrush")) {
-                ColorPicker("Colour (with opacity)", selection: $state.moduleBGColor)
+                ColorPicker("Colour (with opacity)", selection: $state.moduleBGColor.toUnwrapped(defaultValue: .gray))
                 HStack {
-                    Text("Blur (\(state.moduleBGBlur))")
+                    Text("Blur (\(state.moduleBGBlur ?? 50))")
                     Spacer()
-                    Slider(value: $state.moduleBGBlur.doubleBinding, in: 0 ... 100, step: 1) {
+                    Slider(value: $state.moduleBGBlur.toUnwrapped(defaultValue: 50).doubleBinding, in: 0 ... 100, step: 1) {
                         Text("Blur")
                     } minimumValueLabel: { Text("0") } maximumValueLabel: { Text("100") }.frame(width: 150)
                 }
             }
 
             Section(header: Label("Module Colour", systemImage: "paintbrush")) {
-                ColorPicker("Colour (with opacity)", selection: $state.moduleColor)
+                ColorPicker("Colour (with opacity)", selection: $state.moduleColor.toUnwrapped(defaultValue: .gray))
                 HStack {
-                    Text("Blur (\(state.moduleBlur))")
+                    Text("Blur (\(state.moduleBlur ?? 50))")
                     Spacer()
-                    Slider(value: $state.moduleBlur.doubleBinding, in: 0 ... 100, step: 1) {
+                    Slider(value: $state.moduleBlur.toUnwrapped(defaultValue: 50).doubleBinding, in: 0 ... 100, step: 1) {
                         Text("Blur")
                     } minimumValueLabel: { Text("0") } maximumValueLabel: { Text("100") }.frame(width: 150)
                 }
             }
-        }.navigationBarTitle("Edit CC Colours")
+        }.navigationBarTitle("Edit CC Colours").navigationBarTitleDisplayMode(.inline)
     }
 }
