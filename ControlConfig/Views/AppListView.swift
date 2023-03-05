@@ -46,8 +46,13 @@ struct AppListView: View {
                                     
                                     VStack {
                                         HStack {
-                                            MarqueeText(text: app.name, font: UIFont.preferredFont(forTextStyle: .subheadline), leftFade: 16, rightFade: 16, startDelay: 0.5)
-                                                .padding(.horizontal, 6)
+                                            if app.hiddenFromSpringboard {
+                                                MarqueeText(text: "\(app.name) (Hidden)", font: UIFont.preferredFont(forTextStyle: .subheadline), leftFade: 16, rightFade: 16, startDelay: 0.5)
+                                                    .padding(.horizontal, 6)
+                                            } else {
+                                                MarqueeText(text: app.name, font: UIFont.preferredFont(forTextStyle: .subheadline), leftFade: 16, rightFade: 16, startDelay: 0.5)
+                                                    .padding(.horizontal, 6)
+                                            }
                                             Spacer()
                                         }
                                     }
