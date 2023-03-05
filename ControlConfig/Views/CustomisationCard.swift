@@ -88,14 +88,14 @@ struct CustomisationCard: View {
         }) {
             EditModuleView(customisation: customisation, appState: appState, saveToUserDefaults: saveToUserDefaults)
         }
-        .confirmationDialog("Are you sure you want to delete the customisation \(customisation.module.description)?", isPresented: $showingDeleteConfirmation, titleVisibility: .visible) {
-            Button("Yes", role: .destructive) {
+        .confirmationDialog("Are you sure you want to delete the customisation \"\(customisation.module.description)\"?", isPresented: $showingDeleteConfirmation, titleVisibility: .visible) {
+            Button("Delete", role: .destructive) {
                 withAnimation {
                     deleteCustomisation(customisation.self)
                 }
             }
 
-            Button("No", role: .cancel) {}
+            Button("Cancel", role: .cancel) {}
         }
         // TODO: Drag and drop?
         .contextMenu {

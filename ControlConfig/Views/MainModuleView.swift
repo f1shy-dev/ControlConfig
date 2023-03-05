@@ -44,7 +44,7 @@ struct MainModuleView: View {
 //            }
             .frame(maxWidth: .infinity)
             .navigationTitle("ControlConfig")
-            .navigationBarTitleDisplayMode(.inline)
+//            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     Button(action: {
