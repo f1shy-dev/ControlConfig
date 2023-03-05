@@ -56,8 +56,6 @@ struct AppListView: View {
                             .foregroundColor(.accentColor)
                         }
                     }
-                } header: {
-                    Label("Apps", systemImage: "square.grid.2x2")
                 }
             }
             .navigationTitle("Pick app")
