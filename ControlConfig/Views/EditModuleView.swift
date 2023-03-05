@@ -61,7 +61,7 @@ struct EditModuleView: View {
                             Button(action: {
                                 self.isModal = true
                             }) {
-                                Text("[Pick app from list (Beta)")
+                                Label("Pick app from list (Beta)", systemImage: "checklist")
                             } .sheet(isPresented: $isModal, content: {
                                 AppListView(customisation: customisation)
                             })
