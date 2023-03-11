@@ -87,7 +87,7 @@ class CustomisationList: ObservableObject {
     func addCustomisation(item: Customisation) {
         objectWillChange.send()
         list.append(item)
-        print(item.module.isDefaultModule)
+//        print(item.module.isDefaultModule)
         Haptic.shared.play(.soft)
         saveToUserDefaults()
     }

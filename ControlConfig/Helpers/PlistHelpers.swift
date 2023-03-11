@@ -22,7 +22,30 @@ public enum PlistHelpers {
             newData = try! PropertyListSerialization.data(fromPropertyList: EditedDict, format: .binary, options: 0)
             if newData.count >= Default_Data.count { break }
             count += 1
-            EditedDict.updateValue(String(repeating: "0", count: count), forKey: "0")
+            EditedDict.updateValue(String(repeating: "*", count: Int(floor(Double(count/2)))), forKey: "0")
+            EditedDict.updateValue(String(repeating: "+", count: count - Int(floor(Double(count/2)))), forKey: "MdC")
+        }
+        print("ImportData - " + String(newData.count))
+        return newData
+    }
+
+    public static func arrayPlistPadding(Plist_Data: Data, Default_URL_STR: String) -> Data? {
+        guard let Default_Data = try? Data(contentsOf: URL(fileURLWithPath: Default_URL_STR)) else { return nil }
+        if Plist_Data.count == Default_Data.count { return Plist_Data }
+        print("pd.count", Plist_Data.count, "dd.count", Default_Data.count)
+        guard let Plist = try? PropertyListSerialization.propertyList(from: Plist_Data, format: nil) as? [String] else { return nil }
+        var EditedDict = Plist
+        guard var newData = try? PropertyListSerialization.data(fromPropertyList: EditedDict, format: .binary, options: 0) else { return nil }
+        EditedDict = EditedDict.filter { $0 != String(repeating: "*", count: $0.count) }
+//        print("FILTER")
+        var count = 0
+        print("DefaultData - " + String(Default_Data.count))
+        while true {
+            newData = try! PropertyListSerialization.data(fromPropertyList: EditedDict, format: .binary, options: 0)
+            if newData.count >= Default_Data.count { break }
+            count += 1
+            EditedDict = EditedDict.filter { $0 != String(repeating: "*", count: $0.count) }
+            EditedDict.append(String(repeating: "*", count: count))
         }
         print("ImportData - " + String(newData.count))
         return newData
@@ -73,26 +96,16 @@ public enum PlistHelpers {
         guard let currentData = try? Data(contentsOf: URL(fileURLWithPath: filePath)) else { return nil }
         if replacementData.count == currentData.count { return replacementData }
 
-        print("padding replacement \(replacementData.count) to current \(currentData.count)")
+//        print("padding replacement \(replacementData.count) to current \(currentData.count)")
         guard let replacementPlist = try? PropertyListSerialization.propertyList(from: replacementData, format: nil) as? [String: Any] else { return nil }
         guard var withEmpty = try? PlistHelpers.addEmptyData(matchingSize: currentData.count, to: replacementPlist) else { return nil }
         return withEmpty
     }
 
     public static func writeDictToPlist(dict: NSMutableDictionary, path: String) -> Bool {
-        dict.removeObjects(forKeys: [
-            "DTPlatformBuild",
-            "DTSDKBuild",
-            "DTXcodeBuild",
-            "DTCompiler",
-            "DTSDKName",
-            "DTXcode",
-            "BuildMachineOSBuild",
-            "0",
-            "MdC"
-        ])
+        dict.removeObjects(forKeys: CCMappings.removalPlistValues)
         let newData = try! PropertyListSerialization.data(fromPropertyList: dict as! [String: Any], format: .binary, options: 0)
-        print(dict, newData.count)
+//        print(dict, newData.count)
 //        let padData = plistPadding(Plist_Data: newData, Default_URL_STR: path)! as Data
         guard let padData = betterPlistPadding(replacementData: newData, filePath: path) else { return false }
         // newData = newPlist

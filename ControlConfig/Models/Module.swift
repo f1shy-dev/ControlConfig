@@ -11,7 +11,7 @@ class Module: Identifiable, CustomStringConvertible, Codable, ObservableObject, 
     var id: String { fileName }
     var fileName: String
 
-    var isDefaultModule: Bool
+//    var isDefaultModule: Bool
 
     static func ==(lhs: Module, rhs: Module) -> Bool {
         return lhs.fileName == rhs.fileName
@@ -25,9 +25,9 @@ class Module: Identifiable, CustomStringConvertible, Codable, ObservableObject, 
         let fileDict = NSDictionary(contentsOfFile: "\(CCMappings.bundlesPath)\(fileName)/Info.plist")
         let bundleID = "\(fileDict?["CFBundleIdentifier"] ?? "com.what.unknown")"
 
-        self.isDefaultModule = dmsDict?.allKeys.contains(where: { key in
-            bundleID == "\(key)"
-        }) == true
+//        self.isDefaultModule = dmsDict?.allKeys.contains(where: { key in
+//            bundleID == "\(key)"
+//        }) == true
     }
 
     var sfIcon: String {
@@ -58,6 +58,10 @@ class Module: Identifiable, CustomStringConvertible, Codable, ObservableObject, 
     var description: String {
         let fileDict = NSDictionary(contentsOfFile: "\(CCMappings.bundlesPath)\(fileName)/Info.plist")
 
+        if let setNameFolder = CCMappings.folderBasedModuleNameOverrides[fileName] {
+            return "\(setNameFolder)"
+        }
+
         if let setName = CCMappings.bundleIDBasedModuleNameOverrides[bundleID] {
             return "\(setName)"
         }
@@ -79,8 +83,8 @@ class Module: Identifiable, CustomStringConvertible, Codable, ObservableObject, 
         let fileDict = NSDictionary(contentsOfFile: "\(CCMappings.bundlesPath)\(fileName)/Info.plist")
         let bundleID = "\(fileDict?["CFBundleIdentifier"] ?? "com.what.unknown")"
 
-        self.isDefaultModule = dmsDict?.allKeys.contains(where: { key in
-            bundleID == "\(key)"
-        }) == true
+//        self.isDefaultModule = dmsDict?.allKeys.contains(where: { key in
+//            bundleID == "\(key)"
+//        }) == true
     }
 }

@@ -16,6 +16,8 @@ let isiOSSixteen = ProcessInfo().operatingSystemVersion.majorVersion == 16
 
 @main
 struct ControlConfigApp: App {
+    @State var showingBackupSheet = false
+    @State var backupStage: BackupStage = .YetToRespring
     var body: some Scene {
         WindowGroup {
 //            TabView {
@@ -35,6 +37,9 @@ struct ControlConfigApp: App {
             ////                    }
 //            }
             MainModuleView()
+                .sheet(isPresented: $showingBackupSheet) {
+                    BackupView(backupStage: $backupStage)
+                }
                 .onAppear {
                     let appVersion = ((Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown") + " (" + (Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown") + ")")
                     print("ControlConfig version \(appVersion)")
@@ -92,10 +97,23 @@ struct ControlConfigApp: App {
                         task.resume()
                     }
 
-                    Haptic.shared.notify(.success)
-                    if !UserDefaults.standard.bool(forKey: "shownFirstOpen") {
-                        UIApplication.shared.alert(title: "Please read", body: "This app is still in alpha. Some features will not work. Please report any issues you run into to the developer, with logs exported from the settings menu.")
-                        UserDefaults.standard.set(true, forKey: "shownFirstOpen")
+                    // idk man
+                    while !isUnsandboxed {
+                        Thread.sleep(forTimeInterval: 0.1)
+                    }
+
+                    BackupManager.shared.loadBackupList()
+                    let isDoingBk = UserDefaults.standard.bool(forKey: "isCurrentlyDoingBackup")
+                    if BackupManager.shared.backups.count == 0 || isDoingBk {
+                        backupStage = .YetToRespring
+                        if isDoingBk { backupStage = .BackupLoading }
+                        showingBackupSheet = true
+                    } else {
+                        //                    Haptic.shared.notify(.success)
+                        if !UserDefaults.standard.bool(forKey: "shownFirstOpen") {
+                            UIApplication.shared.alert(title: "Please read", body: "This app is still in alpha. Some features will not work. Please report any issues you run into to the developer, with logs exported from the settings menu.")
+                            UserDefaults.standard.set(true, forKey: "shownFirstOpen")
+                        }
                     }
                 }
                 .onOpenURL { url in

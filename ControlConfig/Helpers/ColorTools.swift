@@ -44,7 +44,7 @@ enum ColorTools {
             let r = thirdLevel["red"] as? Double ?? CIColor.gray.red
             let g = thirdLevel["green"] as? Double ?? CIColor.gray.green
             let b = thirdLevel["blue"] as? Double ?? CIColor.gray.blue
-            let mFactor = 0.3
+            let mFactor = 0.8
             let a = (secondLevel["tintAlpha"] as? Double ?? mFactor) / mFactor
 
             return Color(red: CGFloat(r), green: CGFloat(g), blue: CGFloat(b)).opacity(a)

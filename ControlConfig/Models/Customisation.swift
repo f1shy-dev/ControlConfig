@@ -12,6 +12,10 @@ enum CustomisationMode: String, Codable {
     case AppLauncher, ModuleFunction, WorkflowLauncher, CustomAction
 }
 
+enum SizeMode: String, Codable {
+    case Individual, BothWays, None
+}
+
 enum CustomAction: String, Codable {
     case Respring, BackboardRespring, FrontboardRespring, LegacyRespring
 }
@@ -20,25 +24,27 @@ class Customisation: Codable, ObservableObject, Hashable {
     var isEnabled: Bool
     var module: Module
     @Published var mode: CustomisationMode
+    @Published var customSizeMode: SizeMode
 
     init(module: Module) {
         self.module = module
         self.mode = .ModuleFunction
         self.isEnabled = false
+        self.customSizeMode = .None
 
-        if module.isDefaultModule {
-            if let dmsTemp = PlistHelpers.plistToDict(path: CCMappings().dmsPath), let moduleDMSDict = dmsTemp[module.bundleID] as? NSMutableDictionary {
-                let sizes = module.sizesInDMSFile
-                if sizes.contains("size.height"), let h = moduleDMSDict.value(forKeyPath: "size.height") as? Int { self.customHeightBothWays = h }
-                if sizes.contains("size.width"), let h = moduleDMSDict.value(forKeyPath: "size.width") as? Int { self.customWidthBothWays = h }
-
-                if sizes.contains("portrait.size.height"), let h = moduleDMSDict.value(forKeyPath: "portrait.size.height") as? Int { self.customHeightPortrait = h }
-                if sizes.contains("portrait.size.width"), let h = moduleDMSDict.value(forKeyPath: "portrait.size.width") as? Int { self.customWidthPortrait = h }
-
-                if sizes.contains("landscape.size.height"), let h = moduleDMSDict.value(forKeyPath: "landscape.size.height") as? Int { self.customHeightLandscape = h }
-                if sizes.contains("landscape.size.width"), let h = moduleDMSDict.value(forKeyPath: "landscape.size.width") as? Int { self.customWidthLandscape = h }
-            }
-        }
+//        if module.isDefaultModule {
+//            if let dmsTemp = PlistHelpers.plistToDict(path: CCMappings().dmsPath), let moduleDMSDict = dmsTemp[module.bundleID] as? NSMutableDictionary {
+//                let sizes = module.sizesInDMSFile
+//                if sizes.contains("size.height"), let h = moduleDMSDict.value(forKeyPath: "size.height") as? Int { self.customHeightBothWays = h }
+//                if sizes.contains("size.width"), let h = moduleDMSDict.value(forKeyPath: "size.width") as? Int { self.customWidthBothWays = h }
+//
+//                if sizes.contains("portrait.size.height"), let h = moduleDMSDict.value(forKeyPath: "portrait.size.height") as? Int { self.customHeightPortrait = h }
+//                if sizes.contains("portrait.size.width"), let h = moduleDMSDict.value(forKeyPath: "portrait.size.width") as? Int { self.customWidthPortrait = h }
+//
+//                if sizes.contains("landscape.size.height"), let h = moduleDMSDict.value(forKeyPath: "landscape.size.height") as? Int { self.customHeightLandscape = h }
+//                if sizes.contains("landscape.size.width"), let h = moduleDMSDict.value(forKeyPath: "landscape.size.width") as? Int { self.customWidthLandscape = h }
+//            }
+//        }
     }
 
     func hash(into hasher: inout Hasher) {
@@ -124,6 +130,7 @@ class Customisation: Codable, ObservableObject, Hashable {
         case customWidthBothWays
         case customHeightBothWays
 
+        case customSizeMode
         case customName
         case customAction
     }
@@ -146,6 +153,7 @@ class Customisation: Codable, ObservableObject, Hashable {
         self.customHeightBothWays = try? container.decode(Int.self, forKey: .customHeightBothWays)
         self.customName = try? container.decode(String.self, forKey: .customName)
         self.customAction = try container.decode(CustomAction.self, forKey: .customAction)
+        self.customSizeMode = try container.decode(SizeMode.self, forKey: .customSizeMode)
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -168,6 +176,7 @@ class Customisation: Codable, ObservableObject, Hashable {
         try? container.encode(customWidthBothWays, forKey: .customWidthBothWays)
         try? container.encode(customHeightBothWays, forKey: .customHeightBothWays)
 
+        try? container.encode(customSizeMode, forKey: .customSizeMode)
         try? container.encode(customName, forKey: .customName)
         try? container.encode(customAction, forKey: .customAction)
     }

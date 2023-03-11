@@ -18,11 +18,20 @@ struct MainModuleView: View {
         NavigationView {
             VStack {
                 List {
-                    Section(header: Label("General Customisations", systemImage: "paintbrush.pointed")) {
+//                    Section(header: Label("General Customisations", systemImage: "paintbrush.pointed")) {
+                    Section(footer: Text("Re-ordering the fixed modules requires you click apply first, to make them 'movable.' Note that you have to re-order them like the other modules, in the control center section in Settings.")) {
                         NavigationLink {
                             EditCCColorsView(state: customisations.otherCustomisations, saveOCToUserDefaults: customisations.saveToUserDefaults)
                         } label: {
                             Label("Edit CC Colours", systemImage: "paintbrush")
+                        }
+
+                        Button {
+                            if let url = URL(string: "App-Prefs:root=CONTROL_CENTER") {
+                                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                            }
+                        } label: {
+                            Label("Reorder modules", systemImage: "arrow.up.right.square")
                         }
                     }
 

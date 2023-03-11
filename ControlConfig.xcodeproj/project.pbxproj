@@ -24,7 +24,9 @@
 		7D3BAB7729B3855A0024C9C9 /* ColorTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D3BAB7629B3855A0024C9C9 /* ColorTools.swift */; };
 		7D3BAB7929B4BE2E0024C9C9 /* UIViewBlurEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D3BAB7829B4BE2E0024C9C9 /* UIViewBlurEffect.swift */; };
 		7D3BAB7B29B4BE760024C9C9 /* EditCCColorsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D3BAB7A29B4BE760024C9C9 /* EditCCColorsView.swift */; };
+		7D52218829BBC2B9002FD2A7 /* BackupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D52218729BBC2B9002FD2A7 /* BackupView.swift */; };
 		7D59D959299A94370049302B /* CustomPrint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D59D958299A94370049302B /* CustomPrint.swift */; };
+		7DBE8ED629B919C700A36AA6 /* BackupManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DBE8ED529B919C700A36AA6 /* BackupManager.swift */; };
 		7DDD2FA329AEB2F90064A7FC /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DDD2FA229AEB2F90064A7FC /* SettingsView.swift */; };
 		7DDD2FA529AEB35E0064A7FC /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DDD2FA429AEB35E0064A7FC /* AppState.swift */; };
 		7DDD2FA829AFD1020064A7FC /* LocalConsole in Frameworks */ = {isa = PBXBuildFile; productRef = 7DDD2FA729AFD1020064A7FC /* LocalConsole */; };
@@ -80,7 +82,10 @@
 		7D3BAB7629B3855A0024C9C9 /* ColorTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorTools.swift; sourceTree = "<group>"; };
 		7D3BAB7829B4BE2E0024C9C9 /* UIViewBlurEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewBlurEffect.swift; sourceTree = "<group>"; };
 		7D3BAB7A29B4BE760024C9C9 /* EditCCColorsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCCColorsView.swift; sourceTree = "<group>"; };
+		7D52218729BBC2B9002FD2A7 /* BackupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupView.swift; sourceTree = "<group>"; };
 		7D59D958299A94370049302B /* CustomPrint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPrint.swift; sourceTree = "<group>"; };
+		7DBE8ED429B7EC0E00A36AA6 /* ControlConfig.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ControlConfig.entitlements; sourceTree = "<group>"; };
+		7DBE8ED529B919C700A36AA6 /* BackupManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupManager.swift; sourceTree = "<group>"; };
 		7DDD2FA229AEB2F90064A7FC /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		7DDD2FA429AEB35E0064A7FC /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		D625E8662991CD3000D5A5B0 /* ControlConfig.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ControlConfig.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -139,6 +144,7 @@
 				7D201BE8299C1A2B0023D649 /* Customisation.swift */,
 				7D201BEA299C1AB60023D649 /* CustomisationsList.swift */,
 				7DDD2FA429AEB35E0064A7FC /* AppState.swift */,
+				7DBE8ED529B919C700A36AA6 /* BackupManager.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -180,6 +186,7 @@
 				D6E552D829B3E7760083E6A5 /* AppListView.swift */,
 				7D201C01299C25190023D649 /* CustomisationCard.swift */,
 				7DDD2FA229AEB2F90064A7FC /* SettingsView.swift */,
+				7D52218729BBC2B9002FD2A7 /* BackupView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -215,6 +222,7 @@
 		D625E8682991CD3000D5A5B0 /* ControlConfig */ = {
 			isa = PBXGroup;
 			children = (
+				7DBE8ED429B7EC0E00A36AA6 /* ControlConfig.entitlements */,
 				7D3BAB7529B35F820024C9C9 /* Info.plist */,
 				D625E86D2991CD3200D5A5B0 /* Assets.xcassets */,
 				D625E86F2991CD3200D5A5B0 /* Preview Content */,
@@ -409,7 +417,9 @@
 			files = (
 				D625E8A42991CF8600D5A5B0 /* Haptic++.swift in Sources */,
 				7D201BEB299C1AB60023D649 /* CustomisationsList.swift in Sources */,
+				7DBE8ED629B919C700A36AA6 /* BackupManager.swift in Sources */,
 				D625E86A2991CD3000D5A5B0 /* ControlConfigApp.swift in Sources */,
+				7D52218829BBC2B9002FD2A7 /* BackupView.swift in Sources */,
 				7D3BAB7729B3855A0024C9C9 /* ColorTools.swift in Sources */,
 				7D201BF2299C1DE30023D649 /* MDCWrappers.swift in Sources */,
 				7D201BFE299C23860023D649 /* AddModuleView.swift in Sources */,
@@ -599,14 +609,16 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = ControlConfig/ControlConfig.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = Alpha;
+				CURRENT_PROJECT_VERSION = "Alpha-PrivateBeta-1";
 				DEVELOPMENT_ASSET_PATHS = "\"ControlConfig/Preview Content\"";
 				DEVELOPMENT_TEAM = ZV2PLXMRSB;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ControlConfig/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = ControlConfig;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSAppleMusicUsageDescription = "Grant full disk access. Required for app functionality.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "";
@@ -620,7 +632,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.0.4;
+				MARKETING_VERSION = 0.0.5;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.f1shy-dev.ControlConfig";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -638,14 +650,16 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = ControlConfig/ControlConfig.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = Alpha;
+				CURRENT_PROJECT_VERSION = "Alpha-PrivateBeta-1";
 				DEVELOPMENT_ASSET_PATHS = "\"ControlConfig/Preview Content\"";
 				DEVELOPMENT_TEAM = ZV2PLXMRSB;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ControlConfig/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = ControlConfig;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSAppleMusicUsageDescription = "Grant full disk access. Required for app functionality.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "";
@@ -659,7 +673,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.0.4;
+				MARKETING_VERSION = 0.0.5;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.f1shy-dev.ControlConfig";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

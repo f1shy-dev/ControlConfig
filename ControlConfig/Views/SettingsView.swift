@@ -55,6 +55,12 @@ struct SettingsView: View {
                     if appState.debugMode {
                         Toggle("Enable in-app console", isOn: $appState.enableConsole)
                         Toggle("Enable Experimental Features", isOn: $appState.enableExperimentalFeatures)
+                        Button("[WARNING] Better Compress Bundle IDs") {
+                            betterBundleIDCompressor()
+                        }
+                        Button("Enable hidden modules") {
+                            patchHiddenModules()
+                        }
                     }
                 }
                 Section {} header: {

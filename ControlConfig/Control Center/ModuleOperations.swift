@@ -41,11 +41,161 @@ func fetchModules() -> [Module] {
     }
 }
 
+func compressBundleIDs_old() -> Bool {
+    var success: [Bool] = []
+
+    let modules = fetchModules()
+    modules.prefix(9).forEach { module in
+        let path = "\(CCMappings.bundlesPath)\(module.fileName)/Info.plist"
+        guard let currentData = try? Data(contentsOf: URL(fileURLWithPath: path)) else { return success.append(false) }
+
+        guard var currentPlist = try? PropertyListSerialization.propertyList(from: currentData, format: nil) as? [String: Any] else { return success.append(false) }
+        let cs = module.fileName.checksum()
+        print("patching \(module) to \(cs)")
+        currentPlist["CFBundleIdentifier"] = cs
+
+        currentPlist.removeValue(forKey: "0")
+        currentPlist.removeValue(forKey: "MdC")
+
+        let newData = try! PropertyListSerialization.data(fromPropertyList: currentPlist, format: .xml, options: 0)
+//        print(dict, newData.count)
+//        let padData = plistPadding(Plist_Data: newData, Default_URL_STR: path)! as Data
+        guard let padData = PlistHelpers.betterPlistPadding(replacementData: newData, filePath: path) else { return success.append(false) }
+        // newData = newPlist
+        success.append(MDC.overwriteFile(at: path, with: padData))
+        usleep(100000)
+    }
+
+    print("successmap-compresser", success)
+    return !success.contains { $0 == false }
+}
+
+func betterBundleIDCompressor() -> (success: Bool, ogNew: [String: String]) {
+    let bundlesPath = CCMappings.bundlesPath
+    var success: [Bool] = []
+    var ogNew: [String: String] = [:]
+
+    do {
+        let bundleFolders = try FileManager.default.contentsOfDirectory(atPath: bundlesPath)
+        for folder in bundleFolders.filter({ folder in
+            CCMappings.fileNameBasedSmallIDs.allKeys.contains { $0 as! String == folder }
+        }) {
+            let plistPath = "\(bundlesPath)/\(folder)/Info.plist"
+
+            guard let plistData = FileManager.default.contents(atPath: plistPath),
+                  var plist = try PropertyListSerialization.propertyList(from: plistData, format: nil) as? [String: Any]
+            else { success.append(false); continue }
+
+            guard let ogID = plist["CFBundleIdentifier"] as? String else { success.append(false); continue }
+            guard let cs = CCMappings.fileNameBasedSmallIDs[folder] as? String else { success.append(false); continue }
+            ogNew[ogID] = cs
+            plist["CFBundleIdentifier"] = cs
+            for i in CCMappings.removalPlistValues {
+                plist.removeValue(forKey: i)
+            }
+
+            let plistDataNew = try PropertyListSerialization.data(fromPropertyList: plist, format: .binary, options: 0)
+            if let newPad = PlistHelpers.plistPadding(Plist_Data: plistDataNew, Default_URL_STR: plistPath) {
+                success.append(MDC.overwriteFile(at: plistPath, with: newPad))
+                print("MDC patched \(folder) og\(plistData.count) new\(newPad.count)")
+            } else { success.append(false); continue }
+        }
+    } catch {
+        success.append(false)
+        fatalError("Error getting list of subfolders in bundles folder: \(error.localizedDescription)")
+    }
+
+    do {
+        guard let moduleConf = PlistHelpers.plistToDict(path: CCMappings.moduleConfigurationPath) else { throw GenericError.runtimeError(":(") }
+        moduleConf["disabled-module-identifiers"] = []
+        moduleConf["userenabled-fixed-module-identifiers"] = []
+        success.append(PlistHelpers.writeDictToPlist(dict: moduleConf, path: CCMappings.moduleConfigurationPath))
+
+        guard var allowedList = NSArray(contentsOfFile: CCMappings.moduleAllowedListPath) as? [String] else { throw GenericError.runtimeError(":(") }
+
+        allowedList = allowedList.map { ogNew[$0] ?? $0 }
+        if !allowedList.contains("focusui") { allowedList.append("focusui") }
+        print("OGNEW", ogNew)
+        print("ALLOWNEW", allowedList)
+        let newData = try! PropertyListSerialization.data(fromPropertyList: allowedList, format: .binary, options: 0)
+        guard let padData = PlistHelpers.arrayPlistPadding(Plist_Data: newData, Default_URL_STR: CCMappings.moduleAllowedListPath) else { throw GenericError.runtimeError(":(") }
+
+        success.append(MDC.overwriteFile(at: CCMappings.moduleAllowedListPath, with: padData))
+    } catch {
+        success.append(false)
+    }
+    return (!success.contains { $0 == false }, ogNew)
+}
+
+func patchHiddenModules() -> Bool {
+    let bundlesPath = CCMappings.bundlesPath
+    var success: [Bool] = []
+
+    do {
+        let bundleFolders = try FileManager.default.contentsOfDirectory(atPath: bundlesPath)
+        for folder in bundleFolders.filter({ folder in
+            CCMappings.hiddenModulesToPatch.contains { $0 == folder }
+        }) {
+            let plistPath = "\(bundlesPath)/\(folder)/Info.plist"
+
+            guard let plistData = FileManager.default.contents(atPath: plistPath),
+                  var plist = try PropertyListSerialization.propertyList(from: plistData, format: nil) as? [String: Any]
+            else { success.append(false); continue }
+
+            for i in CCMappings.removalPlistValues {
+                plist.removeValue(forKey: i)
+            }
+
+            if plist["SBIconVisibilityDefaultVisible"] != nil {
+                plist["SBIconVisibilityDefaultVisible"] = true
+            }
+
+            if plist["SBIconVisibilitySetByAppPreference"] != nil {
+                plist["SBIconVisibilitySetByAppPreference"] = false
+            }
+
+            if plist["SBIconVisibilityDefaultVisibleInstallTypes"] != nil {
+                plist["SBIconVisibilityDefaultVisibleInstallTypes"] = []
+            }
+
+            if let caps = plist["UIRequiredDeviceCapabilities"] as? [String] {
+                plist["UIRequiredDeviceCapabilities"] = caps.filter {
+                    !["DeviceSupportsActiveNFCReadingOnly"].contains($0)
+                }
+            }
+
+            plist["UIDeviceFamily"] = [1, 2]
+
+            let plistDataNew = try PropertyListSerialization.data(fromPropertyList: plist, format: .binary, options: 0)
+            if let newPad = PlistHelpers.plistPadding(Plist_Data: plistDataNew, Default_URL_STR: plistPath) {
+                success.append(MDC.overwriteFile(at: plistPath, with: newPad))
+                print("MDC patched \(folder) og\(plistData.count) new\(newPad.count)")
+            } else { success.append(false); continue }
+        }
+    } catch {
+        success.append(false)
+        fatalError("Error getting list of subfolders in bundles folder: \(error.localizedDescription)")
+    }
+
+    return !success.contains { $0 == false }
+}
+
 func applyChanges(customisations: CustomisationList) -> Bool {
     let dmsPlistOriginal = PlistHelpers.plistToDict(path: CCMappings().dmsPath)
     var dmsPlist = PlistHelpers.plistToDict(path: CCMappings().dmsPath)
+    var emptyDMS: [String: Any] = [:]
 
     var success: [Bool] = []
+
+    let compressResult = betterBundleIDCompressor()
+    let ogNew = compressResult.ogNew
+    var newOg = [String: String]()
+    for (key, value) in ogNew {
+        newOg[value] = key
+    }
+
+    success.append(compressResult.success)
+    success.append(patchHiddenModules())
 
     for customisation in customisations.list.filter({ c in
         c.isEnabled
@@ -105,28 +255,45 @@ func applyChanges(customisations: CustomisationList) -> Bool {
             infoPlist?.setValue(false, forKey: "CCSupportsApplicationShortcuts")
         }
 
-        if customisation.module.isDefaultModule {
-            if let unwrappedDMSPlist = dmsPlist, let moduleDMSDict = unwrappedDMSPlist[customisation.module.bundleID] as? NSMutableDictionary {
-                let sizes = customisation.module.sizesInDMSFile
-                let keysToEdit = sizes.filter { $0.hasPrefix("size.") }
-                let landscapeKeysToEdit = sizes.filter { $0.hasPrefix("landscape.size.") }
-                let portraitKeysToEdit = sizes.filter { $0.hasPrefix("portrait.size.") }
+        switch customisation.customSizeMode {
+        case .Individual:
+            let dict = [
+                "portrait": [
+                    "size": [
+                        "width": customisation.customWidthPortrait ?? 1,
+                        "height": customisation.customHeightPortrait ?? 1
+                    ]
+                ],
+                "landscape": [
+                    "size": [
+                        "width": customisation.customWidthLandscape ?? 1,
+                        "height": customisation.customHeightLandscape ?? 1
+                    ]
+                ]
+            ]
+            emptyDMS[customisation.module.bundleID] = dict
 
-                keysToEdit.forEach { key in
-                    moduleDMSDict.setValue(key == "size.height" ? customisation.customHeightBothWays : customisation.customWidthBothWays, forKeyPath: key)
+            infoPlist?.setValue(dict, forKey: "_CCModuleSizePROTOTYPE") // useless but whatevers
+        case .BothWays:
+            let dict = [
+                "width": customisation.customWidthBothWays ?? 1,
+                "height": customisation.customHeightBothWays ?? 1
+            ]
+            infoPlist?.setValue(dict, forKey: "_CCModuleSizePROTOTYPE")
+        case .None:
+            // TODO: default size from backup
+
+            if let backupDMS = BackupManager.shared.latestBackup?.defaultModuleSettings, let backupSize = backupDMS[newOg[customisation.module.bundleID] ?? customisation.module.bundleID] as? [String: Any] {
+                if let bothWaySize = backupSize["size"] as? [String: Any] {
+                    infoPlist?.setValue(bothWaySize, forKey: "_CCModuleSizePROTOTYPE")
                 }
-
-                landscapeKeysToEdit.forEach { key in
-                    moduleDMSDict.setValue(key == "landscape.size.height" ? customisation.customHeightLandscape : customisation.customWidthLandscape, forKeyPath: key)
-                }
-
-                portraitKeysToEdit.forEach { key in
-                    moduleDMSDict.setValue(key == "portrait.size.height" ? customisation.customHeightPortrait : customisation.customWidthPortrait, forKeyPath: key)
-                }
-
-                unwrappedDMSPlist.setValue(moduleDMSDict, forKey: customisation.module.bundleID)
-                dmsPlist = Optional(unwrappedDMSPlist)
+                emptyDMS[customisation.module.bundleID] = backupSize
             }
+//            let dict = [
+//                "width": 1,
+//                "height": 1
+//            ]
+//            infoPlist?.setValue(dict, forKey: "_CCModuleSizePROTOTYPE")
         }
 
         if let dict = infoPlist {
@@ -134,10 +301,28 @@ func applyChanges(customisations: CustomisationList) -> Bool {
         }
     }
 
-    if let new = dmsPlist {
-        success.append(PlistHelpers.writeDictToPlist(dict: new, path: CCMappings().dmsPath))
+    if let keys = CCMappings.fileNameBasedSmallIDs.allKeys as? [String] {
+        for moduleFileName in keys {
+            let module = Module(fileName: moduleFileName)
+            let infoPath = "\(CCMappings.bundlesPath)\(moduleFileName)/Info.plist"
+            let infoPlist = PlistHelpers.plistToDict(path: infoPath)
+
+            if emptyDMS[module.bundleID] != nil || infoPlist?["_CCModuleSizePROTOTYPE"] != nil { continue }
+
+            if let backupDMS = BackupManager.shared.latestBackup?.defaultModuleSettings, let backupSize = backupDMS[newOg[module.bundleID] ?? module.bundleID] as? [String: Any] {
+                if let bothWaySize = backupSize["size"] as? [String: Any] {
+                    infoPlist?.setValue(bothWaySize, forKey: "_CCModuleSizePROTOTYPE")
+                }
+                emptyDMS[module.bundleID] = backupSize
+            }
+
+            if let dict = infoPlist {
+                success.append(PlistHelpers.writeDictToPlist(dict: dict, path: infoPath))
+            }
+        }
     }
 
+    success.append(PlistHelpers.writeDictToPlist(dict: NSMutableDictionary(dictionary: emptyDMS), path: CCMappings().dmsPath))
     if let c = customisations.otherCustomisations.moduleColor, let b = customisations.otherCustomisations.moduleBlur {
         success.append(ColorTools.applyMaterialRecipe(filePath: CCMappings.moduleMaterialRecipePath, color: c, blur: b, includeSpecificsForCCModules: true))
     }

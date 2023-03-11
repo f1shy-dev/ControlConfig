@@ -20,40 +20,42 @@ struct AddModuleView: View {
             return true
         }
 
+        for i in filteredModules {
+            print(i.fileName, i.description)
+        }
+
         return NavigationView {
             Form {
-                Section(header: Label("Default Modules", systemImage: "slider.horizontal.3")) {
-                    ForEach(filteredModules.filter { m in
-                        m.isDefaultModule
-                    }) {
-                        let module = $0
-                        HStack {
-                            Label(module.description, systemImage: module.sfIcon)
-                            Spacer()
-                        }
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            customisations.addCustomisation(item: Customisation(module: module))
-                            dismiss()
-                        }
-                    }
-                }
+//                Section(header: Label("Default Modules", systemImage: "slider.horizontal.3")) {
+//                    ForEach(filteredModules.filter { m in
+//                        m.isDefaultModule
+//                    }) {
+//                        let module = $0
+//                        HStack {
+//                            Label(module.description, systemImage: module.sfIcon)
+//                            Spacer()
+//                        }
+//                        .contentShape(Rectangle())
+//                        .onTapGesture {
+//                            customisations.addCustomisation(item: Customisation(module: module))
+//                            dismiss()
+//                        }
+//                    }
+//                }
 
-                Section(header: Label("Movable Modules", systemImage: "slider.vertical.3")) {
-                    ForEach(filteredModules.filter { m in
-                        !m.isDefaultModule
-                    }) {
-                        let module = $0
-                        HStack {
-                            Label(module.description, systemImage: module.sfIcon)
-                            Spacer()
-                        }
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            customisations.addCustomisation(item: Customisation(module: module))
-                            dismiss()
-                        }
+//                Section(header: Label("Movable Modules", systemImage: "slider.vertical.3")) {
+                ForEach(filteredModules) {
+                    let module = $0
+                    HStack {
+                        Label(module.description, systemImage: module.sfIcon)
+                        Spacer()
                     }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        customisations.addCustomisation(item: Customisation(module: module))
+                        dismiss()
+                    }
+//                    }
                 }
             }
             .navigationTitle("New customisation")

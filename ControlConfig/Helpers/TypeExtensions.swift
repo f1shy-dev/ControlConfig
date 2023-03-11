@@ -26,6 +26,13 @@ extension Binding where Value == Int? {
             }
         )
     }
+
+    var intSafeBinding: Binding<String> {
+        Binding<String>(
+            get: { String(self.wrappedValue ?? 1) },
+            set: { self.wrappedValue = Int($0) ?? 1 }
+        )
+    }
 }
 
 extension Binding where Value == Int {
@@ -39,11 +46,25 @@ extension Binding where Value == Int {
             }
         )
     }
+
+    var intSafeBinding: Binding<String> {
+        Binding<String>(
+            get: { String(self.wrappedValue) },
+            set: { self.wrappedValue = Int($0) ?? 0 }
+        )
+    }
 }
 
 extension Double {
     func roundToDecimal(_ fractionDigits: Int) -> Double {
         let multiplier = pow(10, Double(fractionDigits))
         return Darwin.round(self * multiplier) / multiplier
+    }
+}
+
+// Turn a string into a threeletter/number code
+extension String {
+    func checksum() -> String {
+        return "\(self.prefix(1))\(String(format: "%02x", self.utf8.reduce(0) { $0 ^ $1 }))"
     }
 }

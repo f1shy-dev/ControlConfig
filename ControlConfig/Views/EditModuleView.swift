@@ -9,6 +9,19 @@ import Combine
 import Foundation
 import SwiftUI
 
+struct LabelTextField: View {
+    var label: String
+    @Binding var value: String
+
+    var body: some View {
+        HStack {
+            Text(label)
+            Spacer()
+            TextField("", text: $value)
+        }
+    }
+}
+
 struct EditModuleView: View {
     @Environment(\.dismiss) var dismiss
     @ObservedObject var customisation: Customisation
@@ -116,90 +129,30 @@ struct EditModuleView: View {
                     TextField("Name", text: $customisation.customName.toUnwrapped(defaultValue: ""))
                 }
 
-                if customisation.module.isDefaultModule {
-                    let sizes = customisation.module.sizesInDMSFile
-                    if sizes.contains("size.height") || sizes.contains("size.width") {
-                        Section(header: Label("Sizing (All Orientations)", systemImage: "ruler")) {
-                            if sizes.contains("size.height") {
-                                HStack {
-                                    Text("Height")
-                                    Spacer()
-                                    HStack {
-                                        Slider(value: $customisation.customHeightBothWays.doubleBinding, in: 1...4, step: 1) {
-                                            Text("Height")
-                                        } minimumValueLabel: { Text("1") } maximumValueLabel: { Text("4") }
-                                    }.frame(width: 175)
-                                }
-                            }
-
-                            if sizes.contains("size.width") {
-                                HStack {
-                                    Text("Width")
-                                    Spacer()
-                                    HStack {
-                                        Slider(value: $customisation.customWidthBothWays.doubleBinding, in: 1...4, step: 1) {
-                                            Text("Width")
-                                        } minimumValueLabel: { Text("1") } maximumValueLabel: { Text("4") }
-                                    }.frame(width: 175)
-                                }
-                            }
-                        }
+                Section(header: Label("Module Sizing", systemImage: "ruler"), footer: Text("Module sizes are measured in one-module width/tall units. Setting custom sizing to none will make the module it's default size. Invidiual will let you pick a size for each orientation (portrait/landscape), both orientations will let you set a size that is used for both orientations. Default size is 1x1.")) {
+                    Picker("Sizing Mode", selection: $customisation.customSizeMode) {
+                        Text("None").tag(SizeMode.None)
+                        Text("Individual").tag(SizeMode.Individual)
+                        Text("Both orientations").tag(SizeMode.BothWays)
+                    }
+                    .pickerStyle(.automatic)
+                    .id(customisation)
+                    .onReceive(self.customisation.$customSizeMode) { _ in
+                        customisation.objectWillChange.send()
                     }
 
-                    if sizes.contains("landscape.size.height") || sizes.contains("landscape.size.width") {
-                        Section(header: Label("Sizing (Landscape)", systemImage: "ruler")) {
-                            if sizes.contains("landscape.size.height") {
-                                HStack {
-                                    Text("Width")
-                                    Spacer()
-                                    HStack {
-                                        Slider(value: $customisation.customWidthLandscape.doubleBinding, in: 1...4, step: 1) {
-                                            Text("Width")
-                                        } minimumValueLabel: { Text("1") } maximumValueLabel: { Text("4") }
-                                    }.frame(width: 175)
-                                }
-                            }
+                    switch customisation.customSizeMode {
+                    case .BothWays:
+                        LabelTextField(label: "Height", value: $customisation.customHeightBothWays.intSafeBinding)
+                        LabelTextField(label: "Width", value: $customisation.customWidthBothWays.intSafeBinding)
+                    case .Individual:
+                        LabelTextField(label: "Portrait Height", value: $customisation.customHeightPortrait.intSafeBinding)
+                        LabelTextField(label: "Portrait Width", value: $customisation.customWidthPortrait.intSafeBinding)
 
-                            if sizes.contains("landscape.size.width") {
-                                HStack {
-                                    Text("Height")
-                                    Spacer()
-                                    HStack {
-                                        Slider(value: $customisation.customHeightLandscape.doubleBinding, in: 1...4, step: 1) {
-                                            Text("Height")
-                                        } minimumValueLabel: { Text("1") } maximumValueLabel: { Text("4") }
-                                    }.frame(width: 175)
-                                }
-                            }
-                        }
-                    }
-
-                    if sizes.contains("portrait.size.height") || sizes.contains("portrait.size.width") {
-                        Section(header: Label("Sizing (Portrait)", systemImage: "ruler")) {
-                            if sizes.contains("portrait.size.height") {
-                                HStack {
-                                    Text("Width")
-                                    Spacer()
-                                    HStack {
-                                        Slider(value: $customisation.customWidthPortrait.doubleBinding, in: 1...4, step: 1) {
-                                            Text("Width")
-                                        } minimumValueLabel: { Text("1") } maximumValueLabel: { Text("4") }
-                                    }.frame(width: 175)
-                                }
-                            }
-
-                            if sizes.contains("portrait.size.width") {
-                                HStack {
-                                    Text("Height")
-                                    Spacer()
-                                    HStack {
-                                        Slider(value: $customisation.customHeightPortrait.doubleBinding, in: 1...4, step: 1) {
-                                            Text("Height")
-                                        } minimumValueLabel: { Text("1") } maximumValueLabel: { Text("4") }
-                                    }.frame(width: 175)
-                                }
-                            }
-                        }
+                        LabelTextField(label: "Landscape Height", value: $customisation.customHeightLandscape.intSafeBinding)
+                        LabelTextField(label: "Landscape Width", value: $customisation.customWidthLandscape.intSafeBinding)
+                    case .None:
+                        EmptyView()
                     }
                 }
 

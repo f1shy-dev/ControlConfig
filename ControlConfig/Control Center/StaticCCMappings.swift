@@ -11,8 +11,16 @@ import UIKit
 public struct CCMappings {
     public static let bundlesPath = "/System/Library/ControlCenter/Bundles/"
     public static let privFrameworksPath = "/System/Library/PrivateFrameworks/"
-    public static let moduleMaterialRecipePath = "/System/Library/PrivateFrameworks/CoreMaterial.framework/modules.materialrecipe"
-    public static let moduleBackgroundMaterialRecipePath = "/System/Library/PrivateFrameworks/CoreMaterial.framework/modulesBackground.materialrecipe"
+    public static let moduleMaterialRecipePath =
+        "\(privFrameworksPath)/CoreMaterial.framework/modules.materialrecipe"
+    public static let moduleBackgroundMaterialRecipePath =
+        "\(privFrameworksPath)/CoreMaterial.framework/modulesBackground.materialrecipe"
+    public static let moduleConfigurationPath =
+        "/var/mobile/Library/ControlCenter/ModuleConfiguration.plist"
+    public static let moduleConfiguration_ccsupportPath =
+        "/var/mobile/Library/ControlCenter/ModuleConfiguration_CCSupport.plist"
+    public static let moduleAllowedListPath =
+        "\(privFrameworksPath)/ControlCenterServices.framework/ModuleAllowedList.plist"
 
     public var dmsPath: String {
         let dmsBase = CCMappings.privFrameworksPath + "ControlCenterUI.framework/DefaultModuleSettings~"
@@ -22,6 +30,39 @@ public struct CCMappings {
             return dmsBase + "iphone.plist"
         }
     }
+
+    public static let removalPlistValues: [String] = [
+        "DTPlatformBuild",
+        "DTSDKBuild",
+        "DTXcodeBuild",
+        "DTCompiler",
+        "DTSDKName",
+        "DTXcode",
+        "BuildMachineOSBuild",
+        "0",
+        "MdC",
+    ]
+
+    public static let fileNameBasedSmallIDs: NSDictionary = [
+        "ConnectivityModule.bundle": "connect",
+        "MediaControlsModule.bundle": "music",
+        "OrientationLockModule.bundle": "rotate",
+        "AirPlayMirroringModule.bundle": "airplay",
+        "FocusUIModule.bundle": "focusui",
+        "DisplayModule.bundle": "screen",
+        "MediaControlsAudioModule.bundle": "volume",
+        "HomeControlCenterModule.bundle": "home.large",
+        "DoNotDisturbModule.bundle": "ios15.dnd",
+        "CarModeModule.bundle": "ios15.car",
+        "MuteModule.bundle": "mute",
+//        "VideoConferenceControlCenterModule.bundle": "conf.cam",
+//        "AudioConferenceControlCenterModule.bundle": "conf.mic",
+    ]
+
+    public static let hiddenModulesToPatch: [String] = [
+        "SilenceCallsCCWidget.bundle", "ContinuousExposeModule.bundle", "NFCControlCenterModule.bundle", "PerformanceTraceModule.bundle",
+        "DoNotDisturbModule.bundle", "CarModeModule.bundle", "KeyboardBrightnessModule.bundle", "MuteModule.bundle", "HomeControlCenterModule.bundle",
+    ]
 
     public static let bundleIDBasedModuleNameOverrides: NSDictionary = [
         "com.apple.shazamkit.controlcenter.ShazamModule": "Shazam",
@@ -37,6 +78,11 @@ public struct CCMappings {
         "com.apple.control-center.AppleTVRemoteModule": "TV Remote",
         "com.apple.control-center.PerformanceTraceModule": "Performance Tracer",
         "com.apple.springboard.ContinuousExposeModule": "Stage Manager",
+        // TODO: mediacontrolsaudio and others
+    ]
+
+    public static let folderBasedModuleNameOverrides: NSDictionary = [
+        "DisplayModule.bundle": "Brightness",
         // TODO: mediacontrolsaudio and others
     ]
 
@@ -70,7 +116,8 @@ public struct CCMappings {
             // TODO: more.
         ]
 
-        if #available(iOS 16.0, *) {} else {
+        if #available(iOS 16.0, *) {
+        } else {
             base["com.apple.shazamkit.controlcenter.ShazamModule"] = "music.note.list"
         }
         return base as NSDictionary
