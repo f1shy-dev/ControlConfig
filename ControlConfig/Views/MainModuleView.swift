@@ -19,15 +19,17 @@ struct MainModuleView: View {
             VStack {
                 List {
 //                    Section(header: Label("General Customisations", systemImage: "paintbrush.pointed")) {
-                    Section(footer: Text("Re-ordering the fixed modules requires you click apply first, to make them 'movable.' Note that you have to re-order them like the other modules, in the control center section in Settings.")) {
-                        NavigationLink {
-                            EditCCColorsView(state: customisations.otherCustomisations, saveOCToUserDefaults: customisations.saveToUserDefaults)
+                    Section(footer: Text("Re-ordering the fixed modules requires you click apply first, to make them 'movable.' Note that you have to re-order them like the other modules, in the control center section in iOS Settings.")) {
+                        Button { // was NavigationLink
+                            UIApplication.shared.confirmAlert(title: "Notice", body: "Colors are currently disabled due to issues with respring-loops. This feature will come back soon, but sorry about the inconvenience.", onOK: {}, noCancel: true)
+
+//                            EditCCColorsView(state: customisations.otherCustomisations, saveOCToUserDefaults: customisations.saveToUserDefaults)
                         } label: {
                             Label("Edit CC Colours", systemImage: "paintbrush")
                         }
 
                         Button {
-                            if let url = URL(string: "App-Prefs:root=CONTROL_CENTER") {
+                            if let url = URL(string: "App-Prefs:root=ControlCenter&path=CUSTOMIZE_CONTROLS") {
                                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
                             }
                         } label: {
@@ -77,7 +79,7 @@ struct MainModuleView: View {
                             UIApplication.shared.confirmAlert(title: "Applied!", body: "Please respring to see any changes.", onOK: {}, noCancel: true)
                         } else {
                             Haptic.shared.notify(.error)
-                            UIApplication.shared.alert(body: "An error occurred when writing to the file(s). This might be due to custom width/heights, which might have made the file too large. Please try and re-arrange your custom width/heights first, and then try again, and if not, please report this to the developer.")
+                            UIApplication.shared.alert(body: "An error occurred when writing to the file(s). First please try rebooting your device, and if it does not work, please report this to the developer and provide any logs/details of what you tried.")
                         }
                     }, label: {
                         Label("Apply", systemImage: "seal")

@@ -29,8 +29,17 @@ extension Binding where Value == Int? {
 
     var intSafeBinding: Binding<String> {
         Binding<String>(
-            get: { String(self.wrappedValue ?? 1) },
-            set: { self.wrappedValue = Int($0) ?? 1 }
+            get: {
+                if self.wrappedValue == nil { return "" }
+                return String(self.wrappedValue ?? 1)
+            },
+            set: {
+                if $0 == "" {
+                    self.wrappedValue = nil
+                } else {
+                    self.wrappedValue = Int($0) ?? 1
+                }
+            }
         )
     }
 }

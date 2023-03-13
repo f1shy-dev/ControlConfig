@@ -102,7 +102,7 @@ struct ControlConfigApp: App {
                         Thread.sleep(forTimeInterval: 0.1)
                     }
 
-                    BackupManager.shared.loadBackupList()
+//                    BackupManager.shared.loadBackupList()
                     let isDoingBk = UserDefaults.standard.bool(forKey: "isCurrentlyDoingBackup")
                     if BackupManager.shared.backups.count == 0 || isDoingBk {
                         backupStage = .YetToRespring

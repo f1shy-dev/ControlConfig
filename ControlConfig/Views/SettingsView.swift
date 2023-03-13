@@ -24,6 +24,18 @@ struct SettingsView: View {
                 } footer: {
                     Label("Only enable if respringing doesn't work.", systemImage: "info.circle")
                 }
+
+                Picker("SpringBoard Language", selection: $appState.sbRegionCode) {
+                    ForEach(CCMappings.hardcodedRegions, id: \.self) { region in
+                        Text(region).tag(region)
+                    }
+                }
+                .pickerStyle(.automatic)
+                .id(appState.sbRegionCode)
+//                .onReceive(self.customisation.$mode) { _ in
+//                    customisation.objectWillChange.send()
+//                }
+
                 Section(header: Label("Debug", systemImage: "ladybug"), footer: Label("Settings meant for people who know what they're doing. Only touch anything here if the developers explicitly told you to.", systemImage: "info.circle")) {
                     Button("Export app logs") {
                         let encoder = JSONEncoder()

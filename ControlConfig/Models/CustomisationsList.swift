@@ -52,7 +52,7 @@ class CustomisationList: ObservableObject {
     var list: [Customisation] {
         didSet {
             DispatchQueue(label: "UserDefaultsSaver", qos: .background).async {
-//                print("saved something to USD")
+                print("saved list to USD")
                 self.saveToUserDefaults()
             }
         }
@@ -61,7 +61,7 @@ class CustomisationList: ObservableObject {
     @Published var otherCustomisations: OtherCustomisations {
         didSet {
             DispatchQueue(label: "UserDefaultsSaver", qos: .background).async {
-                print("saved something to USD")
+                print("saved othercustoms to USD")
                 self.saveToUserDefaults()
             }
         }
@@ -101,7 +101,7 @@ class CustomisationList: ObservableObject {
     }
 
     func saveToUserDefaults() {
-//        print("saving to user defaults...")
+        print("usd saver - listobj called")
         let encoder = JSONEncoder()
         if let encoded = try? encoder.encode(list), let encodedOther = try? encoder.encode(otherCustomisations) {
             UserDefaults.standard.set(encoded, forKey: "customisationList")
@@ -110,9 +110,18 @@ class CustomisationList: ObservableObject {
     }
 
     static func loadFromUserDefaults() -> CustomisationList {
-        if let data = UserDefaults.standard.data(forKey: "customisationList"), let items = try? JSONDecoder().decode([Customisation].self, from: data), let other = UserDefaults.standard.data(forKey: "otherCustomisations"), let otherDc = try? JSONDecoder().decode(OtherCustomisations.self, from: other) {
+        print("loading from defaults")
+        do {
+            guard let data = UserDefaults.standard.data(forKey: "customisationList") else { throw GenericError.runtimeError("ndc data") }
+            let items = try JSONDecoder().decode([Customisation].self, from: data)
+            guard let other = UserDefaults.standard.data(forKey: "otherCustomisations") else { throw GenericError.runtimeError("ndc otherdata") }
+            let otherDc = try JSONDecoder().decode(OtherCustomisations.self, from: other)
+
             return CustomisationList(list: items, otherCustomisations: otherDc)
         }
-        return CustomisationList()
+        catch {
+            print(error)
+            return CustomisationList()
+        }
     }
 }

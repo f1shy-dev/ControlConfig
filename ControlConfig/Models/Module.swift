@@ -31,7 +31,7 @@ class Module: Identifiable, CustomStringConvertible, Codable, ObservableObject, 
     }
 
     var sfIcon: String {
-        if let icon = CCMappings().bundleIDBasedSFIcons[bundleID] {
+        if let icon = CCMappings().moduleSFIcons[fileName] {
             return "\(icon)"
         }
         return "app.dashed"
@@ -58,11 +58,7 @@ class Module: Identifiable, CustomStringConvertible, Codable, ObservableObject, 
     var description: String {
         let fileDict = NSDictionary(contentsOfFile: "\(CCMappings.bundlesPath)\(fileName)/Info.plist")
 
-        if let setNameFolder = CCMappings.folderBasedModuleNameOverrides[fileName] {
-            return "\(setNameFolder)"
-        }
-
-        if let setName = CCMappings.bundleIDBasedModuleNameOverrides[bundleID] {
+        if let setName = CCMappings.moduleNames[fileName] {
             return "\(setName)"
         }
 

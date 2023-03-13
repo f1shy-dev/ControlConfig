@@ -41,7 +41,10 @@ public struct CCMappings {
         "BuildMachineOSBuild",
         "0",
         "MdC",
+        "$",
     ]
+
+    public static let hardcodedRegions: [String] = ["ar", "ca", "cs", "da", "de", "el", "en", "en_AU", "en_GB", "es", "es_419", "fi", "fr", "fr_CA", "he", "hi", "hr", "hu", "id", "it", "ja", "ko", "ms", "nl", "no", "pl", "pt", "pt_PT", "ro", "ru", "sk", "sv", "th", "tr", "uk", "vi", "zh_CN", "zh_HK", "zh_TW"]
 
     public static let fileNameBasedSmallIDs: NSDictionary = [
         "ConnectivityModule.bundle": "connect",
@@ -55,70 +58,154 @@ public struct CCMappings {
         "DoNotDisturbModule.bundle": "ios15.dnd",
         "CarModeModule.bundle": "ios15.car",
         "MuteModule.bundle": "mute",
+        "PerformanceTraceModule.bundle": "ptrace",
+        "SleepModeControlCenterButton.bundle": "ios15.sleep",
 //        "VideoConferenceControlCenterModule.bundle": "conf.cam",
 //        "AudioConferenceControlCenterModule.bundle": "conf.mic",
     ]
 
     public static let hiddenModulesToPatch: [String] = [
-        "SilenceCallsCCWidget.bundle", "ContinuousExposeModule.bundle", "NFCControlCenterModule.bundle", "PerformanceTraceModule.bundle",
-        "DoNotDisturbModule.bundle", "CarModeModule.bundle", "KeyboardBrightnessModule.bundle", "MuteModule.bundle", "HomeControlCenterModule.bundle",
+        "SilenceCallsCCWidget.bundle",
+        "ContinuousExposeModule.bundle",
+        "NFCControlCenterModule.bundle",
+        "PerformanceTraceModule.bundle",
+        "DoNotDisturbModule.bundle",
+        "CarModeModule.bundle",
+        "KeyboardBrightnessModule.bundle",
+        "MuteModule.bundle",
+        "HomeControlCenterModule.bundle",
+        "PerformanceTraceModule.bundle",
+        "SleepModeControlCenterButton.bundle",
     ]
 
-    public static let bundleIDBasedModuleNameOverrides: NSDictionary = [
-        "com.apple.shazamkit.controlcenter.ShazamModule": "Shazam",
-        "com.apple.control-center.DisplayModule": "Brightness",
-        "com.apple.mediaremote.controlcenter.nowplaying": "Media Player",
-        "com.apple.Home.ControlCenter": "Home (large)",
-        "com.apple.Home.CompactControlCenter": "Home (small)",
-        "com.apple.FocusUIModule": "Focus",
-        "com.apple.control-center.OrientationLockModule": "Orientation Lock",
-        "com.apple.mediaremote.controlcenter.audio": "Volume",
-        "com.apple.replaykit.controlcenter.screencapture": "Screen Recording",
-        "com.apple.TelephonyUtilities.SilenceCallsCCWidget": "Silence Calls",
-        "com.apple.control-center.AppleTVRemoteModule": "TV Remote",
-        "com.apple.control-center.PerformanceTraceModule": "Performance Tracer",
-        "com.apple.springboard.ContinuousExposeModule": "Stage Manager",
-        // TODO: mediacontrolsaudio and others
-    ]
-
-    public static let folderBasedModuleNameOverrides: NSDictionary = [
+    public static let moduleNames: NSDictionary = [
+        "FocusUIModule.bundle": "Focus",
+        "MediaControlsAudioModule.bundle": "Volume",
+        "MediaControlsModule.bundle": "Media Player",
+        "PerformanceTraceModule.bundle": "Performance Tracer",
+        "ReplayKitModule.bundle": "Screen Recording",
+        "ContinuousExposeModule.bundle": "Stage Manager",
+        "HomeControlCenterModule.bundle": "Home (large)",
+        "SilenceCallsCCWidget.bundle": "Silence Calls",
+        "HomeControlCenterCompactModule.bundle": "Home (small)",
+        "OrientationLockModule.bundle": "Orientation Lock",
+        "ShazamModule.bundle": "Shazam",
+        "TVRemoteModule.bundle": "TV Remote",
         "DisplayModule.bundle": "Brightness",
-        // TODO: mediacontrolsaudio and others
+
+        "QuickNoteModule.bundle": "Notes",
+        "NFCControlCenterModule.bundle": "NFC Tag Reader",
+        "KeyboardBrightnessModule.bundle": "Keyboard Brightness",
+        "AccessibilityShorcutsModule.bundle": "Accessibility Shortcuts",
+        "AudioConferenceControlCenterModule.bundle": "Conference Audio Options",
+        "AlarmModule.bundle": "Alarm",
+        "ConnectivityModule.bundle": "Connectivity",
+        "AccessibilityGuidedAccessControlCenterModule.bundle": "Guided Access",
+        "SystemQuickNoteModule.bundle": "Quick Note",
+        "AppearanceModule.bundle": "Appearance",
+        "MuteModule.bundle": "Mute",
+        "MagnifierModule.bundle": "Magnifier",
+        "CameraModule.bundle": "Camera",
+        "HearingAidsModule.bundle": "Hearing",
+        "QRCodeModule.bundle": "QR Code Scanner",
+        "VoiceMemosModule.bundle": "Voice Memos",
+        "WalletModule.bundle": "Wallet",
+        "AccessibilitySoundDetectionControlCenterModule.bundle": "Sound Detection",
+        "AirPlayMirroringModule.bundle": "AirPlay Mirroring",
+        "StopwatchModule.bundle": "Stopwatch",
+        "LowPowerModule.bundle": "Low Power Mode",
+        "AccessibilityTextSizeModule.bundle": "Text Size",
+        "SpokenNotificationsModule.bundle": "Spoken Notifications",
+        "VideoConferenceControlCenterModule.bundle": "Conference Video Options",
+        "FlashlightModule.bundle": "Flashlight",
+        "FeedbackAssistantModule.bundle": "Feedback Assistant",
+        "CalculatorModule.bundle": "Calculator",
+        "TimerModule.bundle": "Timer",
+
+        "CarModeModule.bundle": "Driving Focus",
+        "SleepModeControlCenterButton.bundle": "Sleep Focus",
+        "DoNotDisturbModule.bundle": "Do Not Disturb (iOS 14)",
     ]
 
-    public var bundleIDBasedSFIcons: NSDictionary {
-        var base = [
-            "com.apple.replaykit.VideoConferenceControlCenterModule": "video",
-            "com.apple.FocusUIModule": "moon.fill",
-            "com.apple.Home.ControlCenter": "homekit",
-            "com.apple.Home.CompactControlCenter": "homekit",
-            "com.apple.control-center.DisplayModule": "sun.max",
-            "com.apple.control-center.OrientationLockModule": "lock.rotation",
-            "com.apple.mediaremote.controlcenter.audio": "speaker.wave.2",
-            "com.apple.control-center.ConnectivityModule": "wifi",
-            "com.apple.control-center.MuteModule": "bell.slash.fill",
-            "com.apple.control-center.QuickNoteModule": "note.text",
-            "com.apple.mobilenotes.SystemPaperControlCenterModule": "note.text",
-            "com.apple.springboard.ContinuousExposeModule": "squares.leading.rectangle",
-            "com.apple.control-center.FlashlightModule": "flashlight.off.fill",
-            "com.apple.control-center.CameraModule": "camera.fill",
-            "com.apple.control-center.LowPowerModule": "battery.25",
+    public var moduleSFIcons: NSDictionary {
+//        var base = [
+//            "com.apple.replaykit.VideoConferenceControlCenterModule": "video",
+//            "com.apple.FocusUIModule": "moon.fill",
+//            "com.apple.Home.ControlCenter": "homekit",
+//            "com.apple.Home.CompactControlCenter": "homekit",
+//            "com.apple.control-center.DisplayModule": "sun.max",
+//            "com.apple.control-center.OrientationLockModule": "lock.rotation",
+//            "com.apple.mediaremote.controlcenter.audio": "speaker.wave.2",
+//            "com.apple.control-center.ConnectivityModule": "wifi",
+//            "com.apple.control-center.MuteModule": "bell.slash.fill",
+//            "com.apple.control-center.QuickNoteModule": "note.text",
+//            "com.apple.mobilenotes.SystemPaperControlCenterModule": "note.text",
+//            "com.apple.springboard.ContinuousExposeModule": "squares.leading.rectangle",
+//            "com.apple.control-center.FlashlightModule": "flashlight.off.fill",
+//            "com.apple.control-center.CameraModule": "camera.fill",
+//            "com.apple.control-center.LowPowerModule": "battery.25",
+//            "com.apple.shazamkit.controlcenter.ShazamModule": "shazam.logo.fill",
+//            "com.apple.TelephonyUtilities.SilenceCallsCCWidget": "iphone.homebutton.slash",
+//            "com.apple.replaykit.controlcenter.screencapture": "record.circle",
+//            "com.apple.replaykit.AudioConferenceControlCenterModule": "mic",
+//            "com.apple.control-center.AppleTVRemoteModule": "appletvremote.gen4.fill",
+//            "com.apple.control-center.FeedbackAssistanceModule": "exclamationmark.bubble.fill",
+//            "com.apple.control-center.PerformanceTraceModule": "waveform.path.ecg",
+//            "com.apple.mediaremote.controlcenter.nowplaying": "waveform",
+//            // TODO: more.
+//        ]
 
-            "com.apple.shazamkit.controlcenter.ShazamModule": "shazam.logo.fill",
-            // for lack of a better symbol
-            "com.apple.TelephonyUtilities.SilenceCallsCCWidget": "iphone.homebutton.slash",
-            "com.apple.replaykit.controlcenter.screencapture": "record.circle",
-            "com.apple.replaykit.AudioConferenceControlCenterModule": "mic",
-            "com.apple.control-center.AppleTVRemoteModule": "appletvremote.gen4.fill",
-            "com.apple.control-center.FeedbackAssistanceModule": "exclamationmark.bubble.fill",
-            "com.apple.control-center.PerformanceTraceModule": "waveform.path.ecg",
-            "com.apple.mediaremote.controlcenter.nowplaying": "waveform",
-            // TODO: more.
+        var base = [
+            "VideoConferenceControlCenterModule.bundle": "video",
+            "SystemQuickNoteModule.bundle": "note.text",
+            "CameraModule.bundle": "camera", // fill?
+            "FeedbackAssistantModule.bundle": "exclamationmark.bubble", // fill?
+            "ContinuousExposeModule.bundle": "squares.leading.rectangle",
+            "AudioConferenceControlCenterModule.bundle": "mic",
+            "OrientationLockModule.bundle": "lock.rotation",
+            "ShazamModule.bundle": "shazam.logo", // fill?
+            "QuickNoteModule.bundle": "note.text",
+            "DisplayModule.bundle": "sun.max",
+            "HomeControlCenterCompactModule.bundle": "homekit",
+            "MediaControlsAudioModule.bundle": "speaker.wave.2",
+            "FlashlightModule.bundle": "flashlight.off.fill", // not-fill doesnt exist?
+            "HomeControlCenterModule.bundle": "homekit",
+            "MediaControlsModule.bundle": "airplayaudio",
+            "MuteModule.bundle": "bell.slash", // fill?
+            "SilenceCallsCCWidget.bundle": "iphone.homebutton.slash",
+            "PerformanceTraceModule.bundle": "waveform.path.ecg",
+            "ConnectivityModule.bundle": "wifi",
+            "FocusUIModule.bundle": "moon", // fill?
+            "ReplayKitModule.bundle": "record.circle",
+            "TVRemoteModule.bundle": "appletvremote.gen4", // fill?
+            "LowPowerModule.bundle": "battery.25",
+            "WalletModule.bundle": "creditcard",
+
+            "AlarmModule.bundle": "alarm", // fill?
+            "SleepModeControlCenterButton.bundle": "bed.double", // fill?
+            "AccessibilityTextSizeModule.bundle": "textformat.size",
+            "StopwatchModule.bundle": "stopwatch", // fill?
+            "DoNotDisturbModule.bundle": "moon.zzz", // fill?
+            "AccessibilityGuidedAccessControlCenterModule.bundle": "lock.rectangle",
+            "AccessibilityShorcutsModule.bundle": "cursorarrow.motionlines", // acc where tf is this icon too omg
+            "MagnifierModule.bundle": "plus.magnifyingglass",
+            "CalculatorModule.bundle": "function", // wheretf is the calc icon
+            "VoiceMemosModule.bundle": "waveform.and.mic",
+            "CarModeModule.bundle": "car", // fill?
+            "AppearanceModule.bundle": "lightbulb", // fill?
+            "SpokenNotificationsModule.bundle": "bell.and.waveform", // fill?
+            "NFCControlCenterModule.bundle": "wave.3.right.circle", // fill?
+            "QRCodeModule.bundle": "qrcode.viewfinder",
+            "AccessibilitySoundDetectionControlCenterModule.bundle": "waveform.and.magnifyingglass",
+            "TimerModule.bundle": "timer",
+            "HearingAidsModule.bundle": "hearingdevice.ear",
+            "KeyboardBrightnessModule.bundle": "light.max",
+            "AirPlayMirroringModule.bundle": "airplayvideo",
         ]
 
         if #available(iOS 16.0, *) {
         } else {
-            base["com.apple.shazamkit.controlcenter.ShazamModule"] = "music.note.list"
+            base["ShazamModule.bundle"] = "music.note.list"
         }
         return base as NSDictionary
     }

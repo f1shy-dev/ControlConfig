@@ -17,7 +17,7 @@ struct LabelTextField: View {
         HStack {
             Text(label)
             Spacer()
-            TextField("", text: $value)
+            TextField("", text: $value).keyboardType(.numberPad)
         }
     }
 }
@@ -40,23 +40,10 @@ struct EditModuleView: View {
     var body: some View {
         return NavigationView {
             List {
-                if #available(iOS 16, *) {
+                Section(footer: customisation.mode == .DefaultFunction ? Text("This module will function as it normally would.") : Text("")) {
                     Picker("Action", selection: $customisation.mode) {
+                        Text("Default Action").tag(CustomisationMode.DefaultFunction)
                         Text("App Launcher").tag(CustomisationMode.AppLauncher)
-                        Text("CC Module").tag(CustomisationMode.ModuleFunction)
-                        Text("Run Shortcut").tag(CustomisationMode.WorkflowLauncher)
-                        Text("Custom Action").tag(CustomisationMode.CustomAction)
-                    }
-                    // im picky ok, it looks nice like this on 16, on 15 it doesnt look like a picker...
-                    .pickerStyle(.menu)
-                    .id(customisation)
-                    .onReceive(self.customisation.$mode) { _ in
-                        customisation.objectWillChange.send()
-                    }
-                } else {
-                    Picker("Action", selection: $customisation.mode) {
-                        Text("App Launcher").tag(CustomisationMode.AppLauncher)
-                        Text("CC Module").tag(CustomisationMode.ModuleFunction)
                         Text("Run Shortcut").tag(CustomisationMode.WorkflowLauncher)
                         Text("Custom Action").tag(CustomisationMode.CustomAction)
                     }
@@ -70,15 +57,15 @@ struct EditModuleView: View {
                 switch customisation.mode {
                 case .AppLauncher:
                     Section(header: Label("App Launcher", systemImage: "app.badge.checkmark"), footer: Text("The URL Scheme is to launch to a specific section of an app, such as com.apple.tv://us/show")) {
-                        if appState.enableExperimentalFeatures {
-                            Button(action: {
-                                self.showingAppPickerSheet = true
-                            }) {
-                                Label("Pick app from list (Beta)", systemImage: "checklist")
-                            }.sheet(isPresented: $showingAppPickerSheet, content: {
-                                AppListView(customisation: customisation)
-                            })
-                        }
+//                        if appState.enableExperimentalFeatures {
+                        Button(action: {
+                            self.showingAppPickerSheet = true
+                        }) {
+                            Label("Pick app from list (Beta)", systemImage: "checklist")
+                        }.sheet(isPresented: $showingAppPickerSheet, content: {
+                            AppListView(customisation: customisation)
+                        })
+//                        }
                         TextField("App Bundle ID", text: $customisation.launchAppBundleID.toUnwrapped(defaultValue: ""))
                         TextField("URL Scheme (optional)", text: $customisation.launchAppURLScheme.toUnwrapped(defaultValue: ""))
                     }
@@ -86,50 +73,33 @@ struct EditModuleView: View {
                     Section(header: Label("Open shortcut", systemImage: "arrow.up.forward.app"), footer: Text("Runs a specified Shortcut/Workflow when clicked. Note: Opens the shortcut app first (doesn't run in the background).")) {
                         TextField("Shortcut Name", text: $customisation.launchShortcutName.toUnwrapped(defaultValue: ""))
                     }
-                case .ModuleFunction:
-                    Section(header: Label("CC Module Functionality", systemImage: "square.on.square"), footer: Text("Set the module to have the function that it would have normally, or make it have the function of a different module")) {
-                        Text("Coming soon...")
-                    }
+//                    Section(header: Label("Default Function", systemImage: "square.on.square"), footer:) {}
                 case .CustomAction:
-                    Section(header: Label("Custom Actions", systemImage: "terminal"), footer: Text("Make the module run a in-built custom action on click, mainly stuff you can't normally do. \(appState.debugMode ? "Only use advanced actions if you know what you're doing..." : "")")) {
-                        if #available(iOS 16, *) {
-                            Picker("Action", selection: $customisation.customAction) {
-                                Text("Respring").tag(CustomAction.Respring)
-                                if appState.debugMode {
-                                    Text("(Advanced) Frontboard Respring").tag(CustomAction.FrontboardRespring)
-                                    Text("(Advanced) Backboard Respring").tag(CustomAction.BackboardRespring)
-                                    Text("(Advanced) Legacy Respring").tag(CustomAction.LegacyRespring)
-                                }
-                            }
-                            // im picky ok, it looks nice like this on 16, on 15 it doesnt look like a picker...
-                            .pickerStyle(.menu)
-                            .id(customisation)
-                            .onReceive(self.customisation.$customAction) { _ in
-                                customisation.objectWillChange.send()
-                            }
-                        } else {
-                            Picker("Action", selection: $customisation.customAction) {
-                                Text("Respring").tag(CustomAction.Respring)
-                                if appState.enableExperimentalFeatures {
-                                    Text("(Advanced) Frontboard Respring").tag(CustomAction.FrontboardRespring)
-                                    Text("(Advanced) Backboard Respring").tag(CustomAction.BackboardRespring)
-                                    Text("(Advanced) Legacy Respring").tag(CustomAction.LegacyRespring)
-                                }
-                            }
-                            .pickerStyle(.automatic)
-                            .id(customisation)
-                            .onReceive(self.customisation.$customAction) { _ in
-                                customisation.objectWillChange.send()
+                    Section(header: Label("Custom Actions", systemImage: "terminal"), footer: Text("Make the module run a in-built custom action on click, mainly stuff you can't normally do. \(appState.enableExperimentalFeatures ? "Only use advanced actions if you know what you're doing..." : "")")) {
+                        Picker("Action", selection: $customisation.customAction) {
+                            Text("Respring").tag(CustomAction.Respring)
+                            if appState.enableExperimentalFeatures {
+                                Text("Frontboard Respring").tag(CustomAction.FrontboardRespring)
+                                Text("Backboard Respring").tag(CustomAction.BackboardRespring)
+                                Text("Legacy Respring").tag(CustomAction.LegacyRespring)
                             }
                         }
+                        .pickerStyle(.automatic)
+                        .id(customisation)
+                        .onReceive(self.customisation.$customAction) { _ in
+                            customisation.objectWillChange.send()
+                        }
                     }
+                case .DefaultFunction:
+                    EmptyView()
                 }
 
                 Section(header: Label("Looks", systemImage: "paintbrush")) {
                     TextField("Name", text: $customisation.customName.toUnwrapped(defaultValue: ""))
                 }
 
-                Section(header: Label("Module Sizing", systemImage: "ruler"), footer: Text("Module sizes are measured in one-module width/tall units. Setting custom sizing to none will make the module it's default size. Invidiual will let you pick a size for each orientation (portrait/landscape), both orientations will let you set a size that is used for both orientations. Default size is 1x1.")) {
+                let tooLarge = [customisation.customWidthPortrait, customisation.customHeightPortrait, customisation.customHeightLandscape, customisation.customWidthLandscape, customisation.customWidthBothWays, customisation.customHeightBothWays].contains { ($0 ?? 1) > 50 }
+                Section(header: Label("Module Sizing", systemImage: "ruler"), footer: Text("\(tooLarge ? .init(" ⚠️ Warning: modules too large will cause performance issues.\n\n") : "")Sizes are measured in units of one-module, and default to the original size. Invidiual will let you pick a size for each orientation (portrait/landscape), Both orientations for a shared size between both.")) {
                     Picker("Sizing Mode", selection: $customisation.customSizeMode) {
                         Text("None").tag(SizeMode.None)
                         Text("Individual").tag(SizeMode.Individual)
@@ -158,6 +128,16 @@ struct EditModuleView: View {
 
                 Section(header: Label("Other", systemImage: "star"), footer: Text("Disables the menu that shows up when you force-touch/hold down certain modules.")) {
                     Toggle("Disable Hold Menu", isOn: $customisation.disableOnHoldWidget.toUnwrapped(defaultValue: false))
+
+//                    if customisation.module.fileName == "FocusUIModule.bundle" {
+//                        Toggle("Hide Focus Text", isOn: $customisation.hideFocusUIText.toUnwrapped(defaultValue: false))
+//                    }
+//
+//                    if #available(iOS 16, *) {} else {
+//                        if customisation.module.fileName == "AirPlayMirroringModule.bundle" {
+//                            Toggle("Hide Screen Mirroring Text", isOn: $customisation.hideAirplayText.toUnwrapped(defaultValue: false))
+//                        }
+//                    }
                 }
 
                 if appState.debugMode {

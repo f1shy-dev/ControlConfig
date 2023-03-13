@@ -93,6 +93,10 @@ func betterBundleIDCompressor() -> (success: Bool, ogNew: [String: String]) {
             for i in CCMappings.removalPlistValues {
                 plist.removeValue(forKey: i)
             }
+            if let newName = CCMappings.moduleNames[folder] as? String {
+                plist["CFBundleDisplayName"] = newName
+                plist["CFBundleName"] = newName
+            }
 
             let plistDataNew = try PropertyListSerialization.data(fromPropertyList: plist, format: .binary, options: 0)
             if let newPad = PlistHelpers.plistPadding(Plist_Data: plistDataNew, Default_URL_STR: plistPath) {
@@ -182,10 +186,11 @@ func patchHiddenModules() -> Bool {
 
 func applyChanges(customisations: CustomisationList) -> Bool {
     let dmsPlistOriginal = PlistHelpers.plistToDict(path: CCMappings().dmsPath)
-    var dmsPlist = PlistHelpers.plistToDict(path: CCMappings().dmsPath)
+//    var dmsPlist = PlistHelpers.plistToDict(path: CCMappings().dmsPath)
     var emptyDMS: [String: Any] = [:]
 
-    var success: [Bool] = []
+//    var success: [Bool] = []
+    var successMap: [String: Bool] = [:]
 
     let compressResult = betterBundleIDCompressor()
     let ogNew = compressResult.ogNew
@@ -194,8 +199,9 @@ func applyChanges(customisations: CustomisationList) -> Bool {
         newOg[value] = key
     }
 
-    success.append(compressResult.success)
-    success.append(patchHiddenModules())
+//    success.append(compressResult.success)
+    successMap["compressor"] = compressResult.success
+    successMap["patchHidden"] = patchHiddenModules()
 
     for customisation in customisations.list.filter({ c in
         c.isEnabled
@@ -247,6 +253,59 @@ func applyChanges(customisations: CustomisationList) -> Bool {
             print("default")
         }
 
+//        let stringsPath = "\(CCMappings.bundlesPath)\(customisation.module.fileName)/\(AppState.shared.sbRegionCode).lproj/InfoPlist.strings"
+//        if FileManager.default.fileExists(atPath: stringsPath) {
+//            print("File exists")
+//        }
+
+        // doesnt work ios15
+//        if ["HomeControlCenterCompactModule.bundle", "HomeControlCenterModule.bundle"].contains(customisation.module.fileName), let newName = CCMappings.moduleNames[customisation.module.fileName] as? String {
+//            infoPlist?.setValue(newName, forKey: "CFBundleDisplayName")
+//        }
+
+        // PLIST PADDING ISSUE
+//        if (customisation.hideAirplayText ?? false) == true || (customisation.hideFocusUIText ?? false) == true {
+//            if #available(iOS 16, *) {
+//                // code that should only run on iOS 16 or above
+//                if customisation.module.fileName == "FocusUIModule.bundle" && customisation.hideFocusUIText == true {
+//                    let stringsPath = "\(CCMappings.bundlesPath)\(customisation.module.fileName)/Localizable.loctable"
+//                    if var baseDict = NSMutableDictionary(contentsOfFile: stringsPath), var regionPart = baseDict[AppState.shared.sbRegionCode] as? [String: Any] {
+//                        baseDict[AppState.shared.sbRegionCode] = [
+//                            "MODULE_DEFAULT_TITLE": "",
+//                            "MODULE_ON_STATE": ""
+//                        ]
+//                        print(baseDict)
+//                        print("patch focusui strings ios16")
+//                        successMap["focusText_16"] = (PlistHelpers.writeDictToPlist(dict: baseDict, path: stringsPath))
+//                    }
+//                }
+//            } else {
+//                let stringsPath = "\(CCMappings.bundlesPath)\(customisation.module.fileName)/\(AppState.shared.sbRegionCode).lproj/Localizable.strings"
+//                if FileManager.default.fileExists(atPath: stringsPath) {
+//                    if customisation.module.fileName == "FocusUIModule.bundle" && customisation.hideFocusUIText == true {
+//                        print("patch focusui strings ios15")
+//                        print([
+//                            "MODULE_DEFAULT_TITLE": "",
+//                            "MODULE_ON_STATE": ""
+//                        ])
+//                        successMap["focusText_15"] = PlistHelpers.writeDictToPlist(dict: NSMutableDictionary(dictionary: [
+//                            "MODULE_DEFAULT_TITLE": "",
+//                            "MODULE_ON_STATE": ""
+//                        ]), path: stringsPath)
+//                    }
+//
+//                    if customisation.module.fileName == "AirPlayMirroringModule.bundle" && customisation.hideAirplayText == true {
+//                        if var dict = NSMutableDictionary(contentsOfFile: stringsPath) {
+//                            dict["Screen Mirroring Compact"] = ""
+//                            print("patch airplay strings ios15")
+//                            print(dict)
+//                            successMap["airplayText_15"] = PlistHelpers.writeDictToPlist(dict: dict, path: stringsPath)
+//                        }
+//                    }
+//                }
+//            }
+//        }
+
         if let customName = customisation.customName {
             infoPlist?.setValue(customName, forKey: "CFBundleDisplayName")
         }
@@ -297,7 +356,7 @@ func applyChanges(customisations: CustomisationList) -> Bool {
         }
 
         if let dict = infoPlist {
-            success.append(PlistHelpers.writeDictToPlist(dict: dict, path: infoPath))
+            successMap["customInfo_\(customisation.module.fileName)"] = (PlistHelpers.writeDictToPlist(dict: dict, path: infoPath))
         }
     }
 
@@ -317,19 +376,29 @@ func applyChanges(customisations: CustomisationList) -> Bool {
             }
 
             if let dict = infoPlist {
-                success.append(PlistHelpers.writeDictToPlist(dict: dict, path: infoPath))
+                successMap["sizeInfo_\(moduleFileName)"] = PlistHelpers.writeDictToPlist(dict: dict, path: infoPath)
             }
         }
     }
 
-    success.append(PlistHelpers.writeDictToPlist(dict: NSMutableDictionary(dictionary: emptyDMS), path: CCMappings().dmsPath))
-    if let c = customisations.otherCustomisations.moduleColor, let b = customisations.otherCustomisations.moduleBlur {
-        success.append(ColorTools.applyMaterialRecipe(filePath: CCMappings.moduleMaterialRecipePath, color: c, blur: b, includeSpecificsForCCModules: true))
-    }
-    if let cB = customisations.otherCustomisations.moduleBGColor, let bB = customisations.otherCustomisations.moduleBGBlur {
-        success.append(ColorTools.applyMaterialRecipe(filePath: CCMappings.moduleBackgroundMaterialRecipePath, color: cB, blur: bB, includeSpecificsForCCModules: false))
+    successMap["writeDMS"] = PlistHelpers.writeDictToPlist(dict: NSMutableDictionary(dictionary: emptyDMS), path: CCMappings().dmsPath)
+//    if let c = customisations.otherCustomisations.moduleColor, let b = customisations.otherCustomisations.moduleBlur {
+//        successMap["recipe_module"] = (ColorTools.applyMaterialRecipe(filePath: CCMappings.moduleMaterialRecipePath, color: c, blur: b, includeSpecificsForCCModules: true))
+//    }
+//    if let cB = customisations.otherCustomisations.moduleBGColor, let bB = customisations.otherCustomisations.moduleBGBlur {
+//        successMap["recipe_moduleBackground"] = (ColorTools.applyMaterialRecipe(filePath: CCMappings.moduleBackgroundMaterialRecipePath, color: cB, blur: bB, includeSpecificsForCCModules: false))
+//    }
+
+    print("SuccessMap")
+    do {
+        let data = try JSONSerialization.data(withJSONObject: successMap, options: .prettyPrinted)
+        if let prettyPrintedString = String(data: data, encoding: .utf8) {
+            print(prettyPrintedString)
+        }
+    } catch {
+        print(error.localizedDescription)
     }
 
-    print("successmap", success)
-    return !success.contains { $0 == false }
+//    print("successmap", successMap)
+    return !successMap.values.contains { $0 == false }
 }

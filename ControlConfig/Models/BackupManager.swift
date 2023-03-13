@@ -14,7 +14,7 @@ struct ModuleBackup {
     var info_plist: [String: Any]
 }
 
-struct Backup {
+struct Backup: Hashable {
     var moduleConfiguration: [String: Any]
     var moduleConfiguration_ccsupport: [String: Any]?
     var moduleAllowedList: [String]
@@ -32,6 +32,14 @@ struct Backup {
 
     var id: String
     var date: Date
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(self.id)
+    }
+
+    static func == (lhs: Backup, rhs: Backup) -> Bool {
+        return lhs.id == rhs.id
+    }
 }
 
 let backupFolderName = ".DO_NOT_DELETE_ControlConfig"
@@ -79,10 +87,12 @@ class BackupManager {
                     if let id = backupInfo["id"] as? String,
                        let backup = self.loadBackup(id: id)
                     {
-                        print(backup)
+//                        print(backup)
                         self.backups.append(backup)
+                        self.backups = Array(Set(self.backups))
                     }
                 }
+                print("loaded \(self.backups.count) backups.")
             }
         } else {
             self.backups = []
@@ -91,7 +101,7 @@ class BackupManager {
 
     func loadBackup(id: String) -> Backup? {
         let backupFolder = self.backupFolder + "/" + id
-        print(backupFolder)
+        print("loading backup \(id)")
         let moduleConfiguration = self.loadPlist(path: backupFolder + "/ModuleConfiguration.plist")
         let moduleConfiguration_ccsupport = self.loadPlist(
             path: backupFolder + "/ModuleConfiguration_CCSupport.plist")
@@ -128,31 +138,6 @@ class BackupManager {
             path: backupFolder + "/CoreMaterial.framework/moduleFill.visualstyleset")
         let cm_moduleStroke = self.loadPlist(
             path: backupFolder + "/CoreMaterial.framework/moduleStroke.visualstyleset")
-        // if  let each one of them seperately and print names so that i can see which ones are nil
-        if let moduleConfiguration = moduleConfiguration {
-            print("moduleConfiguration: yes")
-        }
-        if let moduleConfiguration_ccsupport = moduleConfiguration_ccsupport {
-            print("moduleConfiguration_ccsupport: yes")
-        }
-        if let moduleAllowedList = moduleAllowedList {
-            print("moduleAllowedList: yes")
-        }
-        if let defaultModuleSettings = defaultModuleSettings {
-            print("defaultModuleSettings: yes")
-        }
-        if let cm_modules = cm_modules {
-            print("cm_modules: \(cm_modules.count)")
-        }
-        if let cm_modulesBackground = cm_modulesBackground {
-            print("cm_modulesBackground: yes")
-        }
-        if let cm_moduleFill = cm_moduleFill {
-            print("cm_moduleFill: yes")
-        }
-        if let cm_moduleStroke = cm_moduleStroke {
-            print("cm_moduleStroke: yes")
-        }
 
         if let moduleConfiguration = moduleConfiguration,
            let moduleAllowedList = moduleAllowedList,

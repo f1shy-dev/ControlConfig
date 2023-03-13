@@ -9,7 +9,7 @@ import Combine
 import Foundation
 
 enum CustomisationMode: String, Codable {
-    case AppLauncher, ModuleFunction, WorkflowLauncher, CustomAction
+    case AppLauncher, DefaultFunction, WorkflowLauncher, CustomAction
 }
 
 enum SizeMode: String, Codable {
@@ -28,7 +28,7 @@ class Customisation: Codable, ObservableObject, Hashable {
 
     init(module: Module) {
         self.module = module
-        self.mode = .ModuleFunction
+        self.mode = .DefaultFunction
         self.isEnabled = false
         self.customSizeMode = .None
 
@@ -78,6 +78,9 @@ class Customisation: Codable, ObservableObject, Hashable {
 
     @Published var disableOnHoldWidget: Bool?
 
+//    @Published var hideAirplayText: Bool?
+//    @Published var hideFocusUIText: Bool?
+
     @Published var customAction: CustomAction = .Respring
 
     var description: String {
@@ -98,8 +101,8 @@ class Customisation: Codable, ObservableObject, Hashable {
             str.append("Runs custom action")
         }
 
-        if [customWidthPortrait, customHeightPortrait, customWidthLandscape, customHeightLandscape, customWidthBothWays, customHeightBothWays].contains(where: { $0 != nil }) {
-            str.append("Custom W/H")
+        if customSizeMode == .BothWays || customSizeMode == .Individual {
+            str.append("Custom size")
         }
 
         if !(customName?.isEmpty ?? true) || (disableOnHoldWidget ?? false) {
@@ -133,6 +136,9 @@ class Customisation: Codable, ObservableObject, Hashable {
         case customSizeMode
         case customName
         case customAction
+
+//        case hideAirplayText
+//        case hideFocusUIText
     }
 
     required init(from decoder: Decoder) throws {
@@ -154,6 +160,8 @@ class Customisation: Codable, ObservableObject, Hashable {
         self.customName = try? container.decode(String.self, forKey: .customName)
         self.customAction = try container.decode(CustomAction.self, forKey: .customAction)
         self.customSizeMode = try container.decode(SizeMode.self, forKey: .customSizeMode)
+//        self.hideAirplayText = try container.decode(Bool.self, forKey: .hideAirplayText)
+//        self.hideFocusUIText = try container.decode(Bool.self, forKey: .hideFocusUIText)
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -179,5 +187,8 @@ class Customisation: Codable, ObservableObject, Hashable {
         try? container.encode(customSizeMode, forKey: .customSizeMode)
         try? container.encode(customName, forKey: .customName)
         try? container.encode(customAction, forKey: .customAction)
+
+//        try? container.encode(hideFocusUIText, forKey: .hideFocusUIText)
+//        try? container.encode(hideAirplayText, forKey: .hideAirplayText)
     }
 }

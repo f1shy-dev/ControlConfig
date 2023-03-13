@@ -612,7 +612,7 @@
 				CODE_SIGN_ENTITLEMENTS = ControlConfig/ControlConfig.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = "Alpha-PrivateBeta-1";
+				CURRENT_PROJECT_VERSION = "Alpha-Beta-2";
 				DEVELOPMENT_ASSET_PATHS = "\"ControlConfig/Preview Content\"";
 				DEVELOPMENT_TEAM = ZV2PLXMRSB;
 				ENABLE_PREVIEWS = YES;
@@ -653,7 +653,7 @@
 				CODE_SIGN_ENTITLEMENTS = ControlConfig/ControlConfig.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = "Alpha-PrivateBeta-1";
+				CURRENT_PROJECT_VERSION = "Alpha-Beta-2";
 				DEVELOPMENT_ASSET_PATHS = "\"ControlConfig/Preview Content\"";
 				DEVELOPMENT_TEAM = ZV2PLXMRSB;
 				ENABLE_PREVIEWS = YES;

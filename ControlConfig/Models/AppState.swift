@@ -40,12 +40,26 @@ class AppState: Codable, ObservableObject {
         }
     }
 
+    @Published var sbRegionCode: String { didSet { saveToUserDefaults() } }
+
     private init(enableConsole: Bool, useLegacyRespring: Bool, debugMode: Bool, enableExperimentalFeatures: Bool) {
         self.enableConsole = enableConsole
         self.debugMode = debugMode
         self.useLegacyRespring = useLegacyRespring
         self.enableExperimentalFeatures = enableExperimentalFeatures
         consoleManager.isVisible = enableConsole
+
+        let deviceLanguageCode = Locale.current.languageCode ?? ""
+
+        if CCMappings.hardcodedRegions.contains(deviceLanguageCode) {
+            self.sbRegionCode = deviceLanguageCode
+        } else if let regionCode = Locale.current.regionCode,
+                  CCMappings.hardcodedRegions.contains("\(deviceLanguageCode)_\(regionCode)")
+        {
+            self.sbRegionCode = "\(deviceLanguageCode)_\(regionCode)"
+        } else {
+            self.sbRegionCode = "en"
+        }
     }
 
     enum CodingKeys: String, CodingKey {
@@ -53,6 +67,7 @@ class AppState: Codable, ObservableObject {
         case useLegacyRespring
         case debugMode
         case enableExperimentalFeatures
+        case sbRegionCode
     }
 
     required init(from decoder: Decoder) throws {
@@ -60,6 +75,7 @@ class AppState: Codable, ObservableObject {
         self.enableConsole = try container.decode(Bool.self, forKey: .enableConsole)
         self.useLegacyRespring = try container.decode(Bool.self, forKey: .useLegacyRespring)
         self.debugMode = try container.decode(Bool.self, forKey: .debugMode)
+        self.sbRegionCode = try container.decode(String.self, forKey: .sbRegionCode)
         self.enableExperimentalFeatures = try container.decode(Bool.self, forKey: .enableExperimentalFeatures)
         consoleManager.isVisible = enableConsole
     }
@@ -69,11 +85,12 @@ class AppState: Codable, ObservableObject {
         try container.encode(enableConsole, forKey: .enableConsole)
         try container.encode(useLegacyRespring, forKey: .useLegacyRespring)
         try container.encode(debugMode, forKey: .debugMode)
+        try container.encode(sbRegionCode, forKey: .sbRegionCode)
         try container.encode(enableExperimentalFeatures, forKey: .enableExperimentalFeatures)
     }
 
     func saveToUserDefaults() {
-//        print("saving app state to user defaults...")
+        print("saving app state to user defaults...")
         let encoder = JSONEncoder()
         if let encoded = try? encoder.encode(self) {
             UserDefaults.standard.set(encoded, forKey: "appState")

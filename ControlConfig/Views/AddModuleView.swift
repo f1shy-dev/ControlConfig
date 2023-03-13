@@ -20,10 +20,6 @@ struct AddModuleView: View {
             return true
         }
 
-        for i in filteredModules {
-            print(i.fileName, i.description)
-        }
-
         return NavigationView {
             Form {
 //                Section(header: Label("Default Modules", systemImage: "slider.horizontal.3")) {
@@ -44,7 +40,7 @@ struct AddModuleView: View {
 //                }
 
 //                Section(header: Label("Movable Modules", systemImage: "slider.vertical.3")) {
-                ForEach(filteredModules) {
+                ForEach(filteredModules.sorted(by: { $0.description < $1.description })) {
                     let module = $0
                     HStack {
                         Label(module.description, systemImage: module.sfIcon)
