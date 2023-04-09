@@ -75,11 +75,11 @@ class CustomisationList: ObservableObject {
     init() {
         self.list = []
         let mpath = CCMappings.moduleMaterialRecipePath
-        let mc = ColorTools.getMaterialRecipeColor(filePath: mpath)
+        let mc = ColorTools.getMaterialRecipeColor(filePath: mpath, isCCModule: true)
         let mb = ColorTools.getMaterialRecipeBlur(filePath: mpath)
 
         let mBGpath = CCMappings.moduleBackgroundMaterialRecipePath
-        let mBGc = ColorTools.getMaterialRecipeColor(filePath: mBGpath)
+        let mBGc = ColorTools.getMaterialRecipeColor(filePath: mBGpath, isCCModule: false)
         let mBGb = ColorTools.getMaterialRecipeBlur(filePath: mBGpath)
         self.otherCustomisations = OtherCustomisations(moduleColor: mc, moduleBlur: mb, moduleBGColor: mBGc, moduleBGBlur: mBGb)
     }

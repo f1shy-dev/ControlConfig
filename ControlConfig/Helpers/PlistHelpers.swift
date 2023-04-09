@@ -9,7 +9,6 @@
 import Foundation
 
 public enum PlistHelpers {
-    
     public static func plistPadding(Plist_Data: Data, Default_URL_STR: String) -> Data? {
         guard let Default_Data = try? Data(contentsOf: URL(fileURLWithPath: Default_URL_STR)) else { return nil }
         if Plist_Data.count == Default_Data.count { return Plist_Data }
@@ -54,11 +53,7 @@ public enum PlistHelpers {
 
     static func addEmptyData(matchingSize: Int, to plist: [String: Any]) throws -> Data {
         var newPlist = plist
-        // create the new data
         guard var newData = try? PropertyListSerialization.data(fromPropertyList: newPlist, format: .binary, options: 0) else { throw "Unable to get data" }
-        // add data if too small
-        // while loop to make data match because recursive function didn't work
-        // very slow, will hopefully improve
         var newDataSize = newData.count
         var added = matchingSize - newDataSize
         if added < 0 {
@@ -93,13 +88,34 @@ public enum PlistHelpers {
         return newData
     }
 
+//    public static func padDataWithPaddingBytes(_ data: Data, numPaddingBytes: Int) -> Data? {
+//        do {
+//            let trailerData = Array(data.suffix(32))
+//            let offsetTableOffsetSize = trailerData[6]
+//            let objectRefSize = trailerData[7]
+//            let numObjects = trailerData[8 ..< 16].withUnsafeBytes { $0.load(as: UInt64.self).bigEndian }
+//            let offsetTableOffset = trailerData[24 ..< 32].withUnsafeBytes { $0.load(as: UInt64.self).bigEndian }
+//            let paddingPos = Int(offsetTableOffset + (numObjects * UInt64(offsetTableOffsetSize)))
+//            print("paddingpos \(paddingPos)")
+//            print("npb \(numPaddingBytes)")
+//            //    let paddingBytes = data[paddingPos ..< data.count - 32].count
+//
+//            var padData = data[0 ..< paddingPos] + Data(repeating: 0xAA, count: numPaddingBytes) + data[(data.count - 32)...]
+//
+//            return padData
+//        } catch {
+//            return nil
+//        }
+//    }
+
     public static func betterPlistPadding(replacementData: Data, filePath: String) -> Data? {
         guard let currentData = try? Data(contentsOf: URL(fileURLWithPath: filePath)) else { return nil }
         if replacementData.count == currentData.count { return replacementData }
 
 //        print("padding replacement \(replacementData.count) to current \(currentData.count)")
         guard let replacementPlist = try? PropertyListSerialization.propertyList(from: replacementData, format: nil) as? [String: Any] else { return nil }
-        guard var withEmpty = try? PlistHelpers.addEmptyData(matchingSize: currentData.count, to: replacementPlist) else { return nil }
+        guard var withEmpty = try? insaneNewPaddingMethodUsingBytes(replacementData, padToBytes: currentData.count) else { return nil }
+//        guard var withEmpty = try? PlistHelpers.addEmptyData(matchingSize: currentData.count, to: replacementPlist) else { return nil }
         return withEmpty
     }
 

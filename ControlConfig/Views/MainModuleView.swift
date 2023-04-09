@@ -7,8 +7,11 @@
 
 import Foundation
 import SwiftUI
+import WelcomeSheet
 
 struct MainModuleView: View {
+    @Environment(\.colorScheme) var colorScheme
+    @State private var showingFirstLaunchSheet = true
     @State private var showingAddNewSheet = false
     @State private var showingSettingsSheet = false
     @ObservedObject var customisations = CustomisationList.loadFromUserDefaults()
@@ -20,10 +23,10 @@ struct MainModuleView: View {
                 List {
 //                    Section(header: Label("General Customisations", systemImage: "paintbrush.pointed")) {
                     Section(footer: Text("Re-ordering the fixed modules requires you click apply first, to make them 'movable.' Note that you have to re-order them like the other modules, in the control center section in iOS Settings.")) {
-                        Button { // was NavigationLink
-                            UIApplication.shared.confirmAlert(title: "Notice", body: "Colors are currently disabled due to issues with respring-loops. This feature will come back soon, but sorry about the inconvenience.", onOK: {}, noCancel: true)
+                        NavigationLink { // was Button
+//                            UIApplication.shared.confirmAlert(title: "Notice", body: "Colors are currently disabled due to issues with respring-loops. This feature will come back soon, but sorry about the inconvenience.", onOK: {}, noCancel: true)
 
-//                            EditCCColorsView(state: customisations.otherCustomisations, saveOCToUserDefaults: customisations.saveToUserDefaults)
+                            EditCCColorsView(state: customisations.otherCustomisations, saveOCToUserDefaults: customisations.saveToUserDefaults)
                         } label: {
                             Label("Edit CC Colours", systemImage: "paintbrush")
                         }
@@ -72,15 +75,20 @@ struct MainModuleView: View {
             .toolbar {
                 ToolbarItemGroup(placement: .bottomBar) {
                     Button(action: {
-                        print(customisations)
-                        let success = applyChanges(customisations: customisations)
-                        if success {
-                            Haptic.shared.notify(.success)
-                            UIApplication.shared.confirmAlert(title: "Applied!", body: "Please respring to see any changes.", onOK: {}, noCancel: true)
-                        } else {
-                            Haptic.shared.notify(.error)
-                            UIApplication.shared.alert(body: "An error occurred when writing to the file(s). First please try rebooting your device, and if it does not work, please report this to the developer and provide any logs/details of what you tried.")
+//                        print(customisations)
+                        DispatchQueue.global(qos: .userInitiated).async {
+                            let success = applyChanges(customisations: customisations)
+                            DispatchQueue.main.async {
+                                if success {
+                                    Haptic.shared.notify(.success)
+                                    UIApplication.shared.confirmAlert(title: "Applied!", body: "Please respring to see any changes.", onOK: {}, noCancel: true)
+                                } else {
+                                    Haptic.shared.notify(.error)
+                                    UIApplication.shared.alert(body: "An error occurred when writing to the file(s). First please try rebooting your device, and if it does not work, please report this to the developer and provide any logs/details of what you tried.")
+                                }
+                            }
                         }
+
                     }, label: {
                         Label("Apply", systemImage: "seal")
                         Text("Apply")
@@ -115,6 +123,7 @@ struct MainModuleView: View {
                     })
                 }
             }
+
         }.navigationViewStyle(StackNavigationViewStyle())
     }
 }

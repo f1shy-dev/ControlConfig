@@ -17,7 +17,7 @@ struct LabelTextField: View {
         HStack {
             Text(label)
             Spacer()
-            TextField("", text: $value).keyboardType(.numberPad)
+            TextField("1", text: $value).keyboardType(.numberPad)
         }
     }
 }

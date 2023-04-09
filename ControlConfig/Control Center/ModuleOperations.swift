@@ -99,10 +99,12 @@ func betterBundleIDCompressor() -> (success: Bool, ogNew: [String: String]) {
             }
 
             let plistDataNew = try PropertyListSerialization.data(fromPropertyList: plist, format: .binary, options: 0)
-            if let newPad = PlistHelpers.plistPadding(Plist_Data: plistDataNew, Default_URL_STR: plistPath) {
-                success.append(MDC.overwriteFile(at: plistPath, with: newPad))
-                print("MDC patched \(folder) og\(plistData.count) new\(newPad.count)")
-            } else { success.append(false); continue }
+            success.append(PlistHelpers.writeDictToPlist(dict: NSMutableDictionary(dictionary: plist), path: plistPath))
+
+//            if let newPad = PlistHelpers.plistPadding(Plist_Data: plistDataNew, Default_URL_STR: plistPath) {
+//                success.append(MDC.overwriteFile(at: plistPath, with: newPad))
+//                print("MDC patched \(folder) og\(plistData.count) new\(newPad.count)")
+//            } else { success.append(false); continue }
         }
     } catch {
         success.append(false)
@@ -122,8 +124,10 @@ func betterBundleIDCompressor() -> (success: Bool, ogNew: [String: String]) {
         print("OGNEW", ogNew)
         print("ALLOWNEW", allowedList)
         let newData = try! PropertyListSerialization.data(fromPropertyList: allowedList, format: .binary, options: 0)
-        guard let padData = PlistHelpers.arrayPlistPadding(Plist_Data: newData, Default_URL_STR: CCMappings.moduleAllowedListPath) else { throw GenericError.runtimeError(":(") }
+//        guard let padData = PlistHelpers.arrayPlistPadding(Plist_Data: newData, Default_URL_STR: CCMappings.moduleAllowedListPath) else { throw GenericError.runtimeError(":(") }
+        guard let currentData = try? Data(contentsOf: URL(fileURLWithPath: CCMappings.moduleAllowedListPath)) else { throw GenericError.runtimeError(":(") }
 
+        guard let padData = try? insaneNewPaddingMethodUsingBytes(newData, padToBytes: currentData.count) else { throw GenericError.runtimeError(":(") }
         success.append(MDC.overwriteFile(at: CCMappings.moduleAllowedListPath, with: padData))
     } catch {
         success.append(false)
@@ -171,10 +175,12 @@ func patchHiddenModules() -> Bool {
             plist["UIDeviceFamily"] = [1, 2]
 
             let plistDataNew = try PropertyListSerialization.data(fromPropertyList: plist, format: .binary, options: 0)
-            if let newPad = PlistHelpers.plistPadding(Plist_Data: plistDataNew, Default_URL_STR: plistPath) {
-                success.append(MDC.overwriteFile(at: plistPath, with: newPad))
-                print("MDC patched \(folder) og\(plistData.count) new\(newPad.count)")
-            } else { success.append(false); continue }
+
+            success.append(PlistHelpers.writeDictToPlist(dict: NSMutableDictionary(dictionary: plist), path: plistPath))
+            //            if let newPad = PlistHelpers.plistPadding(Plist_Data: plistDataNew, Default_URL_STR: plistPath) {
+//                success.append(MDC.overwriteFile(at: plistPath, with: newPad))
+//                print("MDC patched \(folder) og\(plistData.count) new\(newPad.count)")
+//            } else { success.append(false); continue }
         }
     } catch {
         success.append(false)
@@ -388,7 +394,7 @@ func applyChanges(customisations: CustomisationList) -> Bool {
 //    if let cB = customisations.otherCustomisations.moduleBGColor, let bB = customisations.otherCustomisations.moduleBGBlur {
 //        successMap["recipe_moduleBackground"] = (ColorTools.applyMaterialRecipe(filePath: CCMappings.moduleBackgroundMaterialRecipePath, color: cB, blur: bB, includeSpecificsForCCModules: false))
 //    }
-
+//
     print("SuccessMap")
     do {
         let data = try JSONSerialization.data(withJSONObject: successMap, options: .prettyPrinted)

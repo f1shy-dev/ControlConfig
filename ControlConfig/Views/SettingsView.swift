@@ -8,11 +8,13 @@
 import Foundation
 import LocalConsole
 import SwiftUI
+import WelcomeSheet
 
 struct SettingsView: View {
     @Environment(\.dismiss) var dismiss
     @ObservedObject var appState: AppState
     @ObservedObject var customisations: CustomisationList
+    @State var showFirstLaunchSheet = false
 
     var body: some View {
         NavigationView {
@@ -73,6 +75,12 @@ struct SettingsView: View {
                         Button("Enable hidden modules") {
                             patchHiddenModules()
                         }
+                        Button("Trigger first-launch sheet") {
+                            UserDefaults.standard.set(false, forKey: "shownFirstOpen")
+                            showFirstLaunchSheet = true
+                        }.welcomeSheet(isPresented: $showFirstLaunchSheet, onDismiss: {
+                            UserDefaults.standard.set(true, forKey: "shownFirstOpen")
+                        }, pages: firstLaunchSheetPages)
                     }
                 }
                 Section {} header: {

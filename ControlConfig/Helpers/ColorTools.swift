@@ -37,14 +37,14 @@ extension Color: Codable {
 }
 
 enum ColorTools {
-    static func getMaterialRecipeColor(filePath: String) -> Color {
+    static func getMaterialRecipeColor(filePath: String, isCCModule: Bool) -> Color {
         if !FileManager.default.fileExists(atPath: filePath) { return Color.black }
 
         if let plist = PlistHelpers.plistToDict(path: filePath), let firstLevel = plist["baseMaterial"] as? [String: Any], let secondLevel = firstLevel["tinting"] as? [String: Any], let thirdLevel = secondLevel["tintColor"] as? [String: Any] {
             let r = thirdLevel["red"] as? Double ?? CIColor.gray.red
             let g = thirdLevel["green"] as? Double ?? CIColor.gray.green
             let b = thirdLevel["blue"] as? Double ?? CIColor.gray.blue
-            let mFactor = 0.8
+            let mFactor = isCCModule ? 0.8 : 1
             let a = (secondLevel["tintAlpha"] as? Double ?? mFactor) / mFactor
 
             return Color(red: CGFloat(r), green: CGFloat(g), blue: CGFloat(b)).opacity(a)
@@ -62,15 +62,17 @@ enum ColorTools {
     }
 
     static func applyMaterialRecipe(filePath: String, color: Color, blur: Int, includeSpecificsForCCModules: Bool) -> Bool {
-        if let cc = color.cgColor?.components {
+        if let cg = color.cgColor {
+            let cc = CIColor(cgColor: cg)
+
             var plistDict: [String: Any] = [
                 "baseMaterial": [
                     "tinting": [
-                        "tintAlpha": Double(cc[3]) * 0.8,
+                        "tintAlpha": Double(cc.alpha) * (includeSpecificsForCCModules ? 0.8 : 1),
                         "tintColor": [
-                            "red": Double(cc[0]),
-                            "green": Double(cc[1]),
-                            "blue": Double(cc[2]),
+                            "red": Double(cc.red),
+                            "green": Double(cc.green),
+                            "blue": Double(cc.blue),
                             "alpha": 1
                         ]
                     ],
@@ -80,15 +82,15 @@ enum ColorTools {
                 ]
             ]
 
-            if includeSpecificsForCCModules {
-                plistDict.merge([
-                    "styles": [
-                        "fill": "moduleFill",
-                        "stroke": "moduleStroke"
-                    ],
-                    "materialSettingsVersion": 2
-                ]) { current, _ in current }
-            }
+//            if includeSpecificsForCCModules {
+            plistDict.merge([
+                "styles": [
+                    "fill": "moduleFill",
+                    "stroke": "moduleStroke"
+                ],
+                "materialSettingsVersion": 2
+            ]) { current, _ in current }
+//            }
 
             return (PlistHelpers.writeDictToPlist(dict: NSMutableDictionary(dictionary: plistDict), path: filePath))
         }

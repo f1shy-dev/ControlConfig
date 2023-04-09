@@ -71,9 +71,10 @@ func overwriteFileWithDataImpl(originPath: String, replacementData: Data) -> Boo
             }
             if overwriteSucceeded {
                 overwroteOne = true
-                print("Successfully overwrote!")
+                print("Successfully overwrote! \(originPath)")
                 break
             }
+
             print("try again?!")
         }
         guard overwroteOne else {

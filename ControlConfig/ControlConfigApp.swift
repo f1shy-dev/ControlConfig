@@ -8,6 +8,7 @@
 
 import LocalConsole
 import SwiftUI
+import WelcomeSheet
 
 var isUnsandboxed = false
 let appVersion = ((Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown") + " (" + (Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown") + ")")
@@ -17,6 +18,7 @@ let isiOSSixteen = ProcessInfo().operatingSystemVersion.majorVersion == 16
 @main
 struct ControlConfigApp: App {
     @State var showingBackupSheet = false
+    @State var showingFirstLaunchSheet = false
     @State var backupStage: BackupStage = .YetToRespring
     var body: some Scene {
         WindowGroup {
@@ -40,10 +42,13 @@ struct ControlConfigApp: App {
                 .sheet(isPresented: $showingBackupSheet) {
                     BackupView(backupStage: $backupStage)
                 }
+                .welcomeSheet(isPresented: $showingFirstLaunchSheet, onDismiss: {
+                    UserDefaults.standard.set(true, forKey: "shownFirstOpen")
+                }, isSlideToDismissDisabled: true, preferredColorScheme: UITraitCollection.current.userInterfaceStyle == .dark ? .dark : .light, pages: firstLaunchSheetPages)
                 .onAppear {
                     let appVersion = ((Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown") + " (" + (Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown") + ")")
                     print("ControlConfig version \(appVersion)")
-                    if #available(iOS 16.2, *) {
+                    if #available(iOS 16.3, *) {
                         #if targetEnvironment(simulator)
                         #else
                         // I'm sorry 16.2 dev beta 1 users, you are a vast minority.
@@ -111,8 +116,8 @@ struct ControlConfigApp: App {
                     } else {
                         //                    Haptic.shared.notify(.success)
                         if !UserDefaults.standard.bool(forKey: "shownFirstOpen") {
-                            UIApplication.shared.alert(title: "Please read", body: "This app is still in alpha. Some features will not work. Please report any issues you run into to the developer, with logs exported from the settings menu.")
-                            UserDefaults.standard.set(true, forKey: "shownFirstOpen")
+//                            UIApplication.shared.alert(title: "Please read", body: "This app is still in alpha. Some features will not work. Please report any issues you run into to the developer, with logs exported from the settings menu.")
+                            showingFirstLaunchSheet = true
                         }
                     }
                 }
