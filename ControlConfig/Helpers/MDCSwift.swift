@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import MacDirtyCow
+import AbsoluteSolver
 
 public enum RespringMethod {
     case backboard, frontboard, legacy
@@ -16,7 +17,12 @@ public enum RespringMethod {
 
 public enum MDC {
     public static func overwriteFile(at path: String, with data: Data) -> Bool {
-        return MacDirtyCow.overwriteFileWithDataImpl(originPath: path, replacementData: data)
+        do {
+            try AbsoluteSolver.replace(at: URL(fileURLWithPath: path), with: data as NSData)
+            return true
+        } catch {
+            return false
+        }
     }
     
     public static func respring(method: RespringMethod) {
