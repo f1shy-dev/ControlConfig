@@ -9,6 +9,7 @@
 import LocalConsole
 import SwiftUI
 import WelcomeSheet
+import MacDirtyCow
 
 var isUnsandboxed = false
 let appVersion = ((Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown") + " (" + (Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown") + ")")
@@ -51,7 +52,6 @@ struct ControlConfigApp: App {
                     if #available(iOS 16.3, *) {
                         #if targetEnvironment(simulator)
                         #else
-                        // I'm sorry 16.2 dev beta 1 users, you are a vast minority.
                         print("Throwing not supported error (mdc patched)")
                         UIApplication.shared.alert(title: "Not Supported", body: "This version of iOS is not supported.", withButton: false)
                         #endif
@@ -69,16 +69,16 @@ struct ControlConfigApp: App {
                             // grant r/w access
                             if #available(iOS 15, *) {
                                 print("Escaping Sandbox...")
-                                grant_full_disk_access { error in
-                                    if error != nil {
-                                        print("Unable to escape sandbox!! Error: ", String(describing: error?.localizedDescription ?? "unknown?!"))
-                                        UIApplication.shared.alert(title: "Access Error", body: "Error: \(String(describing: error?.localizedDescription))\nPlease close the app and retry.", withButton: false)
+                                // asyncAfter(deadline: .now())
+                                DispatchQueue.global(qos: .userInitiated).sync {
+                                    do {
+                                        try MacDirtyCow.unsandbox()
+                                        isUnsandboxed = true
+                                    } catch {
                                         isUnsandboxed = false
-                                    } else {
-                                        print("Successfully escaped sandbox!")
+                                        UIApplication.shared.alert(body: "Unsandboxing Error: \(error.localizedDescription)\nPlease close the app and retry.", withButton: false)
                                     }
                                 }
-                                isUnsandboxed = true
                             } else {
                                 print("Throwing not supported error (too old?!)")
                                 UIApplication.shared.alert(title: "Exploit Not Supported", body: "Please install via TrollStore")

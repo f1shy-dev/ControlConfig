@@ -1,3 +1,5 @@
+import Foundation
+
 func insaneNewPaddingMethodUsingBytes(_ inputData: Data, padToBytes: Int) -> Data {
     print("paddmethodcalled_woahs")
     var data = inputData

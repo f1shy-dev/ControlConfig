@@ -13,7 +13,6 @@
 		7D201BEB299C1AB60023D649 /* CustomisationsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201BEA299C1AB60023D649 /* CustomisationsList.swift */; };
 		7D201BEE299C1D1C0023D649 /* TypeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201BED299C1D1C0023D649 /* TypeExtensions.swift */; };
 		7D201BF0299C1D470023D649 /* MDCSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201BEF299C1D470023D649 /* MDCSwift.swift */; };
-		7D201BF2299C1DE30023D649 /* MDCWrappers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201BF1299C1DE30023D649 /* MDCWrappers.swift */; };
 		7D201BF4299C1E280023D649 /* PlistHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201BF3299C1E280023D649 /* PlistHelpers.swift */; };
 		7D201BF7299C1FAC0023D649 /* StaticCCMappings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201BF6299C1FAC0023D649 /* StaticCCMappings.swift */; };
 		7D201BF9299C22680023D649 /* TickToggleStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201BF8299C22680023D649 /* TickToggleStyle.swift */; };
@@ -33,15 +32,14 @@
 		7DDD2FA329AEB2F90064A7FC /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DDD2FA229AEB2F90064A7FC /* SettingsView.swift */; };
 		7DDD2FA529AEB35E0064A7FC /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DDD2FA429AEB35E0064A7FC /* AppState.swift */; };
 		7DDD2FA829AFD1020064A7FC /* LocalConsole in Frameworks */ = {isa = PBXBuildFile; productRef = 7DDD2FA729AFD1020064A7FC /* LocalConsole */; };
+		D6039E8229E48A43002F91D7 /* AbsoluteSolver in Frameworks */ = {isa = PBXBuildFile; productRef = D6039E8129E48A43002F91D7 /* AbsoluteSolver */; };
+		D6039E8529E48A9C002F91D7 /* DirtyCowKit in Frameworks */ = {isa = PBXBuildFile; productRef = D6039E8429E48A9C002F91D7 /* DirtyCowKit */; };
 		D625E86A2991CD3000D5A5B0 /* ControlConfigApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D625E8692991CD3000D5A5B0 /* ControlConfigApp.swift */; };
 		D625E86E2991CD3200D5A5B0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D625E86D2991CD3200D5A5B0 /* Assets.xcassets */; };
 		D625E8712991CD3200D5A5B0 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D625E8702991CD3200D5A5B0 /* Preview Assets.xcassets */; };
 		D625E87B2991CD3300D5A5B0 /* ControlConfigTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D625E87A2991CD3300D5A5B0 /* ControlConfigTests.swift */; };
 		D625E8852991CD3300D5A5B0 /* ControlConfigUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D625E8842991CD3300D5A5B0 /* ControlConfigUITests.swift */; };
 		D625E8872991CD3300D5A5B0 /* ControlConfigUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D625E8862991CD3300D5A5B0 /* ControlConfigUITestsLaunchTests.swift */; };
-		D625E89D2991CF2A00D5A5B0 /* vm_unaligned_copy_switch_race.c in Sources */ = {isa = PBXBuildFile; fileRef = D625E8972991CF2A00D5A5B0 /* vm_unaligned_copy_switch_race.c */; };
-		D625E89E2991CF2A00D5A5B0 /* helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = D625E8992991CF2A00D5A5B0 /* helpers.m */; };
-		D625E89F2991CF2A00D5A5B0 /* grant_full_disk_access.m in Sources */ = {isa = PBXBuildFile; fileRef = D625E89C2991CF2A00D5A5B0 /* grant_full_disk_access.m */; };
 		D625E8A32991CF8600D5A5B0 /* Alert++.swift in Sources */ = {isa = PBXBuildFile; fileRef = D625E8A12991CF8600D5A5B0 /* Alert++.swift */; };
 		D625E8A42991CF8600D5A5B0 /* Haptic++.swift in Sources */ = {isa = PBXBuildFile; fileRef = D625E8A22991CF8600D5A5B0 /* Haptic++.swift */; };
 		D6E552D129B3E3300083E6A5 /* ApplicationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E552D029B3E32F0083E6A5 /* ApplicationManager.swift */; };
@@ -73,7 +71,6 @@
 		7D201BEA299C1AB60023D649 /* CustomisationsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomisationsList.swift; sourceTree = "<group>"; };
 		7D201BED299C1D1C0023D649 /* TypeExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeExtensions.swift; sourceTree = "<group>"; };
 		7D201BEF299C1D470023D649 /* MDCSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MDCSwift.swift; sourceTree = "<group>"; };
-		7D201BF1299C1DE30023D649 /* MDCWrappers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MDCWrappers.swift; sourceTree = "<group>"; };
 		7D201BF3299C1E280023D649 /* PlistHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlistHelpers.swift; sourceTree = "<group>"; };
 		7D201BF6299C1FAC0023D649 /* StaticCCMappings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticCCMappings.swift; sourceTree = "<group>"; };
 		7D201BF8299C22680023D649 /* TickToggleStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TickToggleStyle.swift; sourceTree = "<group>"; };
@@ -102,13 +99,6 @@
 		D625E8802991CD3300D5A5B0 /* ControlConfigUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ControlConfigUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D625E8842991CD3300D5A5B0 /* ControlConfigUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlConfigUITests.swift; sourceTree = "<group>"; };
 		D625E8862991CD3300D5A5B0 /* ControlConfigUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlConfigUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		D625E8942991CF0C00D5A5B0 /* ControlConfig-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ControlConfig-Bridging-Header.h"; sourceTree = "<group>"; };
-		D625E8972991CF2A00D5A5B0 /* vm_unaligned_copy_switch_race.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = vm_unaligned_copy_switch_race.c; sourceTree = "<group>"; };
-		D625E8982991CF2A00D5A5B0 /* grant_full_disk_access.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = grant_full_disk_access.h; sourceTree = "<group>"; };
-		D625E8992991CF2A00D5A5B0 /* helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = helpers.m; sourceTree = "<group>"; };
-		D625E89A2991CF2A00D5A5B0 /* vm_unaligned_copy_switch_race.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vm_unaligned_copy_switch_race.h; sourceTree = "<group>"; };
-		D625E89B2991CF2A00D5A5B0 /* helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = helpers.h; sourceTree = "<group>"; };
-		D625E89C2991CF2A00D5A5B0 /* grant_full_disk_access.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = grant_full_disk_access.m; sourceTree = "<group>"; };
 		D625E8A12991CF8600D5A5B0 /* Alert++.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Alert++.swift"; sourceTree = "<group>"; };
 		D625E8A22991CF8600D5A5B0 /* Haptic++.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Haptic++.swift"; sourceTree = "<group>"; };
 		D6E552D029B3E32F0083E6A5 /* ApplicationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationManager.swift; sourceTree = "<group>"; };
@@ -120,6 +110,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D6039E8529E48A9C002F91D7 /* DirtyCowKit in Frameworks */,
+				D6039E8229E48A43002F91D7 /* AbsoluteSolver in Frameworks */,
 				D6E552D429B3E3750083E6A5 /* MarqueeText in Frameworks */,
 				7D7956AF29BFCD9B00D7CFCD /* WelcomeSheet in Frameworks */,
 				7DDD2FA829AFD1020064A7FC /* LocalConsole in Frameworks */,
@@ -161,7 +153,6 @@
 				7D59D958299A94370049302B /* CustomPrint.swift */,
 				7D201BED299C1D1C0023D649 /* TypeExtensions.swift */,
 				7D201BEF299C1D470023D649 /* MDCSwift.swift */,
-				7D201BF1299C1DE30023D649 /* MDCWrappers.swift */,
 				7D291E8E29C8DF64007B9444 /* padding_newMethod.swift */,
 				D6E552D029B3E32F0083E6A5 /* ApplicationManager.swift */,
 				D625E8A22991CF8600D5A5B0 /* Haptic++.swift */,
@@ -234,7 +225,6 @@
 				7D3BAB7529B35F820024C9C9 /* Info.plist */,
 				D625E86D2991CD3200D5A5B0 /* Assets.xcassets */,
 				D625E86F2991CD3200D5A5B0 /* Preview Content */,
-				D625E8932991CEFF00D5A5B0 /* Exploit */,
 				7D201BF5299C1F7D0023D649 /* Control Center */,
 				7D201BEC299C1CF20023D649 /* Helpers */,
 				7D201BE5299C19900023D649 /* Models */,
@@ -269,20 +259,6 @@
 			path = ControlConfigUITests;
 			sourceTree = "<group>";
 		};
-		D625E8932991CEFF00D5A5B0 /* Exploit */ = {
-			isa = PBXGroup;
-			children = (
-				D625E8982991CF2A00D5A5B0 /* grant_full_disk_access.h */,
-				D625E89C2991CF2A00D5A5B0 /* grant_full_disk_access.m */,
-				D625E89B2991CF2A00D5A5B0 /* helpers.h */,
-				D625E8992991CF2A00D5A5B0 /* helpers.m */,
-				D625E8972991CF2A00D5A5B0 /* vm_unaligned_copy_switch_race.c */,
-				D625E89A2991CF2A00D5A5B0 /* vm_unaligned_copy_switch_race.h */,
-				D625E8942991CF0C00D5A5B0 /* ControlConfig-Bridging-Header.h */,
-			);
-			path = Exploit;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -304,6 +280,8 @@
 				7DDD2FA729AFD1020064A7FC /* LocalConsole */,
 				D6E552D329B3E3750083E6A5 /* MarqueeText */,
 				7D7956AE29BFCD9B00D7CFCD /* WelcomeSheet */,
+				D6039E8129E48A43002F91D7 /* AbsoluteSolver */,
+				D6039E8429E48A9C002F91D7 /* DirtyCowKit */,
 			);
 			productName = ControlConfig;
 			productReference = D625E8662991CD3000D5A5B0 /* ControlConfig.app */;
@@ -382,6 +360,8 @@
 				7DDD2FA629AFD1020064A7FC /* XCRemoteSwiftPackageReference "LocalConsole" */,
 				D6E552D229B3E3750083E6A5 /* XCRemoteSwiftPackageReference "MarqueeText" */,
 				7D7956AD29BFCD9B00D7CFCD /* XCRemoteSwiftPackageReference "Welcome-Sheet" */,
+				D6039E8029E48A43002F91D7 /* XCRemoteSwiftPackageReference "AbsoluteSolver" */,
+				D6039E8329E48A9C002F91D7 /* XCRemoteSwiftPackageReference "DirtyCowKit" */,
 			);
 			productRefGroup = D625E8672991CD3000D5A5B0 /* Products */;
 			projectDirPath = "";
@@ -432,7 +412,6 @@
 				D625E86A2991CD3000D5A5B0 /* ControlConfigApp.swift in Sources */,
 				7D52218829BBC2B9002FD2A7 /* BackupView.swift in Sources */,
 				7D3BAB7729B3855A0024C9C9 /* ColorTools.swift in Sources */,
-				7D201BF2299C1DE30023D649 /* MDCWrappers.swift in Sources */,
 				7D201BFE299C23860023D649 /* AddModuleView.swift in Sources */,
 				7D201BE7299C19A20023D649 /* Module.swift in Sources */,
 				7D3BAB7929B4BE2E0024C9C9 /* UIViewBlurEffect.swift in Sources */,
@@ -444,8 +423,6 @@
 				7D201BE9299C1A2B0023D649 /* Customisation.swift in Sources */,
 				7D09760D2995714D004E6087 /* ModuleOperations.swift in Sources */,
 				7D291E8F29C8DF64007B9444 /* padding_newMethod.swift in Sources */,
-				D625E89F2991CF2A00D5A5B0 /* grant_full_disk_access.m in Sources */,
-				D625E89D2991CF2A00D5A5B0 /* vm_unaligned_copy_switch_race.c in Sources */,
 				D625E8A32991CF8600D5A5B0 /* Alert++.swift in Sources */,
 				7D3BAB7B29B4BE760024C9C9 /* EditCCColorsView.swift in Sources */,
 				7D201BF4299C1E280023D649 /* PlistHelpers.swift in Sources */,
@@ -453,7 +430,6 @@
 				D6E552D129B3E3300083E6A5 /* ApplicationManager.swift in Sources */,
 				7D201BFB299C23100023D649 /* MainModuleView.swift in Sources */,
 				7D59D959299A94370049302B /* CustomPrint.swift in Sources */,
-				D625E89E2991CF2A00D5A5B0 /* helpers.m in Sources */,
 				7D201BF9299C22680023D649 /* TickToggleStyle.swift in Sources */,
 				D6E552D929B3E7760083E6A5 /* AppListView.swift in Sources */,
 				7DDD2FA329AEB2F90064A7FC /* SettingsView.swift in Sources */,
@@ -648,7 +624,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "ControlConfig/Exploit/ControlConfig-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -688,7 +664,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "ControlConfig/Exploit/ControlConfig-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -836,6 +812,22 @@
 				kind = branch;
 			};
 		};
+		D6039E8029E48A43002F91D7 /* XCRemoteSwiftPackageReference "AbsoluteSolver" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/BomberFish/AbsoluteSolver";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		D6039E8329E48A9C002F91D7 /* XCRemoteSwiftPackageReference "DirtyCowKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/BomberFish/DirtyCowKit";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		D6E552D229B3E3750083E6A5 /* XCRemoteSwiftPackageReference "MarqueeText" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/joekndy/MarqueeText";
@@ -861,6 +853,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 7DDD2FA629AFD1020064A7FC /* XCRemoteSwiftPackageReference "LocalConsole" */;
 			productName = LocalConsole;
+		};
+		D6039E8129E48A43002F91D7 /* AbsoluteSolver */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D6039E8029E48A43002F91D7 /* XCRemoteSwiftPackageReference "AbsoluteSolver" */;
+			productName = AbsoluteSolver;
+		};
+		D6039E8429E48A9C002F91D7 /* DirtyCowKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D6039E8329E48A9C002F91D7 /* XCRemoteSwiftPackageReference "DirtyCowKit" */;
+			productName = DirtyCowKit;
 		};
 		D6E552D329B3E3750083E6A5 /* MarqueeText */ = {
 			isa = XCSwiftPackageProductDependency;
