@@ -7,26 +7,15 @@
 //
 
 import Foundation
+import AbsoluteSolver
 
 public enum PlistHelpers {
     public static func plistPadding(Plist_Data: Data, Default_URL_STR: String) -> Data? {
-        guard let Default_Data = try? Data(contentsOf: URL(fileURLWithPath: Default_URL_STR)) else { return nil }
-        if Plist_Data.count == Default_Data.count { return Plist_Data }
-        print("pd.count", Plist_Data.count, "dd.count", Default_Data.count)
-        guard let Plist = try? PropertyListSerialization.propertyList(from: Plist_Data, format: nil) as? [String: Any] else { return nil }
-        var EditedDict = Plist
-        guard var newData = try? PropertyListSerialization.data(fromPropertyList: EditedDict, format: .binary, options: 0) else { return nil }
-        var count = 0
-        print("DefaultData - " + String(Default_Data.count))
-        while true {
-            newData = try! PropertyListSerialization.data(fromPropertyList: EditedDict, format: .binary, options: 0)
-            if newData.count >= Default_Data.count { break }
-            count += 1
-            EditedDict.updateValue(String(repeating: "*", count: Int(floor(Double(count/2)))), forKey: "0")
-            EditedDict.updateValue(String(repeating: "+", count: count - Int(floor(Double(count/2)))), forKey: "MdC")
+        do {
+            return try AbsoluteSolver.padPlist(replacementData: Plist_Data, filePath: Default_URL_STR)
+        } catch {
+            return nil
         }
-        print("ImportData - " + String(newData.count))
-        return newData
     }
 
     public static func arrayPlistPadding(Plist_Data: Data, Default_URL_STR: String) -> Data? {
@@ -109,14 +98,11 @@ public enum PlistHelpers {
 //    }
 
     public static func betterPlistPadding(replacementData: Data, filePath: String) -> Data? {
-        guard let currentData = try? Data(contentsOf: URL(fileURLWithPath: filePath)) else { return nil }
-        if replacementData.count == currentData.count { return replacementData }
-
-//        print("padding replacement \(replacementData.count) to current \(currentData.count)")
-        guard let replacementPlist = try? PropertyListSerialization.propertyList(from: replacementData, format: nil) as? [String: Any] else { return nil }
-        guard var withEmpty = try? insaneNewPaddingMethodUsingBytes(replacementData, padToBytes: currentData.count) else { return nil }
-//        guard var withEmpty = try? PlistHelpers.addEmptyData(matchingSize: currentData.count, to: replacementPlist) else { return nil }
-        return withEmpty
+        do {
+            return try AbsoluteSolver.padPlist(replacementData: replacementData, filePath: filePath)
+        } catch {
+            return nil
+        }
     }
 
     public static func writeDictToPlist(dict: NSMutableDictionary, path: String) -> Bool {
