@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "IconAppleTV.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

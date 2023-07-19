@@ -12,14 +12,21 @@ import UIKit
 struct ModuleBackup {
     var fileName: String
     var info_plist: [String: Any]
+    var info_path: String
+    var asset_path: String?
 }
+
+
+let backupFolderName = ".DO_NOT_DELETE_ControlConfig"
+let backupFolder = "/private/var/mobile/" + backupFolderName
+let bkFolder = backupFolder
 
 struct Backup: Hashable {
     var moduleConfiguration: [String: Any]
     var moduleConfiguration_ccsupport: [String: Any]?
     var moduleAllowedList: [String]
     var defaultModuleSettings: [String: Any]
-    var modules: [ModuleBackup]
+    var modules: [String: ModuleBackup]
 
     // CoreMaterial.framework/modules.materialrecipe
     var cm_modules: [String: Any]
@@ -31,6 +38,9 @@ struct Backup: Hashable {
     var cm_moduleStroke: [String: Any]
 
     var id: String
+    var folderPath: String {
+        backupFolder + "/\(id)/"
+    }
     var date: Date
 
     func hash(into hasher: inout Hasher) {
@@ -41,8 +51,6 @@ struct Backup: Hashable {
         return lhs.id == rhs.id
     }
 }
-
-let backupFolderName = ".DO_NOT_DELETE_ControlConfig"
 
 //
 class BackupManager {
@@ -58,8 +66,7 @@ class BackupManager {
         let documentsDir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
 //        let backupFolder = documentsDir.appendingPathComponent(backupFolderName).path
 //
-        let backupFolder = "/private/var/mobile/" + backupFolderName
-        self.backupFolder = backupFolder
+        self.backupFolder = bkFolder
 
         // make folder
         if !FileManager.default.fileExists(atPath: backupFolder) {
@@ -92,7 +99,7 @@ class BackupManager {
                         self.backups = Array(Set(self.backups))
                     }
                 }
-                print("loaded \(self.backups.count) backups.")
+//                print("loaded \(self.backups.count) backups.")
             }
         } else {
             self.backups = []
@@ -101,7 +108,7 @@ class BackupManager {
 
     func loadBackup(id: String) -> Backup? {
         let backupFolder = self.backupFolder + "/" + id
-        print("loading backup \(id)")
+        print("🗄️ Loading backup \(id)")
         let moduleConfiguration = self.loadPlist(path: backupFolder + "/ModuleConfiguration.plist")
         let moduleConfiguration_ccsupport = self.loadPlist(
             path: backupFolder + "/ModuleConfiguration_CCSupport.plist")
@@ -116,18 +123,22 @@ class BackupManager {
         let defaultModuleSettings = self.loadPlist(path: backupFolder + base)
 
         let modulesFolder = backupFolder + "/modules"
-        var modules: [ModuleBackup] = []
+        var modules: [String: ModuleBackup] = [:]
         do {
             let modulesFiles = try FileManager.default.contentsOfDirectory(atPath: modulesFolder)
             for moduleFile in modulesFiles {
                 let modulePath = modulesFolder + "/" + moduleFile
-                let info_plist = self.loadPlist(path: modulePath + "/info.plist")
+                let info_plist = self.loadPlist(path: modulePath + "/Info.plist")
                 if let info_plist = info_plist {
-                    modules.append(ModuleBackup(fileName: moduleFile, info_plist: info_plist))
+                    if FileManager.default.fileExists(atPath: modulePath + "/Assets.car") {
+                        modules[moduleFile] = ModuleBackup(fileName: moduleFile, info_plist: info_plist, info_path:modulePath + "/Info.plist", asset_path: modulePath + "/Assets.car")
+                    } else {
+                        modules[moduleFile] = ModuleBackup(fileName: moduleFile, info_plist: info_plist,info_path: modulePath + "/Info.plist")
+                    }
                 }
             }
         } catch {
-            print("Error loading modules: \(error)")
+            print("⛔️ Error loading backup modules: \(error)")
         }
 
         let cm_modules = self.loadPlist(
@@ -173,7 +184,7 @@ class BackupManager {
                         return plist
                     }
                 } catch {
-                    print("Error loading plist: \(error)")
+                    print("⛔️ Error loading backup plist: \(error)")
                 }
             }
         }

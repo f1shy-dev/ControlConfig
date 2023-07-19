@@ -58,9 +58,9 @@ func overwriteFileWithDataImpl(originPath: String, replacementData: Data) -> Boo
     }
 
     // for every 16k chunk, rewrite
-    print(Date())
+//    print(Date())
     for chunkOff in stride(from: 0, to: replacementData.count, by: 0x4000) {
-        print(String(format: "%lx", chunkOff))
+//        print(String(format: "%lx", chunkOff))
         let dataChunk = replacementData[chunkOff..<min(replacementData.count, chunkOff + 0x4000)]
         var overwroteOne = false
         for _ in 0..<2 {
@@ -71,18 +71,31 @@ func overwriteFileWithDataImpl(originPath: String, replacementData: Data) -> Boo
             }
             if overwriteSucceeded {
                 overwroteOne = true
-                print("Successfully overwrote! \(originPath)")
+               
                 break
             }
 
             print("try again?!")
         }
+        
         guard overwroteOne else {
             print("Failed to overwrite")
             return false
         }
     }
-    print(Date())
-    print("Successfully overwrote!")
+    let url = URL(string: originPath)!
+//                let lastTwoItems = url.deletingLastPathComponent().lastPathComponent + "/" + url.lastPathComponent
+    
+    if let name = CCMappings.moduleNames[url.deletingLastPathComponent().lastPathComponent] {
+        if originPath.hasSuffix(".bundle/Info.plist") {
+        print("✅ Overwrote Info for \(name)")
+    } else if originPath.hasSuffix(".bundle/Assets.car"){
+        print("✅ Overwrote Assets for \(name)")
+    }
+    } else {
+        print("✅ Overwrote \(url.lastPathComponent)")
+    }
+//    print(Date())
+//    print("Successfully overwrote!")
     return true
 }

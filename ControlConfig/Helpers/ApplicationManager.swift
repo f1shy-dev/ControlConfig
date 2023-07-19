@@ -9,8 +9,23 @@ import Foundation
 import UIKit
 
 // does nothing lololo
-enum GenericError: Error {
+enum GenericError: Error, Equatable {
     case runtimeError(String)
+    case MissingOC
+    case MissingCL
+    case OldStorageVersion
+    static func ==(lhs: GenericError, rhs: GenericError) -> Bool {
+           switch (lhs, rhs) {
+           case (.MissingCL, .MissingCL):
+               return true
+           case (.MissingOC, .MissingOC):
+               return true
+           case (.OldStorageVersion, .OldStorageVersion):
+               return true
+           default:
+               return false
+           }
+       }
 }
 
 // stolen from appabetical :trolley:

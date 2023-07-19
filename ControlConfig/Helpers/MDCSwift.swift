@@ -21,7 +21,7 @@ public enum MDC {
     public static func respring(method: RespringMethod) {
         switch method {
         case .backboard:
-            print("Respringing... (xpc_crasher backboard)")
+            print("🔁 Respringing... (xpc_crasher backboard)")
             let processes = [
                 // idk this is only for that cc action ig
 //                "com.apple.cfprefsd.daemon",
@@ -32,7 +32,7 @@ public enum MDC {
                 xpc_crash(process)
             }
         case .frontboard:
-            print("Respringing... (xpc_crasher frontboard)")
+            print("🔁 Respringing... (xpc_crasher frontboard)")
             let processes = [
                 // only kill frontboard since killing backboard doesnt apply cc tweaks??
                 "com.apple.cfprefsd.daemon",
@@ -43,7 +43,7 @@ public enum MDC {
                 xpc_crash(process)
             }
         case .legacy:
-            print("Respringing... (legacy)")
+            print("🔁 Respringing... (legacy)")
             Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { _ in
                 guard let window = UIApplication.shared.windows.first else { return }
                 while true {

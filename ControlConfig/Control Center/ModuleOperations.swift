@@ -19,6 +19,37 @@ import SwiftUI
 //    return (patch1 && patch2)
 // }
 
+func applyIcons() -> Bool {
+    var sMap: [Bool] = []
+    let fileManager = FileManager.default
+    let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
+
+    let assetFolder = documentsURL.appendingPathComponent("AssetWorkspace")
+    if !fileManager.fileExists(atPath: assetFolder.path) {
+        return true
+    }
+    for module in fetchModules().filter({ module in
+        !["ContinuousExposeModule.bundle", "ShazamModule.bundle", "DisplayModule.bundle"].contains(module.fileName)
+    }) {
+        let carFile = URL(fileURLWithPath: "\(CCMappings.bundlesPath)\(module.fileName)/Assets.car")
+        let workspaceCarFile = assetFolder.appendingPathComponent("\(module.fileName)_Assets.car")
+
+        if !fileManager.fileExists(atPath: carFile.path) || !fileManager.fileExists(atPath: workspaceCarFile.path) {
+            continue
+        }
+        do {
+            let write = MDC.overwriteFile(at: carFile.path, with: try Data(contentsOf: workspaceCarFile))
+            print("icon Write - \(module.description)", write)
+            sMap.append(write)
+        } catch {
+            print("icon Write FAILURE - \(module.description)")
+            sMap.append(false)
+        }
+    }
+
+    return !sMap.contains { $0 == false }
+}
+
 // MARK: - Get modules
 
 func fetchModules() -> [Module] {
@@ -41,222 +72,100 @@ func fetchModules() -> [Module] {
     }
 }
 
-func compressBundleIDs_old() -> Bool {
-    var success: [Bool] = []
 
-    let modules = fetchModules()
-    modules.prefix(9).forEach { module in
-        let path = "\(CCMappings.bundlesPath)\(module.fileName)/Info.plist"
-        guard let currentData = try? Data(contentsOf: URL(fileURLWithPath: path)) else { return success.append(false) }
 
-        guard var currentPlist = try? PropertyListSerialization.propertyList(from: currentData, format: nil) as? [String: Any] else { return success.append(false) }
-        let cs = module.fileName.checksum()
-        print("patching \(module) to \(cs)")
-        currentPlist["CFBundleIdentifier"] = cs
-
-        currentPlist.removeValue(forKey: "0")
-        currentPlist.removeValue(forKey: "MdC")
-
-        let newData = try! PropertyListSerialization.data(fromPropertyList: currentPlist, format: .xml, options: 0)
-//        print(dict, newData.count)
-//        let padData = plistPadding(Plist_Data: newData, Default_URL_STR: path)! as Data
-        guard let padData = PlistHelpers.betterPlistPadding(replacementData: newData, filePath: path) else { return success.append(false) }
-        // newData = newPlist
-        success.append(MDC.overwriteFile(at: path, with: padData))
-        usleep(100000)
-    }
-
-    print("successmap-compresser", success)
-    return !success.contains { $0 == false }
-}
-
-func betterBundleIDCompressor() -> (success: Bool, ogNew: [String: String]) {
-    let bundlesPath = CCMappings.bundlesPath
-    var success: [Bool] = []
-    var ogNew: [String: String] = [:]
-
-    do {
-        let bundleFolders = try FileManager.default.contentsOfDirectory(atPath: bundlesPath)
-        for folder in bundleFolders.filter({ folder in
-            CCMappings.fileNameBasedSmallIDs.allKeys.contains { $0 as! String == folder }
-        }) {
-            let plistPath = "\(bundlesPath)/\(folder)/Info.plist"
-
-            guard let plistData = FileManager.default.contents(atPath: plistPath),
-                  var plist = try PropertyListSerialization.propertyList(from: plistData, format: nil) as? [String: Any]
-            else { success.append(false); continue }
-
-            guard let ogID = plist["CFBundleIdentifier"] as? String else { success.append(false); continue }
-            guard let cs = CCMappings.fileNameBasedSmallIDs[folder] as? String else { success.append(false); continue }
-            ogNew[ogID] = cs
-            plist["CFBundleIdentifier"] = cs
-            for i in CCMappings.removalPlistValues {
-                plist.removeValue(forKey: i)
-            }
-            if let newName = CCMappings.moduleNames[folder] as? String {
-                plist["CFBundleDisplayName"] = newName
-                plist["CFBundleName"] = newName
-            }
-
-            let plistDataNew = try PropertyListSerialization.data(fromPropertyList: plist, format: .binary, options: 0)
-            success.append(PlistHelpers.writeDictToPlist(dict: NSMutableDictionary(dictionary: plist), path: plistPath))
-
-//            if let newPad = PlistHelpers.plistPadding(Plist_Data: plistDataNew, Default_URL_STR: plistPath) {
-//                success.append(MDC.overwriteFile(at: plistPath, with: newPad))
-//                print("MDC patched \(folder) og\(plistData.count) new\(newPad.count)")
-//            } else { success.append(false); continue }
-        }
-    } catch {
-        success.append(false)
-        fatalError("Error getting list of subfolders in bundles folder: \(error.localizedDescription)")
-    }
-
-    do {
-        guard let moduleConf = PlistHelpers.plistToDict(path: CCMappings.moduleConfigurationPath) else { throw GenericError.runtimeError(":(") }
-        moduleConf["disabled-module-identifiers"] = []
-        moduleConf["userenabled-fixed-module-identifiers"] = []
-        success.append(PlistHelpers.writeDictToPlist(dict: moduleConf, path: CCMappings.moduleConfigurationPath))
-
-        guard var allowedList = NSArray(contentsOfFile: CCMappings.moduleAllowedListPath) as? [String] else { throw GenericError.runtimeError(":(") }
-
-        allowedList = allowedList.map { ogNew[$0] ?? $0 }
-        if !allowedList.contains("focusui") { allowedList.append("focusui") }
-        print("OGNEW", ogNew)
-        print("ALLOWNEW", allowedList)
-        let newData = try! PropertyListSerialization.data(fromPropertyList: allowedList, format: .binary, options: 0)
-//        guard let padData = PlistHelpers.arrayPlistPadding(Plist_Data: newData, Default_URL_STR: CCMappings.moduleAllowedListPath) else { throw GenericError.runtimeError(":(") }
-        guard let currentData = try? Data(contentsOf: URL(fileURLWithPath: CCMappings.moduleAllowedListPath)) else { throw GenericError.runtimeError(":(") }
-
-        guard let padData = try? insaneNewPaddingMethodUsingBytes(newData, padToBytes: currentData.count) else { throw GenericError.runtimeError(":(") }
-        success.append(MDC.overwriteFile(at: CCMappings.moduleAllowedListPath, with: padData))
-    } catch {
-        success.append(false)
-    }
-    return (!success.contains { $0 == false }, ogNew)
-}
-
-func patchHiddenModules() -> Bool {
-    let bundlesPath = CCMappings.bundlesPath
-    var success: [Bool] = []
-
-    do {
-        let bundleFolders = try FileManager.default.contentsOfDirectory(atPath: bundlesPath)
-        for folder in bundleFolders.filter({ folder in
-            CCMappings.hiddenModulesToPatch.contains { $0 == folder }
-        }) {
-            let plistPath = "\(bundlesPath)/\(folder)/Info.plist"
-
-            guard let plistData = FileManager.default.contents(atPath: plistPath),
-                  var plist = try PropertyListSerialization.propertyList(from: plistData, format: nil) as? [String: Any]
-            else { success.append(false); continue }
-
-            for i in CCMappings.removalPlistValues {
-                plist.removeValue(forKey: i)
-            }
-
-            if plist["SBIconVisibilityDefaultVisible"] != nil {
-                plist["SBIconVisibilityDefaultVisible"] = true
-            }
-
-            if plist["SBIconVisibilitySetByAppPreference"] != nil {
-                plist["SBIconVisibilitySetByAppPreference"] = false
-            }
-
-            if plist["SBIconVisibilityDefaultVisibleInstallTypes"] != nil {
-                plist["SBIconVisibilityDefaultVisibleInstallTypes"] = []
-            }
-
-            if let caps = plist["UIRequiredDeviceCapabilities"] as? [String] {
-                plist["UIRequiredDeviceCapabilities"] = caps.filter {
-                    !["DeviceSupportsActiveNFCReadingOnly"].contains($0)
-                }
-            }
-
-            plist["UIDeviceFamily"] = [1, 2]
-
-            let plistDataNew = try PropertyListSerialization.data(fromPropertyList: plist, format: .binary, options: 0)
-
-            success.append(PlistHelpers.writeDictToPlist(dict: NSMutableDictionary(dictionary: plist), path: plistPath))
-            //            if let newPad = PlistHelpers.plistPadding(Plist_Data: plistDataNew, Default_URL_STR: plistPath) {
-//                success.append(MDC.overwriteFile(at: plistPath, with: newPad))
-//                print("MDC patched \(folder) og\(plistData.count) new\(newPad.count)")
-//            } else { success.append(false); continue }
-        }
-    } catch {
-        success.append(false)
-        fatalError("Error getting list of subfolders in bundles folder: \(error.localizedDescription)")
-    }
-
-    return !success.contains { $0 == false }
-}
-
-func applyChanges(customisations: CustomisationList) -> Bool {
-    let dmsPlistOriginal = PlistHelpers.plistToDict(path: CCMappings().dmsPath)
-//    var dmsPlist = PlistHelpers.plistToDict(path: CCMappings().dmsPath)
+func applyChanges(customisations: CustomisationList) -> (Bool, [String:Bool]) {
+    print() // emoji seperation
     var emptyDMS: [String: Any] = [:]
-
-//    var success: [Bool] = []
     var successMap: [String: Bool] = [:]
-
-    let compressResult = betterBundleIDCompressor()
-    let ogNew = compressResult.ogNew
-    var newOg = [String: String]()
-    for (key, value) in ogNew {
-        newOg[value] = key
-    }
-
-//    success.append(compressResult.success)
-    successMap["compressor"] = compressResult.success
-    successMap["patchHidden"] = patchHiddenModules()
-
-    for customisation in customisations.list.filter({ c in
-        c.isEnabled
-    }) {
+    let backupDMS = BackupManager.shared.latestBackup?.defaultModuleSettings
+    
+    var compressedAllowList: [String] = []
+    for customisation in customisations.list {
         let infoPath = "\(CCMappings.bundlesPath)\(customisation.module.fileName)/Info.plist"
-        let infoPlist = PlistHelpers.plistToDict(path: infoPath)
+        let infoPlist = NSMutableDictionary()
+        let originalPlist = PlistHelpers.plistToDict(path: infoPath)
+        let fileName = customisation.module.fileName
+        let moduleBundleID = CCMappings.smallIDBasedModuleIDs[customisation.module.bundleID] as? String ?? customisation.module.bundleID
+        var activeBundleID = customisation.module.bundleID
+//        the "compressor"
+        if CCMappings.fileNameBasedSmallIDs.allKeys.contains(where: { $0 as! String == fileName}) {
+            print("⚙️ \(customisation.module.description) - Set small bundle ID")
+            infoPlist.setValue(CCMappings.fileNameBasedSmallIDs[fileName], forKey: "CFBundleIdentifier")
+            activeBundleID = CCMappings.fileNameBasedSmallIDs[fileName] as! String
+            compressedAllowList.append(CCMappings.fileNameBasedSmallIDs[fileName] as! String)
+            if let newName = CCMappings.moduleNames[fileName] as? String {
+                infoPlist.setValue(newName, forKey: "CFBundleDisplayName")
+                infoPlist.setValue(newName, forKey: "CFBundleName")
+            }
+        } else {
+            compressedAllowList.append(moduleBundleID)
+        }
+        
+        if CCMappings().hiddenModulesToPatch.contains(fileName) {
+            print("⚙️ \(customisation.module.description) - Patch hidden module")
+            if originalPlist?.value(forKey: "SBIconVisibilityDefaultVisible") != nil {
+                infoPlist.setValue(true, forKey: "SBIconVisibilityDefaultVisible")
+            }
+            
+            if originalPlist?.value(forKey: "SBIconVisibilitySetByAppPreference") != nil {
+                infoPlist.setValue(false, forKey: "SBIconVisibilitySetByAppPreference")
+            }
+
+            
+            if originalPlist?.value(forKey: "SBIconVisibilityDefaultVisibleInstallTypes") != nil {
+                infoPlist.setValue([], forKey: "SBIconVisibilityDefaultVisibleInstallTypes")
+            }
+            
+            if let caps = originalPlist?.value(forKey: "UIRequiredDeviceCapabilities") as? [String] {
+                infoPlist.setValue(caps.filter {
+                    !["DeviceSupportsActiveNFCReadingOnly"].contains($0)
+                }, forKey: "UIRequiredDeviceCapabilities")
+            }
+        }
+        
         switch customisation.mode {
         case .AppLauncher:
-            infoPlist?.setValue("CCUIAppLauncherModule", forKey: "NSPrincipalClass")
+            infoPlist.setValue("CCUIAppLauncherModule", forKey: "NSPrincipalClass")
             if let appBundleID = customisation.launchAppBundleID {
-                print("patching \(customisation.module.description) to \(appBundleID)")
-                infoPlist?.setValue(appBundleID, forKey: "CCLaunchApplicationIdentifier")
-                infoPlist?.setValue(appBundleID, forKey: "CCAssociatedBundleIdentifier")
+                print("⚙️ \(customisation.module.description) - Patch appID \(appBundleID)")
+                infoPlist.setValue(appBundleID, forKey: "CCLaunchApplicationIdentifier")
+                infoPlist.setValue(appBundleID, forKey: "CCAssociatedBundleIdentifier")
             }
             if let appURLScheme = customisation.launchAppURLScheme {
-                print("patching \(customisation.module.description) to app-url-scheme \(appURLScheme)")
-                infoPlist?.setValue(appURLScheme, forKey: "CCLaunchURL")
+                print("⚙️ \(customisation.module.description) - Patch url-scheme \(appURLScheme)")
+                infoPlist.setValue(appURLScheme, forKey: "CCLaunchURL")
             }
         case .WorkflowLauncher:
-            infoPlist?.setValue("CCUIAppLauncherModule", forKey: "NSPrincipalClass")
+            infoPlist.setValue("CCUIAppLauncherModule", forKey: "NSPrincipalClass")
             if let shortcutName = customisation.launchShortcutName {
-                print("patching \(customisation.module.description) to open workflow \(shortcutName)")
-                infoPlist?.setValue("com.apple.shortcuts", forKey: "CCLaunchApplicationIdentifier")
-                infoPlist?.setValue("com.apple.shortcuts", forKey: "CCAssociatedBundleIdentifier")
-                infoPlist?.setValue("shortcuts://run-shortcut?name=" + shortcutName, forKey: "CCLaunchURL")
+                print("⚙️ \(customisation.module.description) - Patch shortcut \(shortcutName)")
+                infoPlist.setValue("com.apple.shortcuts", forKey: "CCLaunchApplicationIdentifier")
+                infoPlist.setValue("com.apple.shortcuts", forKey: "CCAssociatedBundleIdentifier")
+                infoPlist.setValue("shortcuts://run-shortcut?name=" + shortcutName, forKey: "CCLaunchURL")
             }
         case .CustomAction:
-            infoPlist?.setValue("CCUIAppLauncherModule", forKey: "NSPrincipalClass")
-            print("customaction")
-
-            print("patching \(customisation.module.description) to custom action")
-            infoPlist?.setValue(Bundle.main.bundleIdentifier, forKey: "CCLaunchApplicationIdentifier")
-            infoPlist?.setValue(Bundle.main.bundleIdentifier, forKey: "CCAssociatedBundleIdentifier")
+            infoPlist.setValue("CCUIAppLauncherModule", forKey: "NSPrincipalClass")
+            print("⚙️ \(customisation.module.description) - Patch custom action")
+            infoPlist.setValue(Bundle.main.bundleIdentifier, forKey: "CCLaunchApplicationIdentifier")
+            infoPlist.setValue(Bundle.main.bundleIdentifier, forKey: "CCAssociatedBundleIdentifier")
             switch customisation.customAction {
             case .Respring:
-                infoPlist?.setValue("controlconfig://respring", forKey: "CCLaunchURL")
+                infoPlist.setValue("controlconfig://respring", forKey: "CCLaunchURL")
             case .FrontboardRespring:
-                if AppState.shared.debugMode { infoPlist?.setValue("controlconfig://respring?type=frontboard", forKey: "CCLaunchURL") }
-                else { infoPlist?.setValue("controlconfig://respring", forKey: "CCLaunchURL") }
+                if AppState.shared.debugMode { infoPlist.setValue("controlconfig://respring?type=frontboard", forKey: "CCLaunchURL") }
+                else { infoPlist.setValue("controlconfig://respring", forKey: "CCLaunchURL") }
             case .BackboardRespring:
-                if AppState.shared.debugMode { infoPlist?.setValue("controlconfig://respring?type=backboard", forKey: "CCLaunchURL") }
-                else { infoPlist?.setValue("controlconfig://respring", forKey: "CCLaunchURL") }
+                if AppState.shared.debugMode { infoPlist.setValue("controlconfig://respring?type=backboard", forKey: "CCLaunchURL") }
+                else { infoPlist.setValue("controlconfig://respring", forKey: "CCLaunchURL") }
             case .LegacyRespring:
-                if AppState.shared.debugMode { infoPlist?.setValue("controlconfig://respring?type=legacy", forKey: "CCLaunchURL") }
-                else { infoPlist?.setValue("controlconfig://respring", forKey: "CCLaunchURL") }
+                if AppState.shared.debugMode { infoPlist.setValue("controlconfig://respring?type=legacy", forKey: "CCLaunchURL") }
+                else { infoPlist.setValue("controlconfig://respring", forKey: "CCLaunchURL") }
             }
 
         default:
-            print("default")
+//            print("default")
+            let _ = ""
         }
 
 //        let stringsPath = "\(CCMappings.bundlesPath)\(customisation.module.fileName)/\(AppState.shared.sbRegionCode).lproj/InfoPlist.strings"
@@ -266,58 +175,118 @@ func applyChanges(customisations: CustomisationList) -> Bool {
 
         // doesnt work ios15
 //        if ["HomeControlCenterCompactModule.bundle", "HomeControlCenterModule.bundle"].contains(customisation.module.fileName), let newName = CCMappings.moduleNames[customisation.module.fileName] as? String {
-//            infoPlist?.setValue(newName, forKey: "CFBundleDisplayName")
+//            infoPlist.setValue(newName, forKey: "CFBundleDisplayName")
 //        }
 
         // PLIST PADDING ISSUE
 //        if (customisation.hideAirplayText ?? false) == true || (customisation.hideFocusUIText ?? false) == true {
-//            if #available(iOS 16, *) {
-//                // code that should only run on iOS 16 or above
-//                if customisation.module.fileName == "FocusUIModule.bundle" && customisation.hideFocusUIText == true {
-//                    let stringsPath = "\(CCMappings.bundlesPath)\(customisation.module.fileName)/Localizable.loctable"
-//                    if var baseDict = NSMutableDictionary(contentsOfFile: stringsPath), var regionPart = baseDict[AppState.shared.sbRegionCode] as? [String: Any] {
-//                        baseDict[AppState.shared.sbRegionCode] = [
-//                            "MODULE_DEFAULT_TITLE": "",
-//                            "MODULE_ON_STATE": ""
-//                        ]
-//                        print(baseDict)
-//                        print("patch focusui strings ios16")
-//                        successMap["focusText_16"] = (PlistHelpers.writeDictToPlist(dict: baseDict, path: stringsPath))
-//                    }
-//                }
-//            } else {
-//                let stringsPath = "\(CCMappings.bundlesPath)\(customisation.module.fileName)/\(AppState.shared.sbRegionCode).lproj/Localizable.strings"
-//                if FileManager.default.fileExists(atPath: stringsPath) {
-//                    if customisation.module.fileName == "FocusUIModule.bundle" && customisation.hideFocusUIText == true {
-//                        print("patch focusui strings ios15")
-//                        print([
-//                            "MODULE_DEFAULT_TITLE": "",
-//                            "MODULE_ON_STATE": ""
-//                        ])
-//                        successMap["focusText_15"] = PlistHelpers.writeDictToPlist(dict: NSMutableDictionary(dictionary: [
-//                            "MODULE_DEFAULT_TITLE": "",
-//                            "MODULE_ON_STATE": ""
-//                        ]), path: stringsPath)
-//                    }
-//
-//                    if customisation.module.fileName == "AirPlayMirroringModule.bundle" && customisation.hideAirplayText == true {
-//                        if var dict = NSMutableDictionary(contentsOfFile: stringsPath) {
-//                            dict["Screen Mirroring Compact"] = ""
-//                            print("patch airplay strings ios15")
-//                            print(dict)
-//                            successMap["airplayText_15"] = PlistHelpers.writeDictToPlist(dict: dict, path: stringsPath)
-//                        }
-//                    }
-//                }
+            if #available(iOS 16, *) {
+                // code that should only run on iOS 16 or above
+                if customisation.module.fileName == "FocusUIModule.bundle" {
+                    let stringsPath = "\(CCMappings.bundlesPath)\(customisation.module.fileName)/Localizable.loctable"
+                    if let latestBkF = BackupManager.shared.latestBackup?.folderPath,
+                       let backupCopy = PlistHelpers.plistToDict(path: latestBkF + "modules/\(customisation.module.fileName)/Localizable.loctable"),
+                       
+//                        let baseDict = NSMutableDictionary(contentsOfFile: stringsPath),
+                        let baseKeys = backupCopy.allKeys as? [String]
+                       
+                    {
+                        let new = NSMutableDictionary(dictionary: backupCopy)
+                        
+                        if customisation.hideFocusUIText == true {
+                            for key in baseKeys.filter({$0 != "LocProvenance"}) {
+                                if let sd = new.value(forKey: key) as? [String: String] {
+                                    for key2 in sd.keys {
+                                        new.setValue("", forKeyPath: "\(key).\(key2)")
+                                    }
+                                }
+                                
+                            }
+                        }
+                        
+                        if let op = PlistHelpers.plistToDict(path: stringsPath) {
+                            for i in CCMappings.removalPlistValues {
+                                new.removeObject(forKey: i)
+                                op.removeObject(forKey: i)
+                            }
+                            if new.isEqual(to:op as! [AnyHashable:Any]) {
+                                if customisation.hideFocusUIText == true { print("⏩ Skipping hide Focus text - file same") }
+                            } else {
+                                if customisation.hideFocusUIText == true {
+                                    print("⚙️ Focus - Hide text")
+                                } else {
+                                    print("⏮️ Reverting Focus - Hide text")
+                                }
+                                successMap["Hide Focus Text (iOS 16)"] = PlistHelpers.writeDictToPlist(dict: NSMutableDictionary(dictionary: new), path: stringsPath)
+                            }
+                        }
+                        
+                    
+                }
+            } else {
+                let stringsPath = "\(CCMappings.bundlesPath)\(customisation.module.fileName)/\(AppState.shared.sbRegionCode).lproj/Localizable.strings"
+                if FileManager.default.fileExists(atPath: stringsPath),
+                   let latestBkF = BackupManager.shared.latestBackup?.folderPath,
+                   let backupCopy = PlistHelpers.plistToDict(path: latestBkF + "modules/\(customisation.module.fileName)/\(AppState.shared.sbRegionCode).lproj/Localizable.strings") {
+                    if customisation.module.fileName == "FocusUIModule.bundle"{
+                        let new = customisation.hideFocusUIText == true ? NSMutableDictionary(dictionary: [
+                            "MODULE_DEFAULT_TITLE": "",
+                            "MODULE_ON_STATE": ""
+                        ]): backupCopy
+                        
+                        if let op = PlistHelpers.plistToDict(path: stringsPath) {
+                            for i in CCMappings.removalPlistValues {
+                                new.removeObject(forKey: i)
+                                op.removeObject(forKey: i)
+                            }
+                            if new.isEqual(to:op as! [AnyHashable:Any]) {
+                                if customisation.hideFocusUIText == true { print("⏩ Skipping hide Focus text - file same") }
+                            } else {
+                                if customisation.hideFocusUIText == true { print("⚙️ Focus - Hide text") }
+                                else { print("⏮️ Reverting Focus - Hide text") }
+                                successMap["Hide Focus Text (iOS 15)"] = (PlistHelpers.writeDictToPlist(dict: NSMutableDictionary(dictionary: new), path: stringsPath))
+                            }
+                        }
+                        
+                        
+                        
+                    }
+                    
+                    if customisation.module.fileName == "AirPlayMirroringModule.bundle" {
+                        var dict = NSMutableDictionary(dictionary: backupCopy)
+                        if customisation.hideAirplayText == true {
+                            dict.setValue("", forKey: "Screen Mirroring Compact")
+                        }
+                        if let op = PlistHelpers.plistToDict(path: stringsPath) {
+                            for i in CCMappings.removalPlistValues {
+                                dict.removeObject(forKey: i)
+                                op.removeObject(forKey: i)
+                            }
+                            if dict.isEqual(to:op as! [AnyHashable:Any]) {
+                                if customisation.hideAirplayText == true { print("⏩ Skipping hide Screen Mirroring text - file same") }
+                                
+                            } else {
+                                if customisation.hideAirplayText == true { print("⚙️ Screen Mirroring - Hide text") }
+                                else { print("⏮️ Reverting Screen Mirroring - Hide text") }
+                                successMap["Hide Screen Mirroring Text"] = PlistHelpers.writeDictToPlist(dict: dict, path: stringsPath)
+                            }
+                        }
+                        
+                        
+                        
+                    }
+                }
+                    //
+                }
 //            }
-//        }
+        }
 
         if let customName = customisation.customName {
-            infoPlist?.setValue(customName, forKey: "CFBundleDisplayName")
+            infoPlist.setValue(customName, forKey: "CFBundleDisplayName")
         }
 
         if customisation.disableOnHoldWidget == true {
-            infoPlist?.setValue(false, forKey: "CCSupportsApplicationShortcuts")
+            infoPlist.setValue(false, forKey: "CCSupportsApplicationShortcuts")
         }
 
         switch customisation.customSizeMode {
@@ -336,75 +305,229 @@ func applyChanges(customisations: CustomisationList) -> Bool {
                     ]
                 ]
             ]
-            emptyDMS[customisation.module.bundleID] = dict
-
-            infoPlist?.setValue(dict, forKey: "_CCModuleSizePROTOTYPE") // useless but whatevers
+            emptyDMS[activeBundleID] = dict
+            print("⚙️ \(customisation.module.description) - Patch individual size")
+            infoPlist.setValue(dict, forKey: "_CCModuleSizePROTOTYPE") // useless but whatevers
         case .BothWays:
             let dict = [
                 "width": customisation.customWidthBothWays ?? 1,
                 "height": customisation.customHeightBothWays ?? 1
             ]
-            infoPlist?.setValue(dict, forKey: "_CCModuleSizePROTOTYPE")
+            print("⚙️ \(customisation.module.description) - Patch bothway size")
+            infoPlist.setValue(dict, forKey: "_CCModuleSizePROTOTYPE")
         case .None:
             // TODO: default size from backup
-
-            if let backupDMS = BackupManager.shared.latestBackup?.defaultModuleSettings, let backupSize = backupDMS[newOg[customisation.module.bundleID] ?? customisation.module.bundleID] as? [String: Any] {
+//            print("The size is NONE", customisation.module.bundleID)
+//            let cbId = CCMappings.fileNameBasedSmallIDs[fileName] ?? customisation.module.bundleID
+//            print("cbid", cbId)
+            if let backupDMS = backupDMS, let backupSize = backupDMS[moduleBundleID] as? [String: Any] {
+                print("⚙️ \(customisation.module.description) - Patch backup size")
                 if let bothWaySize = backupSize["size"] as? [String: Any] {
-                    infoPlist?.setValue(bothWaySize, forKey: "_CCModuleSizePROTOTYPE")
+                    infoPlist.setValue(bothWaySize, forKey: "_CCModuleSizePROTOTYPE")
+                } else {
+                    infoPlist.setValue(backupSize, forKey: "_CCModuleSizePROTOTYPE")
+                    emptyDMS[activeBundleID] = backupSize
                 }
-                emptyDMS[customisation.module.bundleID] = backupSize
+                
+//                emptyDMS[customisation.module.bundleID] = backupSize
             }
 //            let dict = [
 //                "width": 1,
 //                "height": 1
 //            ]
-//            infoPlist?.setValue(dict, forKey: "_CCModuleSizePROTOTYPE")
+//            infoPlist.setValue(dict, forKey: "_CCModuleSizePROTOTYPE")
         }
 
-        if let dict = infoPlist {
-            successMap["customInfo_\(customisation.module.fileName)"] = (PlistHelpers.writeDictToPlist(dict: dict, path: infoPath))
-        }
-    }
-
-    if let keys = CCMappings.fileNameBasedSmallIDs.allKeys as? [String] {
-        for moduleFileName in keys {
-            let module = Module(fileName: moduleFileName)
-            let infoPath = "\(CCMappings.bundlesPath)\(moduleFileName)/Info.plist"
-            let infoPlist = PlistHelpers.plistToDict(path: infoPath)
-
-            if emptyDMS[module.bundleID] != nil || infoPlist?["_CCModuleSizePROTOTYPE"] != nil { continue }
-
-            if let backupDMS = BackupManager.shared.latestBackup?.defaultModuleSettings, let backupSize = backupDMS[newOg[module.bundleID] ?? module.bundleID] as? [String: Any] {
-                if let bothWaySize = backupSize["size"] as? [String: Any] {
-                    infoPlist?.setValue(bothWaySize, forKey: "_CCModuleSizePROTOTYPE")
-                }
-                emptyDMS[module.bundleID] = backupSize
+//        if let ogP = originalPlist as? [AnyHashable: Any],  infoPlist.isEqual(to: ogP) == true {
+//            print("Skipping \(customisation.module.description) - identical plist")
+//        } else if let dict = infoPlist {
+//            successMap["customInfo_\(customisation.module.description)"] = (PlistHelpers.writeDictToPlist(dict: dict, path: infoPath))
+//        }
+        
+        if infoPlist == [:] {
+            print("⏩ Skipping \(customisation.module.description) - no changes")
+        } else if let op = originalPlist {
+            let dict = NSMutableDictionary(dictionary: op)
+            for i in CCMappings.removalPlistValues {
+                dict.removeObject(forKey: i)
+                op.removeObject(forKey: i)
             }
-
-            if let dict = infoPlist {
-                successMap["sizeInfo_\(moduleFileName)"] = PlistHelpers.writeDictToPlist(dict: dict, path: infoPath)
+            dict.addEntries(from: infoPlist as! [AnyHashable:Any])
+            if dict.isEqual(to:op as! [AnyHashable:Any]) {
+                print("⏩ Skipping \(customisation.module.description) - file same")
+            } else {
+                successMap["Module - \(customisation.module.description)"] = (PlistHelpers.writeDictToPlist(dict: dict, path: infoPath))
             }
         }
     }
 
-    successMap["writeDMS"] = PlistHelpers.writeDictToPlist(dict: NSMutableDictionary(dictionary: emptyDMS), path: CCMappings().dmsPath)
-//    if let c = customisations.otherCustomisations.moduleColor, let b = customisations.otherCustomisations.moduleBlur {
-//        successMap["recipe_module"] = (ColorTools.applyMaterialRecipe(filePath: CCMappings.moduleMaterialRecipePath, color: c, blur: b, includeSpecificsForCCModules: true))
-//    }
-//    if let cB = customisations.otherCustomisations.moduleBGColor, let bB = customisations.otherCustomisations.moduleBGBlur {
-//        successMap["recipe_moduleBackground"] = (ColorTools.applyMaterialRecipe(filePath: CCMappings.moduleBackgroundMaterialRecipePath, color: cB, blur: bB, includeSpecificsForCCModules: false))
-//    }
+//    if let keys = CCMappings.fileNameBasedSmallIDs.allKeys as? [String] {
+//        for moduleFileName in keys {
+//            let module = Module(fileName: moduleFileName)
+//            let infoPath = "\(CCMappings.bundlesPath)\(moduleFileName)/Info.plist"
+//            let infoPlist = PlistHelpers.plistToDict(path: infoPath)
 //
-    print("SuccessMap")
+//            if emptyDMS[module.bundleID] != nil || infoPlist["_CCModuleSizePROTOTYPE"] != nil { continue }
+//
+//            if let backupDMS = BackupManager.shared.latestBackup?.defaultModuleSettings, let backupSize = backupDMS[newOg[module.bundleID] ?? module.bundleID] as? [String: Any] {
+//                if let bothWaySize = backupSize["size"] as? [String: Any] {
+//                    infoPlist.setValue(bothWaySize, forKey: "_CCModuleSizePROTOTYPE")
+//                }
+//                emptyDMS[module.bundleID] = backupSize
+//            }
+//
+//            if let dict = infoPlist {
+//                successMap["sizeInfo_\(moduleFileName)"] = PlistHelpers.writeDictToPlist(dict: dict, path: infoPath)
+//            }
+//        }
+//    }
+    
+    
+//    revert modules
+    
+    let notAddedModules = fetchModules().filter { mod in
+        !customisations.list.contains(where: {$0.module.fileName == mod.fileName})
+    }.filter{mod in
+        CCMappings().hiddenModulesToPatch.contains(mod.fileName)
+    }
+    
+    for module in notAddedModules {
+        let infoPath = "\(CCMappings.bundlesPath)\(module.fileName)/Info.plist"
+        if let infoPlist = PlistHelpers.plistToDict(path: infoPath),
+            let moduleBackupPath = BackupManager.shared.latestBackup?.modules[module.fileName]?.info_path,
+            let backupPlist = PlistHelpers.plistToDict(path: moduleBackupPath){
+            var shouldRevert = false
+            
+            if let og = backupPlist.value(forKey: "SBIconVisibilitySetByAppPreference") as? Bool, let new = infoPlist.value(forKey: "SBIconVisibilitySetByAppPreference") as? Bool, og != new {
+//                print("sbivsbap")
+                shouldRevert = true
+            }
+            
+            if let og = backupPlist.value(forKey: "SBIconVisibilityDefaultVisible") as? Bool, let new = infoPlist.value(forKey: "SBIconVisibilityDefaultVisible") as? Bool, og != new {
+//                print("sbivdv")
+                shouldRevert = true
+            }
+            
+            if let og = backupPlist.value(forKey: "UIDeviceFamily") as? [Int], let new = infoPlist.value(forKey: "SBIconVisibilitySetByAppPreference") as? [Int], og != new {
+//                print("uidf")
+                shouldRevert = true
+            }
+            
+            if let og = backupPlist.value(forKey: "UIRequiredDeviceCapabilities") as? [String], let new = infoPlist.value(forKey: "UIRequiredDeviceCapabilities") as? [String], og != new {
+//                print("uirdc")
+                shouldRevert = true
+            }
+            
+            if let og = backupPlist.value(forKey: "SBIconVisibilityDefaultVisibleInstallTypes") as? [String], let new = infoPlist.value(forKey: "SBIconVisibilityDefaultVisibleInstallTypes") as? [String], og != new {
+//                print("sbvdvit")
+                shouldRevert = true
+            }
+            
+            if shouldRevert {
+                print("⏮️ Reverting hidden module - \(module.description)")
+                successMap["Revert Hidden - \(module.fileName)"] = PlistHelpers.writeDictToPlist(dict: backupPlist, path: infoPath)
+            }
+        } else {
+            successMap["Revert Hidden - \(module.fileName)"] = false
+            print("⛔️ Couldn't locate hidden module \(module.fileName) in backup to check revert...")
+        }
+    }
+
+
+    let dmsPath = CCMappings().dmsPath
+    if emptyDMS.isEmpty {
+        print("⏩ Skipping DMS - no changes")
+    } else if let op = PlistHelpers.plistToDict(path: dmsPath) {
+        let dict = NSMutableDictionary(dictionary: op)
+        for i in CCMappings.removalPlistValues {
+            dict.removeObject(forKey: i)
+            op.removeObject(forKey: i)
+        }
+        dict.addEntries(from: emptyDMS as [AnyHashable:Any])
+        if dict.isEqual(to:op as! [AnyHashable:Any]) {
+            print("⏩ Skipping DMS - file same")
+        } else {
+            print("⚙️ Writing DMS (sizes file)")
+            successMap["DMS (Module Sizings)"] = PlistHelpers.writeDictToPlist(dict: NSMutableDictionary(dictionary: emptyDMS), path: dmsPath)
+        }
+    }
+    
+    if customisations.otherCustomisations.enableCustomColors == true {
+        print("⚙️ Writing colour recipes")
+        if let c = customisations.otherCustomisations.moduleColor, let b = customisations.otherCustomisations.moduleBlur {
+            successMap["Colours - Module"] = (ColorTools.applyMaterialRecipe(filePath: CCMappings.moduleMaterialRecipePath, color: c, blur: b, includeSpecificsForCCModules: true))
+        }
+        
+        if let cB = customisations.otherCustomisations.moduleBGColor, let bB = customisations.otherCustomisations.moduleBGBlur {
+            successMap["Colours - Module Background"] = (ColorTools.applyMaterialRecipe(filePath: CCMappings.moduleBackgroundMaterialRecipePath, color: cB, blur: bB, includeSpecificsForCCModules: false))
+        }
+    }
     do {
-        let data = try JSONSerialization.data(withJSONObject: successMap, options: .prettyPrinted)
-        if let prettyPrintedString = String(data: data, encoding: .utf8) {
-            print(prettyPrintedString)
+        guard let moduleConf = PlistHelpers.plistToDict(path: CCMappings.moduleConfigurationPath) else { throw GenericError.runtimeError(":(") }
+        moduleConf["disabled-module-identifiers"] = []
+        moduleConf["userenabled-fixed-module-identifiers"] = []
+        moduleConf["module-identifiers"] = customisations.list.map { $0.module.bundleID } as [String]
+        
+        
+        if let op = PlistHelpers.plistToDict(path: CCMappings.moduleConfigurationPath) {
+            for i in CCMappings.removalPlistValues {
+                moduleConf.removeObject(forKey: i)
+                op.removeObject(forKey: i)
+            }
+            if moduleConf.isEqual(to:op as! [AnyHashable:Any]) {
+                print("⏩ Skipping moduleconf - file same")
+            } else {
+                print("⚙️ Writing moduleconf (order)")
+                successMap["ModuleConf (Enabled Modules)"] = PlistHelpers.writeDictToPlist(dict: moduleConf, path: CCMappings.moduleConfigurationPath)
+            }
+        }
+        
+        if let currentData = NSArray(contentsOfFile: CCMappings.moduleAllowedListPath) as? [String]{
+            let filteredCurrent = currentData.filter { $0 != String(repeating: "*", count: $0.count) }
+            let filteredNew = compressedAllowList.filter { $0 != String(repeating: "*", count: $0.count) }
+            
+            if filteredNew == filteredCurrent {
+                print("⏩ Skipping module allow-list - file same")
+            } else {
+                let newData = try! PropertyListSerialization.data(fromPropertyList: compressedAllowList, format: .binary, options: 0)
+                guard let padData = PlistHelpers.arrayPlistPadding(Plist_Data: newData, Default_URL_STR: CCMappings.moduleAllowedListPath) else { throw GenericError.runtimeError(":(") }
+                print("⚙️ Writing module allow-list")
+                successMap["Module Allowed List (CC Order)"] = MDC.overwriteFile(at: CCMappings.moduleAllowedListPath, with: padData)
+            }
+        } else {
+            print("⚠️ Failed to check disk for module allow-list, writing anyway...")
+            let newData = try! PropertyListSerialization.data(fromPropertyList: compressedAllowList, format: .binary, options: 0)
+            guard let padData = PlistHelpers.arrayPlistPadding(Plist_Data: newData, Default_URL_STR: CCMappings.moduleAllowedListPath) else { throw GenericError.runtimeError(":(") }
+            print("⚙️ Writing module allow-list")
+            successMap["Module Allowed List (CC Order)"] = MDC.overwriteFile(at: CCMappings.moduleAllowedListPath, with: padData)
         }
     } catch {
-        print(error.localizedDescription)
+        successMap["ModuleConf (Enabled Modules)"] = false
+        successMap["ModuleAllowedList (CC Order)"] = false
+        print(error)
     }
-
+    
+    if successMap.allSatisfy({$1 == true}) {
+        if successMap.count == 0 {
+            print("✅ Completed successfully (nothing changed on disk)")
+        } else {
+            print("✅ Completed \(successMap.count) operations successfully")
+        }
+    } else {
+        let failed = successMap.filter { $0.value == false }.map { $0.key }.joined(separator: ", ")
+        print("⛔️ Not all operations succeeded")
+        print("    ⏺️ \(successMap.filter {$0.value == true}.count)/\(successMap.count) operations succeeded")
+        print("    ⏺️ \(failed) failed")
+//        do {
+//            let data = try JSONSerialization.data(withJSONObject: successMap, options: .prettyPrinted)
+//            if let prettyPrintedString = String(data: data, encoding: .utf8) {
+//                print(prettyPrintedString)
+//            }
+//        } catch {
+//            print(error.localizedDescription)
+//        }
+    }
+    print() // emoji seperation
 //    print("successmap", successMap)
-    return !successMap.values.contains { $0 == false }
+    return (!successMap.values.contains { $0 == false },successMap)
 }

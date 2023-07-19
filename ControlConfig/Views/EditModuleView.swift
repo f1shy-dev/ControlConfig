@@ -40,7 +40,8 @@ struct EditModuleView: View {
     var body: some View {
         return NavigationView {
             List {
-                Section(footer: customisation.mode == .DefaultFunction ? Text("This module will function as it normally would.") : Text("")) {
+
+                Section(footer: customisation.mode == .DefaultFunction ? Text("This module will function as it normally would.") : nil) {
                     Picker("Action", selection: $customisation.mode) {
                         Text("Default Action").tag(CustomisationMode.DefaultFunction)
                         Text("App Launcher").tag(CustomisationMode.AppLauncher)
@@ -61,7 +62,7 @@ struct EditModuleView: View {
                         Button(action: {
                             self.showingAppPickerSheet = true
                         }) {
-                            Label("Pick app from list (Beta)", systemImage: "checklist")
+                            Label("Pick app from list", systemImage: "checklist")
                         }.sheet(isPresented: $showingAppPickerSheet, content: {
                             AppListView(customisation: customisation)
                         })
@@ -129,24 +130,17 @@ struct EditModuleView: View {
                 Section(header: Label("Other", systemImage: "star"), footer: Text("Disables the menu that shows up when you force-touch/hold down certain modules.")) {
                     Toggle("Disable Hold Menu", isOn: $customisation.disableOnHoldWidget.toUnwrapped(defaultValue: false))
 
-//                    if customisation.module.fileName == "FocusUIModule.bundle" {
-//                        Toggle("Hide Focus Text", isOn: $customisation.hideFocusUIText.toUnwrapped(defaultValue: false))
-//                    }
-//
-//                    if #available(iOS 16, *) {} else {
-//                        if customisation.module.fileName == "AirPlayMirroringModule.bundle" {
-//                            Toggle("Hide Screen Mirroring Text", isOn: $customisation.hideAirplayText.toUnwrapped(defaultValue: false))
-//                        }
-//                    }
-                }
+                    if customisation.module.fileName == "FocusUIModule.bundle" {
+                        Toggle("Hide Focus Text", isOn: $customisation.hideFocusUIText)
+                    }
 
-                if appState.debugMode {
-                    Section(header: Label("Debug", systemImage: "ladybug")) {
-                        Button("Print sizes in DMS") {
-                            print(customisation.module.sizesInDMSFile)
+                    if #available(iOS 16, *) {} else {
+                        if customisation.module.fileName == "AirPlayMirroringModule.bundle" {
+                            Toggle("Hide Screen Mirroring Text", isOn: $customisation.hideAirplayText)
                         }
                     }
                 }
+
             }
 
             .navigationTitle("Edit \(customisation.module.description)")

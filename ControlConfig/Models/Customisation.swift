@@ -78,8 +78,8 @@ class Customisation: Codable, ObservableObject, Hashable {
 
     @Published var disableOnHoldWidget: Bool?
 
-//    @Published var hideAirplayText: Bool?
-//    @Published var hideFocusUIText: Bool?
+    @Published var hideAirplayText: Bool = false
+    @Published var hideFocusUIText: Bool = false
 
     @Published var customAction: CustomAction = .Respring
 
@@ -137,8 +137,8 @@ class Customisation: Codable, ObservableObject, Hashable {
         case customName
         case customAction
 
-//        case hideAirplayText
-//        case hideFocusUIText
+        case hideAirplayText
+        case hideFocusUIText
     }
 
     required init(from decoder: Decoder) throws {
@@ -158,10 +158,11 @@ class Customisation: Codable, ObservableObject, Hashable {
         self.customWidthBothWays = try? container.decode(Int.self, forKey: .customWidthBothWays)
         self.customHeightBothWays = try? container.decode(Int.self, forKey: .customHeightBothWays)
         self.customName = try? container.decode(String.self, forKey: .customName)
+        self.hideAirplayText = try container.decode(Bool.self, forKey: .hideAirplayText)
+        self.hideFocusUIText = try container.decode(Bool.self, forKey: .hideFocusUIText)
+        // not optionals -
         self.customAction = try container.decode(CustomAction.self, forKey: .customAction)
         self.customSizeMode = try container.decode(SizeMode.self, forKey: .customSizeMode)
-//        self.hideAirplayText = try container.decode(Bool.self, forKey: .hideAirplayText)
-//        self.hideFocusUIText = try container.decode(Bool.self, forKey: .hideFocusUIText)
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -188,7 +189,7 @@ class Customisation: Codable, ObservableObject, Hashable {
         try? container.encode(customName, forKey: .customName)
         try? container.encode(customAction, forKey: .customAction)
 
-//        try? container.encode(hideFocusUIText, forKey: .hideFocusUIText)
-//        try? container.encode(hideAirplayText, forKey: .hideAirplayText)
+        try? container.encode(hideFocusUIText, forKey: .hideFocusUIText)
+        try? container.encode(hideAirplayText, forKey: .hideAirplayText)
     }
 }

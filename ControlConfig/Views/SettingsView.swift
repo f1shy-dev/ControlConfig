@@ -10,11 +10,14 @@ import LocalConsole
 import SwiftUI
 import WelcomeSheet
 
+
 struct SettingsView: View {
     @Environment(\.dismiss) var dismiss
     @ObservedObject var appState: AppState
     @ObservedObject var customisations: CustomisationList
     @State var showFirstLaunchSheet = false
+    @State var showPrintActionsSheet = false
+    @State var camlCALayer: CALayer?
 
     var body: some View {
         NavigationView {
@@ -69,18 +72,73 @@ struct SettingsView: View {
                     if appState.debugMode {
                         Toggle("Enable in-app console", isOn: $appState.enableConsole)
                         Toggle("Enable Experimental Features", isOn: $appState.enableExperimentalFeatures)
-                        Button("[WARNING] Better Compress Bundle IDs") {
-                            betterBundleIDCompressor()
-                        }
-                        Button("Enable hidden modules") {
-                            patchHiddenModules()
-                        }
+//                        Button("[WARNING] Better Compress Bundle IDs") {
+//                            betterBundleIDCompressor()
+//                        }
+//                        Button("Enable hidden modules") {
+//                            patchHiddenModules()
+//                        }
                         Button("Trigger first-launch sheet") {
                             UserDefaults.standard.set(false, forKey: "shownFirstOpen")
                             showFirstLaunchSheet = true
                         }.welcomeSheet(isPresented: $showFirstLaunchSheet, onDismiss: {
                             UserDefaults.standard.set(true, forKey: "shownFirstOpen")
                         }, pages: firstLaunchSheetPages)
+                        
+                        Button("Show file-printing actions") {
+                            showPrintActionsSheet = true
+                        }.sheet(isPresented: $showPrintActionsSheet) {
+                            List {
+                                Button("Print module configuration m-ids (var)") {
+                                    if let dict = PlistHelpers.plistToDict(path: CCMappings.moduleConfigurationPath), let currentList = dict["module-identifiers"] {
+                                        print(currentList)
+                                    }
+                                }
+                                
+                                Button("Print module configuration (var)") {
+                                        print(PlistHelpers.plistToDict(path: CCMappings.moduleConfigurationPath))
+                                }
+                                
+                                Button("Init some module with BID") {
+                                    print(Module(bundleID: "com.apple.FocusUIModule")?.fileName)
+                                }
+                                
+                                Button("Print module backup idx0") {
+                                    print(BackupManager.shared.latestBackup?.modules)
+                                }
+                                
+                                Button("Not added modules?") {
+                                    let notAddedModules = fetchModules().filter { mod in
+                                        !customisations.list.contains(where: {$0.module.fileName == mod.fileName})
+                                    }.filter{mod in
+                                        CCMappings().hiddenModulesToPatch.contains(mod.fileName)
+                                    }
+                                    print(notAddedModules.map {$0.fileName})
+                                    
+                                }
+                                
+                                Button("Latest backup path URL") {
+                                    if let xd = BackupManager.shared.latestBackup?.folderPath {
+                                        do {print(try FileManager.default.contentsOfDirectory(atPath: xd))}
+                                        catch {print(error)}
+                                    }
+                                }
+                                
+//                                Button("Print CAPackage of CAML") {
+//                                    do {
+//                                        let pack = try CAPackage(contentsOf: URL(fileURLWithPath: "/System/Library/ControlCenter/Bundles/ReplayKitModule.bundle/replaykit.ca"), type: kCAPackageTypeCAMLBundle, options: nil)
+//                                        camlCALayer = (pack as? CAPackage)?.rootLayer
+//                                        print((pack as? CAPackage)?.rootLayer)
+//                                        
+//                                    }
+//                                    catch {print(error)}
+//                                }
+                                
+//                                if let ca = camlCALayer {
+//                                    CALayerRenderer(layer: ca).frame(width: 48, height: 48)
+//                                }
+                            }
+                        }
                     }
                 }
                 Section {} header: {

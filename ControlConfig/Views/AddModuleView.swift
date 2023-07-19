@@ -43,7 +43,20 @@ struct AddModuleView: View {
                 ForEach(filteredModules.sorted(by: { $0.description < $1.description })) {
                     let module = $0
                     HStack {
-                        Label(module.description, systemImage: module.sfIcon)
+//                        Label(module.description, systemImage: module.sfIcon)
+                        Label(title: {
+                            VStack(alignment: .leading, spacing:0){
+                                Text(module.description)
+                                if module.fileName == "ContinuousExposeModule.bundle" {
+                                    Text("Note: This module is known to cause respring issues on device rotation when Stage Manager is turned on an unsupported device.")
+                                        .font(.system(.caption))
+                                        .foregroundColor(.gray)
+                                        .padding(.top, 0.6)
+                                }
+                            }
+                        }, icon: {
+                            Image(systemName: module.sfIcon)
+                        })
                         Spacer()
                     }
                     .contentShape(Rectangle())

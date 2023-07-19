@@ -37,6 +37,8 @@ struct EditCCColorsView: View {
     var body: some View {
         let _ = saveOCToUserDefaults()
         List {
+            Toggle("Enable Custom CC Colors", isOn: $state.enableCustomColors.toUnwrapped(defaultValue: false))
+        
             Section(header: Label("Preview", systemImage: "eye"), footer: Text("Note: This preview isn't 100% accurate to what the actual control center will look like.")) {
                 HStack {
                     Spacer()
@@ -63,7 +65,7 @@ struct EditCCColorsView: View {
                         Text(option)
                     }
                 }
-            }.listRowSeparator(.hidden)
+            }.listRowSeparator(.hidden).disabled(!(state.enableCustomColors ?? false))
             Section(header: Label("Control Center Background", systemImage: "paintbrush")) {
                 ColorPicker("Colour (with opacity)", selection: $state.moduleBGColor.toUnwrapped(defaultValue: .gray))
                 HStack {
@@ -73,7 +75,7 @@ struct EditCCColorsView: View {
                         Text("Blur")
                     } minimumValueLabel: { Text("0") } maximumValueLabel: { Text("100") }.frame(width: 150)
                 }
-            }
+            }.disabled(!(state.enableCustomColors ?? false))
 
             Section(header: Label("Module Colour", systemImage: "paintbrush")) {
                 ColorPicker("Colour (with opacity)", selection: $state.moduleColor.toUnwrapped(defaultValue: .gray))
@@ -84,7 +86,7 @@ struct EditCCColorsView: View {
                         Text("Blur")
                     } minimumValueLabel: { Text("0") } maximumValueLabel: { Text("100") }.frame(width: 150)
                 }
-            }
+            }.disabled(!(state.enableCustomColors ?? false))
         }.navigationBarTitle("Edit CC Colours").navigationBarTitleDisplayMode(.inline)
     }
 }

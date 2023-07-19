@@ -60,23 +60,87 @@ public struct CCMappings {
         "MuteModule.bundle": "mute",
         "PerformanceTraceModule.bundle": "ptrace",
         "SleepModeControlCenterButton.bundle": "ios15.sleep",
-//        "VideoConferenceControlCenterModule.bundle": "conf.cam",
-//        "AudioConferenceControlCenterModule.bundle": "conf.mic",
+        "VideoConferenceControlCenterModule.bundle": "conf.cam",
+        "AudioConferenceControlCenterModule.bundle": "conf.mic",
+    ]
+    
+    //literally just inverted above to save cpu
+    public static let smallIDBasedFileNames: NSDictionary = [
+        "connect": "ConnectivityModule.bundle",
+        "music": "MediaControlsModule.bundle",
+        "rotate": "OrientationLockModule.bundle",
+        "airplay": "AirPlayMirroringModule.bundle",
+        "focusui": "FocusUIModule.bundle",
+        "screen": "DisplayModule.bundle",
+        "volume": "MediaControlsAudioModule.bundle",
+        "home.large": "HomeControlCenterModule.bundle",
+        "ios15.dnd": "DoNotDisturbModule.bundle",
+        "ios15.car": "CarModeModule.bundle",
+        "mute": "MuteModule.bundle",
+        "ptrace": "PerformanceTraceModule.bundle",
+        "ios15.sleep": "SleepModeControlCenterButton.bundle",
+        "conf.cam": "VideoConferenceControlCenterModule.bundle",
+        "conf.mic": "AudioConferenceControlCenterModule.bundle"
+    ]
+    
+    public static let smallIDBasedModuleIDs: NSDictionary = [
+        "connect": "com.apple.control-center.ConnectivityModule",
+        "rotate": "com.apple.control-center.OrientationLockModule",
+        "airplay": "com.apple.mediaremote.controlcenter.airplaymirroring",
+        "ios15.dnd": "com.apple.donotdisturb.DoNotDisturbModule",
+        "ios15.car": "com.apple.control-center.CarModeModule",
+        "ios15.sleep": "com.apple.sleep.controlcenter.sleepmode",
+        "mute": "com.apple.control-center.MuteModule",
+        "ptrace": "com.apple.control-center.PerformanceTraceModule",
+        "music": "com.apple.mediaremote.controlcenter.nowplaying",
+        "focusui": "com.apple.FocusUIModule",
+        "screen": "com.apple.control-center.DisplayModule",
+        "volume": "com.apple.mediaremote.controlcenter.audio",
+        "home.large": "com.apple.Home.ControlCenter"
+//        "com.apple.control-center.ConnectivityModule": "connect",
+//        "com.apple.control-center.OrientationLockModule": "rotate",
+//        "com.apple.mediaremote.controlcenter.airplaymirroring": "airplay",
+//        "com.apple.donotdisturb.DoNotDisturbModule": "ios15.dnd",
+//        "com.apple.control-center.CarModeModule": "ios15.car",
+//        "com.apple.sleep.controlcenter.sleepmode": "ios15.sleep",
+//        "com.apple.control-center.MuteModule": "mute",
+//        "com.apple.control-center.PerformanceTraceModule": "ptrace",
+//        "com.apple.mediaremote.controlcenter.nowplaying": "music",
+//         "com.apple.FocusUIModule": "focusui",
+//         "com.apple.control-center.DisplayModule": "screen",
+//         "com.apple.mediaremote.controlcenter.audio": "volume",
+//         "com.apple.Home.ControlCenter": "home.large",
     ]
 
-    public static let hiddenModulesToPatch: [String] = [
-        "SilenceCallsCCWidget.bundle",
-        "ContinuousExposeModule.bundle",
-        "NFCControlCenterModule.bundle",
-        "PerformanceTraceModule.bundle",
-        "DoNotDisturbModule.bundle",
-        "CarModeModule.bundle",
-        "KeyboardBrightnessModule.bundle",
-        "MuteModule.bundle",
-        "HomeControlCenterModule.bundle",
-        "PerformanceTraceModule.bundle",
-        "SleepModeControlCenterButton.bundle",
+    public static let fileNameBasedAssetOverrides: NSDictionary = [
+        // "filename".car in the bundle of the app
+        "ConnectivityModule.bundle": "Connectivity",
+        "AccessibilityGuidedAccessControlCenterModule.bundle": "GuidedAccess",
+        "MuteModule.bundle": "Mute",
+        "TVRemoteModule.bundle": "TVRemote",
+        "NFCControlCenterModule.bundle": "NFC",
+        "FlashlightModule.bundle": "Flashlight",
+        "ReplayKitModule.bundle": "ReplayKit",
     ]
+    
+    public var hiddenModulesToPatch: [String] {
+        var base: [String] = [
+            "SilenceCallsCCWidget.bundle",
+            "ContinuousExposeModule.bundle",
+            "NFCControlCenterModule.bundle",
+            "PerformanceTraceModule.bundle",
+            "DoNotDisturbModule.bundle",
+            "CarModeModule.bundle",
+            "MuteModule.bundle",
+            "HomeControlCenterModule.bundle",
+            "PerformanceTraceModule.bundle",
+            "SleepModeControlCenterButton.bundle",
+        ]
+        if UIDevice.current.userInterfaceIdiom != .pad {
+            base.append("KeyboardBrightnessModule.bundle")
+        }
+        return base
+    }
 
     public static let moduleNames: NSDictionary = [
         "FocusUIModule.bundle": "Focus",

@@ -7,7 +7,7 @@
 
 import Foundation
 
-class Module: Identifiable, CustomStringConvertible, Codable, ObservableObject, Equatable {
+class Module: Identifiable, CustomStringConvertible, Codable, ObservableObject, Equatable,Hashable {
     var id: String { fileName }
     var fileName: String
 
@@ -15,6 +15,10 @@ class Module: Identifiable, CustomStringConvertible, Codable, ObservableObject, 
 
     static func ==(lhs: Module, rhs: Module) -> Bool {
         return lhs.fileName == rhs.fileName
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(fileName)
     }
 
     init(fileName: String) {
@@ -28,6 +32,31 @@ class Module: Identifiable, CustomStringConvertible, Codable, ObservableObject, 
 //        self.isDefaultModule = dmsDict?.allKeys.contains(where: { key in
 //            bundleID == "\(key)"
 //        }) == true
+    }
+    
+    init?(bundleID: String) {
+        self.fileName = ""
+        if let newFl = CCMappings.smallIDBasedFileNames[bundleID] as? String{
+            self.fileName = newFl
+        } else {
+            do {
+                
+                let contents = try FileManager.default.contentsOfDirectory(at: URL(fileURLWithPath: CCMappings.bundlesPath), includingPropertiesForKeys: nil, options: [])
+                for folder in contents where folder.hasDirectoryPath {
+                    let infoPlistUrl = folder.appendingPathComponent("Info.plist")
+                    if let infoPlistData = try? Data(contentsOf: infoPlistUrl),
+                       let plist = try? PropertyListSerialization.propertyList(from: infoPlistData, options: [], format: nil) as? [String: Any],
+                       let bundleIdInPlist = plist["CFBundleIdentifier"] as? String,
+                       bundleIdInPlist == bundleID {
+                        self.fileName = folder.lastPathComponent
+                        
+                    }
+                }
+            } catch {
+                print("Error while trying to find bundleid \(bundleID)")
+                return nil
+            }
+        }
     }
 
     var sfIcon: String {
@@ -62,7 +91,8 @@ class Module: Identifiable, CustomStringConvertible, Codable, ObservableObject, 
             return "\(setName)"
         }
 
-        let name = "\(fileDict?["CFBundleDisplayName"] ?? fileDict?["CFBundleName"] ?? "Unknown Module")"
+        let name = "\(fileDict?["CFBundleDisplayName"] ?? fileDict?["CFBundleName"] ?? "Unknown - \(self.fileName)")"
+        print(name, fileName + "%%")
         return name.components(separatedBy: "Module").first ?? name
     }
 

@@ -62,17 +62,19 @@ enum ColorTools {
     }
 
     static func applyMaterialRecipe(filePath: String, color: Color, blur: Int, includeSpecificsForCCModules: Bool) -> Bool {
-        if let cg = color.cgColor {
+        if let cg = color.cgColor
+        {
             let cc = CIColor(cgColor: cg)
-
+            let newColor: CIColor = CIColor(red: cc.red, green: cc.green, blue: cc.blue, alpha: cc.alpha*(includeSpecificsForCCModules ? 0.8 : 1))
+            let ap = Double(cc.alpha) * (includeSpecificsForCCModules ? 0.8 : 1)
             var plistDict: [String: Any] = [
                 "baseMaterial": [
                     "tinting": [
-                        "tintAlpha": Double(cc.alpha) * (includeSpecificsForCCModules ? 0.8 : 1),
+                        "tintAlpha": newColor.alpha,
                         "tintColor": [
-                            "red": Double(cc.red),
-                            "green": Double(cc.green),
-                            "blue": Double(cc.blue),
+                            "red": Double(newColor.red),
+                            "green": Double(newColor.green),
+                            "blue": Double(newColor.blue),
                             "alpha": 1
                         ]
                     ],
@@ -82,7 +84,7 @@ enum ColorTools {
                 ]
             ]
 
-//            if includeSpecificsForCCModules {
+            if includeSpecificsForCCModules {
             plistDict.merge([
                 "styles": [
                     "fill": "moduleFill",
@@ -90,7 +92,7 @@ enum ColorTools {
                 ],
                 "materialSettingsVersion": 2
             ]) { current, _ in current }
-//            }
+            }
 
             return (PlistHelpers.writeDictToPlist(dict: NSMutableDictionary(dictionary: plistDict), path: filePath))
         }

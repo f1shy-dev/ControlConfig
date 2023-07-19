@@ -90,7 +90,7 @@ class AppState: Codable, ObservableObject {
     }
 
     func saveToUserDefaults() {
-        print("saving app state to user defaults...")
+        print("💾 Saving app state to defaults...")
         let encoder = JSONEncoder()
         if let encoded = try? encoder.encode(self) {
             UserDefaults.standard.set(encoded, forKey: "appState")

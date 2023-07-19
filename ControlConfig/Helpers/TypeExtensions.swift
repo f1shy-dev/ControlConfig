@@ -64,6 +64,33 @@ extension Binding where Value == Int {
     }
 }
 
+extension Binding where Value == Double? {
+    var intSafeBinding: Binding<String> {
+        Binding<String>(
+            get: {
+                if self.wrappedValue == nil { return "" }
+                return String(self.wrappedValue ?? 1)
+            },
+            set: {
+                if Double($0) == nil {
+                    self.wrappedValue = nil
+                } else {
+                    self.wrappedValue = Double($0) ?? 1
+                }
+            }
+        )
+    }
+}
+
+extension Binding where Value == Double {
+    var intSafeBinding: Binding<String> {
+        Binding<String>(
+            get: { String(self.wrappedValue) },
+            set: { self.wrappedValue = Double($0) ?? 0 }
+        )
+    }
+}
+
 extension Double {
     func roundToDecimal(_ fractionDigits: Int) -> Double {
         let multiplier = pow(10, Double(fractionDigits))

@@ -1,6 +1,15 @@
 {
   "pins" : [
     {
+      "identity" : "aexml",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/tadija/AEXML",
+      "state" : {
+        "revision" : "38f7d00b23ecd891e1ee656fa6aeebd6ba04ecc3",
+        "version" : "4.6.1"
+      }
+    },
+    {
       "identity" : "localconsole",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/f1shy-dev/LocalConsole",
@@ -19,12 +28,30 @@
       }
     },
     {
+      "identity" : "privatekits",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/f1shy-dev/PrivateKits",
+      "state" : {
+        "branch" : "main",
+        "revision" : "a172d5ded696d22bc4c286ac79532d521dfd03ec"
+      }
+    },
+    {
       "identity" : "welcome-sheet",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/MAJKFL/Welcome-Sheet",
       "state" : {
         "branch" : "main",
         "revision" : "93332013d3253bcf0f748a008400d542fb9c9c3e"
+      }
+    },
+    {
+      "identity" : "zipfoundation",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/weichsel/ZIPFoundation.git",
+      "state" : {
+        "revision" : "43ec568034b3731101dbf7670765d671c30f54f3",
+        "version" : "0.9.16"
       }
     }
   ],
