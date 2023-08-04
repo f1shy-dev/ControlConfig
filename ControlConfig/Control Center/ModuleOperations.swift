@@ -466,7 +466,7 @@ func applyChanges(customisations: CustomisationList) -> (Bool, [String:Bool]) {
         guard let moduleConf = PlistHelpers.plistToDict(path: CCMappings.moduleConfigurationPath) else { throw GenericError.runtimeError(":(") }
         moduleConf["disabled-module-identifiers"] = []
         moduleConf["userenabled-fixed-module-identifiers"] = []
-        moduleConf["module-identifiers"] = customisations.list.map { $0.module.bundleID } as [String]
+        moduleConf["module-identifiers"] = customisations.list.filter {!$0.module.fileName.contains("ConferenceControlCenterModule")}.map { $0.module.bundleID } as [String]
         
         
         if let op = PlistHelpers.plistToDict(path: CCMappings.moduleConfigurationPath) {

@@ -13,7 +13,7 @@ import WelcomeSheet
 let appVersion = ((Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown") + " (" + (Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown") + ")")
 let consoleManager = LCManager.shared
 let isiOSSixteen = ProcessInfo().operatingSystemVersion.majorVersion == 16
-
+var kfd: UInt64 = 0
 enum PatchStage {
     case Detecting, NoMDCSupported, UnableToEscape(err: String), TooOld, Escaped
 }

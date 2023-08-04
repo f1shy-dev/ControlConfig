@@ -130,7 +130,14 @@ struct MainModuleView: View {
                         Label("Apply", systemImage: "seal")
                         Text("Apply")
 
-                    })
+                    }).contextMenu {
+                        Button("KFD kopen") {
+                            let puaf_pages_options = [16, 32, 64, 128, 256, 512, 1024, 2048]
+                            let puaf_pages = puaf_pages_options[appState.puaf_pages_index]
+                            kfd = do_kopen(UInt64(puaf_pages), UInt64(appState.puaf_method), UInt64(appState.kread_method), UInt64(appState.kwrite_method))
+                            do_fun()
+                        }
+                    }
 //                    .disabled(
 //                        customisations.list.filter { c in c.isEnabled }.isEmpty &&
 //                            [customisations.otherCustomisations.moduleBlur, customisations.otherCustomisations.moduleBGBlur].allSatisfy { ($0 as Int?) == nil } &&

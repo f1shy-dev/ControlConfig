@@ -41,6 +41,14 @@ class AppState: Codable, ObservableObject {
     }
 
     @Published var sbRegionCode: String { didSet { saveToUserDefaults() } }
+    
+    
+    @Published var puaf_pages_index = 7 { didSet { saveToUserDefaults() } }
+    @Published var puaf_pages = 0 { didSet { saveToUserDefaults() } }
+    @Published var puaf_method = 1 { didSet { saveToUserDefaults() } }
+    @Published var kread_method = 1 { didSet { saveToUserDefaults() } }
+    @Published var kwrite_method = 1 { didSet { saveToUserDefaults() } }
+    
 
     private init(enableConsole: Bool, useLegacyRespring: Bool, debugMode: Bool, enableExperimentalFeatures: Bool) {
         self.enableConsole = enableConsole
@@ -68,6 +76,12 @@ class AppState: Codable, ObservableObject {
         case debugMode
         case enableExperimentalFeatures
         case sbRegionCode
+        
+        case puaf_pages_index
+        case puaf_pages
+        case puaf_method
+        case kread_method
+        case kwrite_method
     }
 
     required init(from decoder: Decoder) throws {
@@ -77,6 +91,12 @@ class AppState: Codable, ObservableObject {
         self.debugMode = try container.decode(Bool.self, forKey: .debugMode)
         self.sbRegionCode = try container.decode(String.self, forKey: .sbRegionCode)
         self.enableExperimentalFeatures = try container.decode(Bool.self, forKey: .enableExperimentalFeatures)
+        
+        self.puaf_pages_index = try container.decode(Int.self, forKey: .puaf_pages_index)
+        self.puaf_pages = try container.decode(Int.self, forKey: .puaf_pages)
+        self.puaf_method = try container.decode(Int.self, forKey: .puaf_method)
+        self.kread_method = try container.decode(Int.self, forKey: .kread_method)
+        self.kwrite_method = try container.decode(Int.self, forKey: .kwrite_method)
         consoleManager.isVisible = enableConsole
     }
 
@@ -87,6 +107,12 @@ class AppState: Codable, ObservableObject {
         try container.encode(debugMode, forKey: .debugMode)
         try container.encode(sbRegionCode, forKey: .sbRegionCode)
         try container.encode(enableExperimentalFeatures, forKey: .enableExperimentalFeatures)
+        
+        try container.encode(puaf_pages_index, forKey: .puaf_pages_index)
+        try container.encode(puaf_pages, forKey: .puaf_pages)
+        try container.encode(puaf_method, forKey: .puaf_method)
+        try container.encode(kread_method, forKey: .kread_method)
+        try container.encode(kwrite_method, forKey: .kwrite_method)
     }
 
     func saveToUserDefaults() {
