@@ -199,9 +199,7 @@ class BackupManager {
             dictionary["cm_moduleFill"] = cm_moduleFill != nil
             dictionary["cm_moduleStroke"] = cm_moduleStroke != nil
 
-            // print the dictionary
-            print("bss", dictionary)
-        
+
         if let moduleConfiguration = moduleConfiguration,
            let moduleAllowedList = moduleAllowedList,
            let defaultModuleSettings = defaultModuleSettings,

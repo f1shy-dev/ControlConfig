@@ -5,12 +5,12 @@ WORKING_LOCATION := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 TARGET = ControlConfig
 CONFIGURATION = Release
 SDK = iphoneos
-
+XCPRETTY = $(shell command -v xcpretty 2> /dev/null)
 build:
 	echo "Building $(TARGET) for $(SDK)..."
-#	xcodebuild -project $(PROJECT) -scheme $(TARGET) -configuration $(CONFIGURATION) -sdk $(SDK) CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO SYMROOT=$(PWD)/build clean 
-#	xcodebuild -project $(PROJECT) -scheme $(TARGET) -configuration $(CONFIGURATION) -sdk $(SDK) CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO SYMROOT=$(PWD)/build -resolvePackageDependencies 
-	xcodebuild -project $(PROJECT) -scheme $(TARGET) -configuration $(CONFIGURATION) -sdk $(SDK) CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO SYMROOT=$(PWD)/build build 
+
+	time xcodebuild -project $(PROJECT) -scheme $(TARGET) -configuration $(CONFIGURATION) -sdk $(SDK) CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO SYMROOT=$(PWD)/build clean build | $(XCPRETTY) -c
+# xcodebuild -project $(PROJECT) -scheme $(TARGET) -configuration $(CONFIGURATION) -sdk $(SDK) CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO SYMROOT=$(PWD)/build build 
 	echo "Build finished!"
 
 entitlements:

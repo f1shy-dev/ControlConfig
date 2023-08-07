@@ -69,13 +69,13 @@ struct ControlConfigApp: App {
                     switch localPatchState {
                     case .LoadingBackups:
                         BareLoading(animateRotate: true, title: "Loading Backups", msg: "Please wait patiently, this can take upto a minute, depending on your device...").onAppear {
-                            #if targetEnvironment(simulator)
-                            DispatchQueue.main.async {
-                                withAnimation {
-                                    localPatchState = .Escaped
-                                }
-                            }
-                            #else
+//                            #if targetEnvironment(simulator)
+//                            DispatchQueue.main.async {
+//                                withAnimation {
+//                                    localPatchState = .Escaped
+//                                }
+//                            }
+//                            #else
                             DispatchQueue.global(qos: .userInitiated).async {
                                 BackupManager.shared.loadBackupList()
                                 if BackupManager.shared.backups.count == 0 {
@@ -100,7 +100,7 @@ struct ControlConfigApp: App {
                                     }
                                 }
                             }
-                            #endif
+//                            #endif
                         }
                     case .Detecting:
                         BareLoading(animateRotate: true, title: "Patching", msg: "Please wait patiently, this can take a second. Also, please accept any access popups...")
@@ -144,6 +144,7 @@ struct ControlConfigApp: App {
                     let appVersion = ((Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown") + " (" + (Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown") + ")")
                     print("🚀 ControlConfig - v\(appVersion)")
                     #if targetEnvironment(simulator)
+                    print("📱 Simulator mode - running as KFD")
                     localPatchState = .LoadingBackups
                     activeExploit = .KFD
                     #else
