@@ -79,7 +79,8 @@ class CustomisationList: ObservableObject {
     init() {
         self.list = []
         var temp_modules: [Module] = []
-        if let dict = PlistHelpers.plistToDict(path: CCMappings.moduleConfigurationPath), let list = dict["module-identifiers"] as? [String] {
+        if activeExploit == .MDC, let dict = PlistHelpers.plistToDict(path: CCMappings.moduleConfigurationPath),
+            let list = dict["module-identifiers"] as? [String] {
                 for module in list {
                     if let mod = Module(bundleID: module) {
                         temp_modules.append(mod)
@@ -102,6 +103,19 @@ class CustomisationList: ObservableObject {
                     Module(fileName: mo)
                 }), at: 0)
             }
+        } else {
+            temp_modules.insert(contentsOf: [
+                "ConnectivityModule.bundle",
+                "MediaControlsModule.bundle",
+                "OrientationLockModule.bundle",
+                "AirPlayMirroringModule.bundle",
+                "DisplayModule.bundle",
+                "MediaControlsAudioModule.bundle",
+                "FocusUIModule.bundle",
+                "HomeControlCenterModule.bundle",
+            ].map({ mo in
+                Module(fileName: mo)
+            }), at: 0)
         }
         
         //safety net for duplicate modules from the file or idfk

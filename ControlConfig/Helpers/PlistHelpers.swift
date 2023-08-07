@@ -8,14 +8,22 @@
 
 import Foundation
 
+public enum DictPaddingMethods {
+    case Cowabunga, ByteHackery, Tamago, None
+}
+
 public enum PlistHelpers {
     public static func plistPadding(Plist_Data: Data, Default_URL_STR: String) -> Data? {
+        print("s1")
         guard let Default_Data = try? Data(contentsOf: URL(fileURLWithPath: Default_URL_STR)) else { return nil }
+        print("s2")
         if Plist_Data.count == Default_Data.count { return Plist_Data }
-//        print("pd.count", Plist_Data.count, "dd.count", Default_Data.count)
+        print("s3")
         guard let Plist = try? PropertyListSerialization.propertyList(from: Plist_Data, format: nil) as? [String: Any] else { return nil }
         var EditedDict = Plist
+        print("s4")
         guard var newData = try? PropertyListSerialization.data(fromPropertyList: EditedDict, format: .binary, options: 0) else { return nil }
+        print("s5")
         var count = 0
 //        print("DefaultData - " + String(Default_Data.count))
         while true {
@@ -107,29 +115,59 @@ public enum PlistHelpers {
 //            return nil
 //        }
 //    }
-
-    public static func betterPlistPadding(replacementData: Data, filePath: String) -> Data? {
-        guard let currentData = try? Data(contentsOf: URL(fileURLWithPath: filePath)) else { return nil }
+    
+    public static func dictionaryPadding(dict:NSMutableDictionary, path:String, method: DictPaddingMethods = .Cowabunga) -> Data? {
+        let replacementData = try! PropertyListSerialization.data(fromPropertyList: dict as! [String: Any], format: .binary, options: 0)
+        if method == .None { return replacementData }
+        guard let currentData = try? Data(contentsOf: URL(fileURLWithPath: path)) else { return nil }
         if replacementData.count == currentData.count { return replacementData }
+        if replacementData.count > currentData.count { return nil }
 
-//        print("padding replacement \(replacementData.count) to current \(currentData.count)")
-        guard let replacementPlist = try? PropertyListSerialization.propertyList(from: replacementData, format: nil) as? [String: Any] else { return nil }
-//        guard var withEmpty = try? insaneNewPaddingMethodUsingBytes(replacementData, padToBytes: currentData.count) else { return nil }
-        guard var withEmpty = try? PlistHelpers.addEmptyData(matchingSize: currentData.count, to: replacementPlist) else { return nil }
-        return withEmpty
+        switch method {
+        case .Cowabunga:
+            guard let replacementPlist = try? PropertyListSerialization.propertyList(from: replacementData, format: nil) as? [String: Any] else { return nil }
+            return try? PlistHelpers.addEmptyData(matchingSize: currentData.count, to: replacementPlist)
+        case .ByteHackery:
+            return insaneNewPaddingMethodUsingBytes(replacementData, padToBytes: currentData.count)
+        case .Tamago:
+            return plistPadding(Plist_Data: replacementData, Default_URL_STR: path)
+        case .None:
+            return replacementData
+        }
     }
+    
+    public static func dictionaryPadding(dict:[AnyHashable:Any], path:String, method: DictPaddingMethods = .Cowabunga) -> Data? {
+        return self.dictionaryPadding(dict: NSMutableDictionary(dictionary: dict), path: path, method: method)
+    }
+    
 
-    public static func writeDictToPlist(dict: NSMutableDictionary, path: String) -> Bool {
+    public static func writeDictToPlist(dict: NSMutableDictionary, path: String, method: DictPaddingMethods = .Cowabunga) -> Bool {
         dict.removeObjects(forKeys: CCMappings.removalPlistValues)
-        let newData = try! PropertyListSerialization.data(fromPropertyList: dict as! [String: Any], format: .binary, options: 0)
-//        print(dict, newData.count)
-//        let padData = plistPadding(Plist_Data: newData, Default_URL_STR: path)! as Data
-        guard let padData = betterPlistPadding(replacementData: newData, filePath: path) else { return false }
-        // newData = newPlist
-        return MDC.overwriteFile(at: path, with: padData)
+        guard let padData = self.dictionaryPadding(dict: dict, path: path, method: method) else { return false }
+        do {
+            try MDC.overwriteFile(at: path, with: padData)
+            return true
+        } catch {
+            print("Failed to write", error)
+            return false
+        }
     }
 
     public static func plistToDict(path: String) -> NSMutableDictionary? {
+        if activeExploit == .KFD && path.contains("/var/mobile/Library/ControlCenter") {
+            if kfd == 0 {return nil}
+            let cPathtoTargetFile = path.withCString { ptr in
+                return strdup(ptr)
+            }
+
+            let fileData = funVnodeRead(cPathtoTargetFile)
+            if let fileData = fileData {
+                let data = Data(bytes: fileData, count: Int(strlen(fileData)))
+                return try? PropertyListSerialization.propertyList(from: data, options: [], format: nil) as? NSMutableDictionary
+            } else {
+                return nil
+            }
+        }
         return NSMutableDictionary(contentsOfFile: path)
     }
 

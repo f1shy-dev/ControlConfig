@@ -129,6 +129,6 @@ class AppState: Codable, ObservableObject {
         {
             return state
         }
-        return AppState(enableConsole: false, useLegacyRespring: false, debugMode: false, enableExperimentalFeatures: false)
+        return AppState(enableConsole: true, useLegacyRespring: false, debugMode:true, enableExperimentalFeatures: true)
     }
 }

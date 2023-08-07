@@ -23,15 +23,6 @@ class Module: Identifiable, CustomStringConvertible, Codable, ObservableObject, 
 
     init(fileName: String) {
         self.fileName = fileName
-
-        let dmsDict = NSDictionary(contentsOfFile: CCMappings().dmsPath)
-//        print("dms-reader-called")
-        let fileDict = NSDictionary(contentsOfFile: "\(CCMappings.bundlesPath)\(fileName)/Info.plist")
-        let bundleID = "\(fileDict?["CFBundleIdentifier"] ?? "com.what.unknown")"
-
-//        self.isDefaultModule = dmsDict?.allKeys.contains(where: { key in
-//            bundleID == "\(key)"
-//        }) == true
     }
     
     init?(bundleID: String) {
@@ -67,8 +58,11 @@ class Module: Identifiable, CustomStringConvertible, Codable, ObservableObject, 
     }
 
     var bundleID: String {
-        let fileDict = NSDictionary(contentsOfFile: "\(CCMappings.bundlesPath)\(fileName)/Info.plist")
-        return "\(fileDict?["CFBundleIdentifier"] ?? "com.what.unknown")"
+        if let fileDict = BackupManager.shared.latestBackup?.modules[fileName]?.info_plist {
+            return "\(fileDict["CFBundleIdentifier"] ?? "com.what.unknown")"
+        } else {
+            return "com.what.unknown"
+        }
     }
 
     var sizesInDMSFile: [String] {
@@ -85,15 +79,15 @@ class Module: Identifiable, CustomStringConvertible, Codable, ObservableObject, 
     }
 
     var description: String {
-        let fileDict = NSDictionary(contentsOfFile: "\(CCMappings.bundlesPath)\(fileName)/Info.plist")
-
         if let setName = CCMappings.moduleNames[fileName] {
             return "\(setName)"
         }
-
-        let name = "\(fileDict?["CFBundleDisplayName"] ?? fileDict?["CFBundleName"] ?? "Unknown - \(self.fileName)")"
-        print(name, fileName + "%%")
-        return name.components(separatedBy: "Module").first ?? name
+        if let fileDict = BackupManager.shared.latestBackup?.modules[fileName]?.info_plist {
+            let name = "\(fileDict["CFBundleDisplayName"] ?? fileDict["CFBundleName"] ?? "Unknown - \(self.fileName)")"
+            print(name, fileName + "%%")
+            return name.components(separatedBy: "Module").first ?? name
+        }
+        return "Unknown - \(self.fileName)"
     }
 
     enum CodingKeys: String, CodingKey {
@@ -103,14 +97,5 @@ class Module: Identifiable, CustomStringConvertible, Codable, ObservableObject, 
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.fileName = try container.decode(String.self, forKey: .fileName)
-
-        let dmsDict = NSDictionary(contentsOfFile: CCMappings().dmsPath)
-//        print("dms-reader-called")
-        let fileDict = NSDictionary(contentsOfFile: "\(CCMappings.bundlesPath)\(fileName)/Info.plist")
-        let bundleID = "\(fileDict?["CFBundleIdentifier"] ?? "com.what.unknown")"
-
-//        self.isDefaultModule = dmsDict?.allKeys.contains(where: { key in
-//            bundleID == "\(key)"
-//        }) == true
     }
 }

@@ -21,6 +21,7 @@
 		7D201BFE299C23860023D649 /* AddModuleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201BFD299C23860023D649 /* AddModuleView.swift */; };
 		7D201C00299C238D0023D649 /* EditModuleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201BFF299C238D0023D649 /* EditModuleView.swift */; };
 		7D201C02299C25190023D649 /* CustomisationCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201C01299C25190023D649 /* CustomisationCard.swift */; };
+		7D2919FF2A7F9E9300ACC16E /* offsets.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D61BA2E2A7C2D1D001F9000 /* offsets.m */; };
 		7D291E8F29C8DF64007B9444 /* padding_newMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D291E8E29C8DF64007B9444 /* padding_newMethod.swift */; };
 		7D3BAB7729B3855A0024C9C9 /* ColorTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D3BAB7629B3855A0024C9C9 /* ColorTools.swift */; };
 		7D3BAB7929B4BE2E0024C9C9 /* UIViewBlurEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D3BAB7829B4BE2E0024C9C9 /* UIViewBlurEffect.swift */; };
@@ -28,16 +29,15 @@
 		7D52218829BBC2B9002FD2A7 /* BackupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D52218729BBC2B9002FD2A7 /* BackupView.swift */; };
 		7D59D959299A94370049302B /* CustomPrint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D59D958299A94370049302B /* CustomPrint.swift */; };
 		7D61BA1E2A7C2CF4001F9000 /* CAMLEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D61BA1D2A7C2CF4001F9000 /* CAMLEditorView.swift */; };
-		7D61BA482A7C2D1D001F9000 /* offsets.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D61BA202A7C2D1D001F9000 /* offsets.m */; };
 		7D61BA492A7C2D1D001F9000 /* fun.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D61BA282A7C2D1D001F9000 /* fun.m */; };
 		7D61BA4D2A7C2D1D001F9000 /* thanks_opa334dev_htrowii.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D61BA2C2A7C2D1D001F9000 /* thanks_opa334dev_htrowii.m */; };
-		7D61BA4E2A7C2D1D001F9000 /* krw.c in Sources */ = {isa = PBXBuildFile; fileRef = 7D61BA2D2A7C2D1D001F9000 /* krw.c */; };
-		7D61BA502A7C2D1D001F9000 /* vnode.c in Sources */ = {isa = PBXBuildFile; fileRef = 7D61BA2F2A7C2D1D001F9000 /* vnode.c */; };
+		7D61BA4E2A7C2D1D001F9000 /* krw.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D61BA2D2A7C2D1D001F9000 /* krw.m */; };
 		7D61BA512A7C2D1D001F9000 /* proc.c in Sources */ = {isa = PBXBuildFile; fileRef = 7D61BA302A7C2D1D001F9000 /* proc.c */; };
 		7D63C1182A63538D0066AB5A /* ExploreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D63C1172A63538D0066AB5A /* ExploreView.swift */; };
 		7D63C11A2A6405A50066AB5A /* FancyIconToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D63C1192A6405A50066AB5A /* FancyIconToggle.swift */; };
 		7D63C11C2A643BFD0066AB5A /* IconPack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D63C11B2A643BFD0066AB5A /* IconPack.swift */; };
 		7D63C11F2A643D070066AB5A /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 7D63C11E2A643D070066AB5A /* ZIPFoundation */; };
+		7D6CFADD2A7E6A0D0038E142 /* iOS16_CCBackup.zip in Resources */ = {isa = PBXBuildFile; fileRef = 7D6CFADC2A7E6A0D0038E142 /* iOS16_CCBackup.zip */; };
 		7D7956AF29BFCD9B00D7CFCD /* WelcomeSheet in Frameworks */ = {isa = PBXBuildFile; productRef = 7D7956AE29BFCD9B00D7CFCD /* WelcomeSheet */; };
 		7D7956B129BFCE5300D7CFCD /* FirstLaunchSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D7956B029BFCE5300D7CFCD /* FirstLaunchSheetView.swift */; };
 		7D8B829A29E354C5001D4166 /* ReorderModulesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D8B829929E354C5001D4166 /* ReorderModulesListView.swift */; };
@@ -45,6 +45,9 @@
 		7DDD2FA329AEB2F90064A7FC /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DDD2FA229AEB2F90064A7FC /* SettingsView.swift */; };
 		7DDD2FA529AEB35E0064A7FC /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DDD2FA429AEB35E0064A7FC /* AppState.swift */; };
 		7DDD2FA829AFD1020064A7FC /* LocalConsole in Frameworks */ = {isa = PBXBuildFile; productRef = 7DDD2FA729AFD1020064A7FC /* LocalConsole */; };
+		7DF5F69F2A7EA30A00BBC7A0 /* vnode.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF5F69D2A7EA30A00BBC7A0 /* vnode.m */; };
+		7DF5F6A02A7EA30A00BBC7A0 /* utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF5F69E2A7EA30A00BBC7A0 /* utils.m */; };
+		7DF5F6A22A7EF27B00BBC7A0 /* DebugActionsMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DF5F6A12A7EF27B00BBC7A0 /* DebugActionsMenu.swift */; };
 		7DF5FE1229E7275700809050 /* AllIconsEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DF5FE1129E7275700809050 /* AllIconsEditorView.swift */; };
 		7DF5FE1529E7440D00809050 /* AEXML in Frameworks */ = {isa = PBXBuildFile; productRef = 7DF5FE1429E7440D00809050 /* AEXML */; };
 		7DF5FE2129E767C300809050 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DF5FE2029E767C300809050 /* ImagePicker.swift */; };
@@ -128,9 +131,8 @@
 		7D61BA2A2A7C2D1D001F9000 /* grant_full_disk_access.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = grant_full_disk_access.m; sourceTree = "<group>"; };
 		7D61BA2B2A7C2D1D001F9000 /* helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = helpers.m; sourceTree = "<group>"; };
 		7D61BA2C2A7C2D1D001F9000 /* thanks_opa334dev_htrowii.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = thanks_opa334dev_htrowii.m; sourceTree = "<group>"; };
-		7D61BA2D2A7C2D1D001F9000 /* krw.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = krw.c; sourceTree = "<group>"; };
+		7D61BA2D2A7C2D1D001F9000 /* krw.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = krw.m; sourceTree = "<group>"; };
 		7D61BA2E2A7C2D1D001F9000 /* offsets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = offsets.m; sourceTree = "<group>"; };
-		7D61BA2F2A7C2D1D001F9000 /* vnode.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = vnode.c; sourceTree = "<group>"; };
 		7D61BA302A7C2D1D001F9000 /* proc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = proc.c; sourceTree = "<group>"; };
 		7D61BA312A7C2D1D001F9000 /* fun.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fun.h; sourceTree = "<group>"; };
 		7D61BA322A7C2D1D001F9000 /* vm_unaligned_copy_switch_race.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vm_unaligned_copy_switch_race.h; sourceTree = "<group>"; };
@@ -158,12 +160,18 @@
 		7D63C1242A6474860066AB5A /* CAFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CAFilter.h; sourceTree = "<group>"; };
 		7D63C1252A6474860066AB5A /* CALayerPrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CALayerPrivate.h; sourceTree = "<group>"; };
 		7D63C1262A64752D0066AB5A /* CAPropertyInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CAPropertyInfo.h; sourceTree = "<group>"; };
+		7D6CFADC2A7E6A0D0038E142 /* iOS16_CCBackup.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = iOS16_CCBackup.zip; sourceTree = "<group>"; };
 		7D7956B029BFCE5300D7CFCD /* FirstLaunchSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstLaunchSheetView.swift; sourceTree = "<group>"; };
 		7D8B829929E354C5001D4166 /* ReorderModulesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReorderModulesListView.swift; sourceTree = "<group>"; };
 		7DBE8ED429B7EC0E00A36AA6 /* ControlConfig.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ControlConfig.entitlements; sourceTree = "<group>"; };
 		7DBE8ED529B919C700A36AA6 /* BackupManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupManager.swift; sourceTree = "<group>"; };
 		7DDD2FA229AEB2F90064A7FC /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		7DDD2FA429AEB35E0064A7FC /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		7DF5F69C2A7EA30A00BBC7A0 /* utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
+		7DF5F69D2A7EA30A00BBC7A0 /* vnode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = vnode.m; sourceTree = "<group>"; };
+		7DF5F69E2A7EA30A00BBC7A0 /* utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = utils.m; sourceTree = "<group>"; };
+		7DF5F6A12A7EF27B00BBC7A0 /* DebugActionsMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugActionsMenu.swift; sourceTree = "<group>"; };
+		7DF5F6A32A7F0C1B00BBC7A0 /* CCSModuleSettingsProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CCSModuleSettingsProvider.h; sourceTree = "<group>"; };
 		7DF5FE1129E7275700809050 /* AllIconsEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllIconsEditorView.swift; sourceTree = "<group>"; };
 		7DF5FE2029E767C300809050 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		7DF5FE2229E81FEC00809050 /* RenditionEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenditionEditorView.swift; sourceTree = "<group>"; };
@@ -295,6 +303,7 @@
 				7DDD2FA229AEB2F90064A7FC /* SettingsView.swift */,
 				7D7956B029BFCE5300D7CFCD /* FirstLaunchSheetView.swift */,
 				7D52218729BBC2B9002FD2A7 /* BackupView.swift */,
+				7DF5F6A12A7EF27B00BBC7A0 /* DebugActionsMenu.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -312,9 +321,11 @@
 				7D61BA2A2A7C2D1D001F9000 /* grant_full_disk_access.m */,
 				7D61BA2B2A7C2D1D001F9000 /* helpers.m */,
 				7D61BA2C2A7C2D1D001F9000 /* thanks_opa334dev_htrowii.m */,
-				7D61BA2D2A7C2D1D001F9000 /* krw.c */,
+				7D61BA2D2A7C2D1D001F9000 /* krw.m */,
+				7DF5F69C2A7EA30A00BBC7A0 /* utils.h */,
+				7DF5F69E2A7EA30A00BBC7A0 /* utils.m */,
+				7DF5F69D2A7EA30A00BBC7A0 /* vnode.m */,
 				7D61BA2E2A7C2D1D001F9000 /* offsets.m */,
-				7D61BA2F2A7C2D1D001F9000 /* vnode.c */,
 				7D61BA302A7C2D1D001F9000 /* proc.c */,
 				7D61BA312A7C2D1D001F9000 /* fun.h */,
 				7D61BA322A7C2D1D001F9000 /* vm_unaligned_copy_switch_race.h */,
@@ -393,6 +404,7 @@
 				7D63C1232A6474860066AB5A /* CAPackage.h */,
 				7D63C1222A6474850066AB5A /* CAState.h */,
 				7D63C1212A6447730066AB5A /* QuartzCorePrivate.h */,
+				7DF5F6A32A7F0C1B00BBC7A0 /* CCSModuleSettingsProvider.h */,
 			);
 			path = "Private Headers";
 			sourceTree = "<group>";
@@ -477,6 +489,7 @@
 		D625E8682991CD3000D5A5B0 /* ControlConfig */ = {
 			isa = PBXGroup;
 			children = (
+				7D6CFADC2A7E6A0D0038E142 /* iOS16_CCBackup.zip */,
 				7D63C1202A6447240066AB5A /* Private Headers */,
 				7DF5FE1D29E75E8700809050 /* IconFiles */,
 				7DBE8ED429B7EC0E00A36AA6 /* ControlConfig.entitlements */,
@@ -662,6 +675,7 @@
 			files = (
 				7DF5FE3E29E98BA400809050 /* Connectivity.car in Resources */,
 				7DF5FE3F29E98BA500809050 /* Empty_200x200.car in Resources */,
+				7D6CFADD2A7E6A0D0038E142 /* iOS16_CCBackup.zip in Resources */,
 				7DF5FE4029E98BA600809050 /* GuidedAccess.car in Resources */,
 				7DF5FE5229E99EAB00809050 /* NFC.car in Resources */,
 				7DF5FE4829E9920E00809050 /* TVRemote.car in Resources */,
@@ -697,6 +711,7 @@
 				D625E8A42991CF8600D5A5B0 /* Haptic++.swift in Sources */,
 				7DF5FE1229E7275700809050 /* AllIconsEditorView.swift in Sources */,
 				7D61BA4D2A7C2D1D001F9000 /* thanks_opa334dev_htrowii.m in Sources */,
+				7DF5F6A02A7EA30A00BBC7A0 /* utils.m in Sources */,
 				7D63C11A2A6405A50066AB5A /* FancyIconToggle.swift in Sources */,
 				7DF5FE2329E81FEC00809050 /* RenditionEditorView.swift in Sources */,
 				7D7956B129BFCE5300D7CFCD /* FirstLaunchSheetView.swift in Sources */,
@@ -726,20 +741,21 @@
 				D625E89F2991CF2A00D5A5B0 /* grant_full_disk_access.m in Sources */,
 				D625E89D2991CF2A00D5A5B0 /* vm_unaligned_copy_switch_race.c in Sources */,
 				D625E8A32991CF8600D5A5B0 /* Alert++.swift in Sources */,
+				7D2919FF2A7F9E9300ACC16E /* offsets.m in Sources */,
 				7D3BAB7B29B4BE760024C9C9 /* EditCCColorsView.swift in Sources */,
 				7D201BF4299C1E280023D649 /* PlistHelpers.swift in Sources */,
 				7DDD2FA529AEB35E0064A7FC /* AppState.swift in Sources */,
-				7D61BA502A7C2D1D001F9000 /* vnode.c in Sources */,
 				D6E552D129B3E3300083E6A5 /* ApplicationManager.swift in Sources */,
 				7D201BFB299C23100023D649 /* MainModuleView.swift in Sources */,
 				7D59D959299A94370049302B /* CustomPrint.swift in Sources */,
 				D625E89E2991CF2A00D5A5B0 /* helpers.m in Sources */,
+				7DF5F69F2A7EA30A00BBC7A0 /* vnode.m in Sources */,
 				7D201BF9299C22680023D649 /* TickToggleStyle.swift in Sources */,
-				7D61BA482A7C2D1D001F9000 /* offsets.m in Sources */,
 				7D61BA512A7C2D1D001F9000 /* proc.c in Sources */,
 				D6E552D929B3E7760083E6A5 /* AppListView.swift in Sources */,
 				7DDD2FA329AEB2F90064A7FC /* SettingsView.swift in Sources */,
-				7D61BA4E2A7C2D1D001F9000 /* krw.c in Sources */,
+				7DF5F6A22A7EF27B00BBC7A0 /* DebugActionsMenu.swift in Sources */,
+				7D61BA4E2A7C2D1D001F9000 /* krw.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -907,7 +923,7 @@
 				CODE_SIGN_ENTITLEMENTS = ControlConfig/ControlConfig.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = "Prerelease-1";
+				CURRENT_PROJECT_VERSION = "KfdExploit-Testing-8";
 				DEVELOPMENT_ASSET_PATHS = "\"ControlConfig/Preview Content\"";
 				DEVELOPMENT_TEAM = ZV2PLXMRSB;
 				ENABLE_PREVIEWS = YES;
@@ -928,9 +944,13 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0.0;
+				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.f1shy-dev.ControlConfigXE";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "ControlConfig/Exploit/ControlConfig-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -948,7 +968,7 @@
 				CODE_SIGN_ENTITLEMENTS = ControlConfig/ControlConfig.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = "Prerelease-1";
+				CURRENT_PROJECT_VERSION = "KfdExploit-Testing-8";
 				DEVELOPMENT_ASSET_PATHS = "\"ControlConfig/Preview Content\"";
 				DEVELOPMENT_TEAM = ZV2PLXMRSB;
 				ENABLE_PREVIEWS = YES;
@@ -969,9 +989,14 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.f1shy-dev.ControlConfigXE";
+				OTHER_LDFLAGS = "$(inherited)";
+				"OTHER_LDFLAGS[arch=*]" = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.f1shy-dev.ControlConfig";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "ControlConfig/Exploit/ControlConfig-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

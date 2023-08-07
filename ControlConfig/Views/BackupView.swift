@@ -48,7 +48,15 @@ struct BackupView: View {
                 BackupBareView(title: "CC Backup Required", msg: "Before being able to use the app, ControlConfig needs to take a backup of your control center configuration. " + baseMsg) {
                     Button("Start Backup") {
                         UserDefaults.standard.set(true, forKey: "isCurrentlyDoingBackup")
-                        MDC.respring(method: .backboard)
+//                        MDC.respring(method: .backboard)
+                        backupStage = .BackupLoading
+                        DispatchQueue.global(qos: .userInitiated).async {
+                            let result = BackupManager.shared.createBackup()
+                            DispatchQueue.main.async {
+                                UserDefaults.standard.set(false, forKey: "isCurrentlyDoingBackup")
+                                backupStage = .BackupDone
+                            }
+                        }
                     }
                 }
             case .BackupLoading:

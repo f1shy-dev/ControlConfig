@@ -14,8 +14,36 @@ public enum RespringMethod {
 }
 
 public enum MDC {
-    public static func overwriteFile(at path: String, with data: Data) -> Bool {
-        return overwriteFileWithDataImpl(originPath: path, replacementData: data)
+    public static func overwriteFile(at path: String, with data: Data) throws {
+        if activeExploit == .MDC {
+            if !overwriteFileWithDataImpl(originPath: path, replacementData: data) {
+                throw "overwrite mdc didnt work"
+            }
+        } else {
+            if kfd == 0 {
+                let appState = AppState.shared
+                let puaf_pages_options = [16, 32, 64, 128, 256, 512, 1024, 2048]
+                let puaf_pages = puaf_pages_options[appState.puaf_pages_index]
+                print("puaf_pages: \(puaf_pages)")
+                kfd = do_kopen(UInt64(puaf_pages), UInt64(appState.puaf_method), UInt64(appState.kread_method), UInt64(appState.kwrite_method))
+                do_fun()
+            }
+            if FileManager.default.fileExists(atPath: URL.documents.appendingPathComponent("TempOverwriteFile").path) {
+                try? FileManager.default.removeItem(at: URL.documents.appendingPathComponent("TempOverwriteFile"))
+            }
+            try data.write(to: URL.documents.appendingPathComponent("TempOverwriteFile"))
+            let replacementURL = URL.documents.appendingPathComponent("TempOverwriteFile")
+            let cPathtoTargetFile = path.withCString { ptr in
+                return strdup(ptr)
+            }
+            let mutablecPathtoTargetFile = UnsafeMutablePointer<Int8>(mutating: cPathtoTargetFile)
+            let cFileURL = replacementURL.path.withCString { ptr in
+                return strdup(ptr)
+            }
+            let mutablecFileURL = UnsafeMutablePointer<Int8>(mutating: cFileURL)
+            let result = funVnodeOverwrite2(cPathtoTargetFile, mutablecFileURL) // the magic is here
+            if result != 0 { throw "vnodeoverwrite didnt work, check console" }
+        }
     }
     
     public static func respring(method: RespringMethod) {

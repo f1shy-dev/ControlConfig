@@ -16,9 +16,9 @@ public struct CCMappings {
     public static let moduleBackgroundMaterialRecipePath =
         "\(privFrameworksPath)/CoreMaterial.framework/modulesBackground.materialrecipe"
     public static let moduleConfigurationPath =
-        "/var/mobile/Library/ControlCenter/ModuleConfiguration.plist"
+        "/private/var/mobile/Library/ControlCenter/ModuleConfiguration.plist"
     public static let moduleConfiguration_ccsupportPath =
-        "/var/mobile/Library/ControlCenter/ModuleConfiguration_CCSupport.plist"
+        "/private/var/mobile/Library/ControlCenter/ModuleConfiguration_CCSupport.plist"
     public static let moduleAllowedListPath =
         "\(privFrameworksPath)/ControlCenterServices.framework/ModuleAllowedList.plist"
 

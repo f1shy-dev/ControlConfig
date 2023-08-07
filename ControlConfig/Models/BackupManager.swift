@@ -39,7 +39,7 @@ struct Backup: Hashable {
 
     var id: String
     var folderPath: String {
-        backupFolder + "/\(id)/"
+        BackupManager.shared.backupFolder + "/\(id)/"
     }
     var date: Date
 
@@ -63,10 +63,13 @@ class BackupManager {
     let backupFolder: String
 
     private init() {
-        let documentsDir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
 //        let backupFolder = documentsDir.appendingPathComponent(backupFolderName).path
 //
-        self.backupFolder = bkFolder
+        if activeExploit == .MDC {
+            self.backupFolder = bkFolder
+        } else {
+            self.backupFolder = URL.documents.appendingPathComponent("CCBackups").path
+        }
 
         // make folder
         if !FileManager.default.fileExists(atPath: backupFolder) {
@@ -85,9 +88,9 @@ class BackupManager {
 
     func loadBackupList() {
         // read backups.plist and populate backups
-        let backupsPlist = self.backupFolder + "/backups.plist"
-        if FileManager.default.fileExists(atPath: backupsPlist) {
-            if let backupsFile = self.loadPlist(path: backupsPlist),
+        let backupsPlistPath = self.backupFolder + "/backups.plist"
+        if FileManager.default.fileExists(atPath: backupsPlistPath) {
+            if let backupsFile = self.loadPlist(path: backupsPlistPath),
                let backupInfos = backupsFile["backups"] as? [[String: Any]]
             {
                 for backupInfo in backupInfos {
@@ -101,8 +104,42 @@ class BackupManager {
                 }
 //                print("loaded \(self.backups.count) backups.")
             }
-        } else {
-            self.backups = []
+        }
+        
+        if !FileManager.default.fileExists(atPath: backupsPlistPath) || self.backups.count == 0 {
+            if #available(iOS 16.0, *) {
+                if let bundledBackupURL = Bundle.main.url(forResource: "iOS16_CCBackup", withExtension: "zip") {
+                    print(bundledBackupURL, "loading bundled")
+                    let backupFolderURL = URL(fileURLWithPath: self.backupFolder)
+                    do {
+                        let backupURL = backupFolderURL.appendingPathComponent("bundled_backup_16")
+                        if FileManager.default.fileExists(atPath: backupURL.path) {
+                            try FileManager.default.removeItem(at: backupURL)
+                        }
+                        try FileManager.default.unzipItem(at: bundledBackupURL, to: backupURL)
+                        if let backup = self.loadBackup(id: "bundled_backup_16") {
+                            self.backups.append(backup)
+                            self.backups = Array(Set(self.backups))
+                            
+                            
+                            let backupsPlist = NSMutableDictionary()
+                            let info =
+                                [
+                                    "id": "bundled_backup_16",
+                                    // timestamp/epoch
+                                    "date": Date().timeIntervalSince1970,
+                                ] as [String: Any]
+                            backupsPlist.setValue([info], forKey: "backups")
+                            backupsPlist.setValue("bundled_backup_16", forKey: "latest")
+                            backupsPlist.write(toFile: backupsPlistPath, atomically: true)
+                        }
+                    } catch {
+                        print("Error unzipping bundled backup: \(error)")
+                    }
+                }
+            } else {
+                self.backups = []
+            }
         }
     }
 
@@ -149,7 +186,22 @@ class BackupManager {
             path: backupFolder + "/CoreMaterial.framework/moduleFill.visualstyleset")
         let cm_moduleStroke = self.loadPlist(
             path: backupFolder + "/CoreMaterial.framework/moduleStroke.visualstyleset")
+            
+        // create a dictionary to store the values
+            var dictionary: [String: Bool] = [:]
 
+            // check if each element is nil or not and store the result in the dictionary
+            dictionary["moduleConfiguration"] = moduleConfiguration != nil
+            dictionary["moduleAllowedList"] = moduleAllowedList != nil
+            dictionary["defaultModuleSettings"] = defaultModuleSettings != nil
+            dictionary["cm_modules"] = cm_modules != nil
+            dictionary["cm_modulesBackground"] = cm_modulesBackground != nil
+            dictionary["cm_moduleFill"] = cm_moduleFill != nil
+            dictionary["cm_moduleStroke"] = cm_moduleStroke != nil
+
+            // print the dictionary
+            print("bss", dictionary)
+        
         if let moduleConfiguration = moduleConfiguration,
            let moduleAllowedList = moduleAllowedList,
            let defaultModuleSettings = defaultModuleSettings,
@@ -249,13 +301,15 @@ class BackupManager {
         print("backupFolder", backupFolder)
 
         for file in [
-            CCMappings.moduleConfigurationPath, CCMappings.moduleAllowedListPath,
-            CCMappings.moduleConfiguration_ccsupportPath, CCMappings().dmsPath,
+            CCMappings.moduleAllowedListPath, CCMappings().dmsPath
         ] {
             // copy file if it exists
             if FileManager.default.fileExists(atPath: file) {
                 self.copyBackupFile(from: file, id: backupId)
             }
+        }
+        for file in [CCMappings.moduleConfigurationPath, CCMappings.moduleConfiguration_ccsupportPath] {
+            
         }
 
         // copy corematerial.framework folder to backupFolder

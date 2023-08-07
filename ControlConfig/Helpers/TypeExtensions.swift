@@ -9,6 +9,14 @@
 import Foundation
 import SwiftUI
 
+extension URL {
+    static var documents: URL {
+        return FileManager
+            .default
+            .urls(for: .documentDirectory, in: .userDomainMask)[0]
+    }
+}
+
 extension Binding {
     func toUnwrapped<T>(defaultValue: T) -> Binding<T> where Value == T? {
         Binding<T>(get: { self.wrappedValue ?? defaultValue }, set: { self.wrappedValue = $0 })

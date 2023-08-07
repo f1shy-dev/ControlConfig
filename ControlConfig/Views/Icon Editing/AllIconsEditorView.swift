@@ -50,9 +50,9 @@ struct AllIconsEditorView: View {
                         for catalog in catalogs {
                             let fileManager = FileManager.default
                             if fileManager.fileExists(atPath: catalog.filePath.path) {
-                                let write = MDC.overwriteFile(at: "\(CCMappings.bundlesPath)\(catalog.module.fileName)/Assets.car", with: try Data(contentsOf: catalog.filePath))
+                                try MDC.overwriteFile(at: "\(CCMappings.bundlesPath)\(catalog.module.fileName)/Assets.car", with: try Data(contentsOf: catalog.filePath))
                                 print("Write - \(catalog.module.description)", write)
-                                sMap.append(write)
+                                sMap.append(true)
                             }
                         }
 
@@ -63,6 +63,7 @@ struct AllIconsEditorView: View {
                         }
 
                     } catch {
+                        UIApplication.shared.alert(title: "Failure...", body: "Failed to overwrite some icons...")
                         print(error)
                     }
                 }, label: {
@@ -111,12 +112,14 @@ struct AllIconsEditorView: View {
                             }
                         }.contextMenu {
                             Button {
+                                print("Write - \(car.module.description)")
                                 do {
                                     let fileManager = FileManager.default
                                     if fileManager.fileExists(atPath: car.filePath.path) {
-                                        print("Write - \(car.module.description)", MDC.overwriteFile(at: "\(CCMappings.bundlesPath)\(car.module.fileName)/Assets.car", with: try Data(contentsOf: car.filePath)))
+                                        try MDC.overwriteFile(at: "\(CCMappings.bundlesPath)\(car.module.fileName)/Assets.car", with: try Data(contentsOf: car.filePath))
                                     }
                                 } catch {
+
                                     print(error)
                                 }
                             } label: {
@@ -184,13 +187,11 @@ struct AllIconsEditorView: View {
                             do {
                                 let fileManager = FileManager.default
                                 if fileManager.fileExists(atPath: car.filePath.path) {
-                                    if MDC.overwriteFile(at: "\(CCMappings.bundlesPath)\(car.module.fileName)/Assets.car", with: try Data(contentsOf: car.filePath)) {
-                                        UIApplication.shared.alert(title: "Success!", body: "Overwrote the file successfully...")
-                                    } else {
-                                        UIApplication.shared.alert(title: "Failure...", body: "Failed to overwrite the file...")
-                                    }
+                                    try MDC.overwriteFile(at: "\(CCMappings.bundlesPath)\(car.module.fileName)/Assets.car", with: try Data(contentsOf: car.filePath))
+                                    UIApplication.shared.alert(title: "Success!", body: "Overwrote the file successfully...")
                                 }
                             } catch {
+                                UIApplication.shared.alert(title: "Failure...", body: "Failed to overwrite the file...")
                                 print(error)
                             }
                         } label: {

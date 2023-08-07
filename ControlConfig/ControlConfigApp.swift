@@ -14,8 +14,10 @@ let appVersion = ((Bundle.main.infoDictionary?["CFBundleShortVersionString"] as?
 let consoleManager = LCManager.shared
 let isiOSSixteen = ProcessInfo().operatingSystemVersion.majorVersion == 16
 var kfd: UInt64 = 0
+enum ActiveExploit { case MDC, KFD }
+var activeExploit: ActiveExploit = .MDC
 enum PatchStage {
-    case Detecting, NoMDCSupported, UnableToEscape(err: String), TooOld, Escaped
+    case Detecting, NotSupported, UnableToEscape(err: String), TooOld, Escaped, LoadingBackups
 }
 
 struct BareLoading: View {
@@ -23,6 +25,8 @@ struct BareLoading: View {
     var title: String
     var msg: String
     var animateRotate: Bool
+    
+
     @State private var rotationAngle: Double = 0
     init(icon: String = "gear", animateRotate: Bool = false, title: String, msg: String) {
         self.icon = icon
@@ -56,43 +60,58 @@ struct ControlConfigApp: App {
     @State var backupStage: BackupStage = .YetToRespring
     @State var localPatchState: PatchStage = .Detecting
     @State private var rotationAngle: Double = 0
-
+    @ObservedObject var appState = AppState.shared
+    
     var body: some Scene {
         WindowGroup {
             ZStack{
                 VStack(alignment: .center) {
                     switch localPatchState {
+                    case .LoadingBackups:
+                        BareLoading(animateRotate: true, title: "Loading Backups", msg: "Please wait patiently, this can take upto a minute, depending on your device...").onAppear {
+                            #if targetEnvironment(simulator)
+                            DispatchQueue.main.async {
+                                withAnimation {
+                                    localPatchState = .Escaped
+                                }
+                            }
+                            #else
+                            DispatchQueue.global(qos: .userInitiated).async {
+                                BackupManager.shared.loadBackupList()
+                                if BackupManager.shared.backups.count == 0 {
+                                    Thread.sleep(forTimeInterval: 0.05)
+                                    print("❓ Reloading backup list to be sure...")
+                                    BackupManager.shared.loadBackupList()
+                                }
+                                
+                                let isDoingBk = UserDefaults.standard.bool(forKey: "isCurrentlyDoingBackup")
+                                if BackupManager.shared.backups.count == 0 || isDoingBk {
+                                    backupStage = .YetToRespring
+                                    if isDoingBk { backupStage = .BackupLoading }
+                                    showingBackupSheet = true
+                                } else {
+                                    DispatchQueue.main.async {
+                                        withAnimation {
+                                            localPatchState = .Escaped
+                                        }
+                                    }
+                                    if !UserDefaults.standard.bool(forKey: "shownFirstOpen") {
+                                        showingFirstLaunchSheet = true
+                                    }
+                                }
+                            }
+                            #endif
+                        }
                     case .Detecting:
                         BareLoading(animateRotate: true, title: "Patching", msg: "Please wait patiently, this can take a second. Also, please accept any access popups...")
-                    case .NoMDCSupported:
-                        BareLoading(icon:"exclamationmark.triangle.fill",title: "Not Supported", msg: "ControlConfig only works on iOS versions 15 to 16.1.2 and iOS 16.2 Developer Beta 1.")
+                    case .NotSupported:
+                        BareLoading(icon:"exclamationmark.triangle.fill",title: "Not Supported", msg: "ControlConfig only works on iOS versions 15 to 16.5, iOS 16.2 Developer Beta 1 and iOS 16.6 Beta 1.")
                     case .UnableToEscape(let err):
                         BareLoading(icon:"exclamationmark.triangle.fill",title: "MDC Access Error", msg: "There was an error while trying to gain full disk access. Please close the app and retry. Error message: \(err)")
                     case .TooOld:
                         BareLoading(icon:"exclamationmark.triangle.fill",title: "Not Supported", msg: "ControlConfig only works on iOS versions 15 to 16.1.2 and iOS 16.2 Developer Beta 1. You may have some success if you install the app with TrollStore, but this isn't recommended.")
                     case .Escaped:
                         MainModuleView().transition(.opacity).onAppear {
-                            #if targetEnvironment(simulator)
-                            #else
-                            BackupManager.shared.loadBackupList()
-                            if BackupManager.shared.backups.count == 0 {
-                                Thread.sleep(forTimeInterval: 0.05)
-                                print("❓ Reloading backup list to be sure...")
-                                BackupManager.shared.loadBackupList()
-                            }
-                            
-                            let isDoingBk = UserDefaults.standard.bool(forKey: "isCurrentlyDoingBackup")
-                            if BackupManager.shared.backups.count == 0 || isDoingBk {
-                                backupStage = .YetToRespring
-                                if isDoingBk { backupStage = .BackupLoading }
-                                showingBackupSheet = true
-                            } else {
-                                if !UserDefaults.standard.bool(forKey: "shownFirstOpen") {
-                                    showingFirstLaunchSheet = true
-                                }
-                            }
-                            #endif
-                            
                             if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String, let url = URL(string: "https://api.github.com/repos/f1shy-dev/ControlConfig/releases/latest") {
                                 let task = URLSession.shared.dataTask(with: url) { data, _, _ in
                                     guard let data = data else { return }
@@ -120,25 +139,39 @@ struct ControlConfigApp: App {
                     UserDefaults.standard.set(true, forKey: "shownFirstOpen")
                 }, isSlideToDismissDisabled: true, preferredColorScheme: UITraitCollection.current.userInterfaceStyle == .dark ? .dark : .light, pages: firstLaunchSheetPages)
                 .onAppear {
-                   
+                    let largeVer = ProcessInfo.processInfo.operatingSystemVersionString
+                    let splitted = largeVer.components(separatedBy: ["(", " ", ")"])
                     let appVersion = ((Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown") + " (" + (Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown") + ")")
                     print("🚀 ControlConfig - v\(appVersion)")
                     #if targetEnvironment(simulator)
-                    localPatchState = .Escaped
+                    localPatchState = .LoadingBackups
                     #else
-                    if #available(iOS 16.3, *) {
-                        print("⛔️ iOS 16.3 or higher - MDC not supported")
-                        localPatchState = .NoMDCSupported
-                    } else {
-                        if UIDevice.current.systemVersion == "16.2" {
-                            let largeVer = ProcessInfo.processInfo.operatingSystemVersionString
-                            let splitted = largeVer.components(separatedBy: ["(", " ", ")"])
-                            if splitted.count >= 4,
-                               !["20C5032e", "20C5043e"].contains(splitted[4]) {
-                                print("⛔️ iOS 16.2 or higher (no dev build 1/2?) - MDC not supported")
-                                localPatchState = .NoMDCSupported
+//                    should be 16.3
+                    if #available(iOS 16.0, *) {
+                        if #available(iOS 16.5.1, *) {
+                            if UIDevice.current.systemVersion == "16.6", splitted.count >= 4, splitted[4] == "20G5026e" {
+                                print("✅ iOS 16.6b1 - KFD supported")
+                                localPatchState = .LoadingBackups
+                                activeExploit = .KFD
+                                return
+                            } else {
+                                print("⛔️ iOS 16.5.1 or higher (no 16.6 dev build 1?) - KFD not supported")
+                                localPatchState = .NotSupported
                                 return
                             }
+                        } else {
+                            print("✅ iOS \(UIDevice.current.systemVersion) - KFD supported")
+                            //No kopen here
+                            activeExploit = .KFD
+                            localPatchState = .LoadingBackups
+                            return
+                        }
+                    } else {
+                        if UIDevice.current.systemVersion == "16.2", splitted.count >= 4, !["20C5032e", "20C5043e"].contains(splitted[4]) {
+                            print("⚠️ iOS 16.2 or higher (no dev build 1/2?) - No MDC, fallback to KFD")
+                            localPatchState = .LoadingBackups
+                            activeExploit = .KFD
+                            return
                         }
                         DispatchQueue.global(qos: .userInitiated).async {
                             do {
@@ -146,7 +179,7 @@ struct ControlConfigApp: App {
                                 print("⚙️ TrollStore install detected...")
                                 DispatchQueue.main.async {
                                     withAnimation {
-                                        localPatchState = .Escaped
+                                        localPatchState = .LoadingBackups
                                     }
                                 }
                             } catch {
@@ -160,7 +193,7 @@ struct ControlConfigApp: App {
                                         } else {
                                             DispatchQueue.main.async {
                                                 withAnimation {
-                                                    localPatchState = .Escaped
+                                                    localPatchState = .LoadingBackups
                                                 }
                                             }
                                             print("✅ Successfully escaped sandbox with MDC!")
@@ -211,5 +244,10 @@ struct ControlConfigApp: App {
                     }
                 }
         }
+    }
+}
+struct ControlConfigApp_Previews: PreviewProvider {
+    static var previews: some View {
+        Text("Hello, world!")
     }
 }

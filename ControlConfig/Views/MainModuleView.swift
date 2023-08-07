@@ -48,14 +48,26 @@ struct MainModuleView: View {
                                 Label("CAML Editor - ReplayKit", systemImage: "pencil")
                             }
                         }
+                        if activeExploit == .KFD {
+                            Button(role: .destructive) {
+                                if (kfd == 0) {
+                                    return UIApplication.shared.alert(title: "KFD Exploit", body: "You can only use this button once you've clicked apply.", animated: true)
+                                }
+                                do_kclose()
+                                exit(1)
+                            } label: {
+                                Label("Unpatch (kclose) and exit", systemImage:"arrow.down.right.and.arrow.up.left")
+                                    .foregroundColor(.red)
+                            }
+                        }
                     }
 
                     if customisations.list.isEmpty {
-                        Section(header: Label("Modules", systemImage: "app.dashed"), footer: Text("You don't have any control center modules - press the \(Image(systemName: "plus.app")) button below to add one!")) {}.headerProminence(.increased)
+                        Section(header: Label(activeExploit == .MDC ? "Modules" : "Customisations", systemImage: "app.dashed"), footer: Text("You don't have any control center modules - press the \(Image(systemName: "plus.app")) button below to add one!")) {}.headerProminence(.increased)
                     } else {
 //                        Section(header: Label("Module Customisations", systemImage: "app.dashed")) {
                         Section(header:                HStack {
-                            Text("Modules")
+                            Text(activeExploit == .MDC ? "Modules" : "Customisations")
                             Spacer()
                             Button {
                                 UIApplication.shared.alert(title: "Info - Modules", body:"Unlike older versions of the app, this list of modules here mirrors what you would see in iOS Settings.\n\nThis means that you can now reorder your modules in-app, by either holding and moving the items around in the modules list, or by going into re-order mode by pressing Edit at the top left of the screen.\n\nThis makes everything easier and faster, and you don't have to mess with the order in settings anymore.")
@@ -69,11 +81,13 @@ struct MainModuleView: View {
 
                                 CustomisationCard(customisation: item, appState: appState, deleteCustomisation: customisations.deleteCustomisation, saveToUserDefaults: customisations.saveToUserDefaults) {
                                     customisations.objectWillChange.send()
-                                }
+                                }.moveDisabled(activeExploit == .KFD)
                             }.onMove { from, to in
-                                customisations.list.move(fromOffsets: from, toOffset: to)
-                                customisations.saveToUserDefaults()
-                                customisations.objectWillChange.send()
+                                if activeExploit == .MDC {
+                                    customisations.list.move(fromOffsets: from, toOffset: to)
+                                    customisations.saveToUserDefaults()
+                                    customisations.objectWillChange.send()
+                                }
                             }
                             .onDelete { idxset in
                                 withAnimation {
@@ -104,7 +118,9 @@ struct MainModuleView: View {
                     }
                 }
                 ToolbarItemGroup {
-                    EditButton()
+                    if activeExploit == .MDC {
+                        EditButton()
+                    }
                 }
             }
             .toolbar {
@@ -131,11 +147,25 @@ struct MainModuleView: View {
                         Text("Apply")
 
                     }).contextMenu {
-                        Button("KFD kopen") {
-                            let puaf_pages_options = [16, 32, 64, 128, 256, 512, 1024, 2048]
-                            let puaf_pages = puaf_pages_options[appState.puaf_pages_index]
-                            kfd = do_kopen(UInt64(puaf_pages), UInt64(appState.puaf_method), UInt64(appState.kread_method), UInt64(appState.kwrite_method))
-                            do_fun()
+                        if activeExploit == .KFD {
+                            Button("Run Exploit (kopen)") {
+                                let puaf_pages_options = [16, 32, 64, 128, 256, 512, 1024, 2048]
+                                let puaf_pages = puaf_pages_options[appState.puaf_pages_index]
+                                print("puaf_pages: \(puaf_pages)")
+                                kfd = do_kopen(UInt64(puaf_pages), UInt64(appState.puaf_method), UInt64(appState.kread_method), UInt64(appState.kwrite_method))
+                                do_fun()
+                            }.disabled(kfd != 0)
+                            Button("Hybrid Apply") {
+                                for _ in 1...2 {
+                                    applyChanges(customisations: customisations)
+                                }
+                                MDC.respring(method: .frontboard)
+                                for _ in 1...5 {
+                                    applyChanges(customisations: customisations)
+                                }
+                                do_kclose()
+                                exit(1)
+                            }.disabled(kfd == 0)
                         }
                     }
 //                    .disabled(
@@ -160,7 +190,9 @@ struct MainModuleView: View {
 
                     Button(action: {
                         MDC.respring(method: appState.useLegacyRespring ? .legacy : .frontboard)
-
+                        if activeExploit == .KFD {
+                            do_kclose()
+                        }
                     }, label: {
                         Label("Respring", systemImage: "arrow.triangle.2.circlepath.circle")
                         Text("Respring")
@@ -168,6 +200,7 @@ struct MainModuleView: View {
                         
                         Button {
                             MDC.respring(method: .frontboard)
+                            do_kclose()
                         } label: {
                             Label("Frontboard Respring", systemImage: "arrow.triangle.2.circlepath")
                         }
