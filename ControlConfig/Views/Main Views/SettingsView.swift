@@ -73,10 +73,6 @@ struct SettingsView: View {
                             }
                         }.disabled(kfd != 0)
                         
-                        Button("Unpatch (kclose) and exit") {
-                            do_kclose()
-                            exit(0)
-                        }
                     }
                 }
                 Section(header: Label("Debug", systemImage: "ladybug"), footer: Label("Settings meant for people who know what they're doing. Only touch anything here if the developers explicitly told you to.", systemImage: "info.circle")) {
@@ -108,7 +104,7 @@ struct SettingsView: View {
                     }
                     Toggle("Enable debug mode", isOn: $appState.debugMode)
                     if appState.debugMode {
-                        Toggle("Enable in-app console", isOn: $appState.enableConsole)
+//                        Toggle("Enable in-app console", isOn: $appState.enableConsole)
                         Toggle("Enable Experimental Features", isOn: $appState.enableExperimentalFeatures)
                         //                        Button("[WARNING] Better Compress Bundle IDs") {
                         //                            betterBundleIDCompressor()
@@ -123,7 +119,7 @@ struct SettingsView: View {
                             UserDefaults.standard.set(true, forKey: "shownFirstOpen")
                         }, pages: firstLaunchSheetPages)
 
-                        Button("Show file-printing actions") {
+                        Button("Open debug actions menu") {
                             showPrintActionsSheet = true
                         }.sheet(isPresented: $showPrintActionsSheet) {
                            DebugActionsMenu()

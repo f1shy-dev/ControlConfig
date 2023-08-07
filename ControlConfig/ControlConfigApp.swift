@@ -145,6 +145,7 @@ struct ControlConfigApp: App {
                     print("🚀 ControlConfig - v\(appVersion)")
                     #if targetEnvironment(simulator)
                     localPatchState = .LoadingBackups
+                    activeExploit = .KFD
                     #else
 //                    should be 16.3
                     if #available(iOS 16.0, *) {

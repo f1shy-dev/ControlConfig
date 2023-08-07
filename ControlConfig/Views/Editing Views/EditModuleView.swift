@@ -58,7 +58,7 @@ struct EditModuleView: View {
                 switch customisation.mode {
                 case .AppLauncher:
                     Section(header: Label("App Launcher", systemImage: "app.badge.checkmark"), footer: Text("The URL Scheme is to launch to a specific section of an app, such as com.apple.tv://us/show")) {
-//                        if appState.enableExperimentalFeatures {
+                        if activeExploit == .MDC {
                         Button(action: {
                             self.showingAppPickerSheet = true
                         }) {
@@ -66,7 +66,7 @@ struct EditModuleView: View {
                         }.sheet(isPresented: $showingAppPickerSheet, content: {
                             AppListView(customisation: customisation)
                         })
-//                        }
+                        }
                         TextField("App Bundle ID", text: $customisation.launchAppBundleID.toUnwrapped(defaultValue: ""))
                         TextField("URL Scheme (optional)", text: $customisation.launchAppURLScheme.toUnwrapped(defaultValue: ""))
                     }

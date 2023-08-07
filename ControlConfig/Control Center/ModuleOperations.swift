@@ -210,19 +210,19 @@ func applyChanges(customisations: CustomisationList) -> (Bool, [String:Bool]) {
                             }
                         }
                         
-//                        if let op = PlistHelpers.plistToDict(path: stringsPath) {
-//                            for i in CCMappings.removalPlistValues {
-//                                new.removeObject(forKey: i)
-//                                op.removeObject(forKey: i)
-//                            }
-//                            if new.isEqual(to:op as! [AnyHashable:Any]) {
-//                                if customisation.hideFocusUIText == true { print("⏩ Skipping hide Focus text - file same") }
-//                            } else {
+                        if let op = PlistHelpers.plistToDict(path: stringsPath) {
+                            for i in CCMappings.removalPlistValues {
+                                new.removeObject(forKey: i)
+                                op.removeObject(forKey: i)
+                            }
+                            if new.isEqual(to:op as! [AnyHashable:Any]) {
+                                if customisation.hideFocusUIText == true { print("⏩ Skipping hide Focus text - file same") }
+                            } else {
                         if customisation.hideFocusUIText == true { print("⚙️ Focus - Hide text") }
                         else { print("⏮️ Reverting Focus - Hide text") }
                         successMap["Hide Focus Text (iOS 16)"] = PlistHelpers.writeDictToPlist(dict: NSMutableDictionary(dictionary: new), path: stringsPath)
-//                            }
-//                        }
+                            }
+                        }
                         
                     
                 }
@@ -356,7 +356,13 @@ func applyChanges(customisations: CustomisationList) -> (Bool, [String:Bool]) {
     
     if activeExploit == .KFD, let keys = CCMappings.fileNameBasedSmallIDs.allKeys as? [String] {
         let custom_modules = customisations.list.map { $0.module.fileName }
-        for fileName in keys.filter({!custom_modules.contains($0) && !((CCMappings.fileNameBasedSmallIDs[$0] as? String)?.contains("ios15") ?? false)}){
+        for fileName in keys.filter({ key in
+            let fn = CCMappings.fileNameBasedSmallIDs[key] as? String
+            
+            if (!["ios15", "ptrace", "mute"].map{fn?.contains($0)}.allSatisfy{$0 == true}) { return false }
+            return !custom_modules.contains(key)
+            
+        }) {
             //budget kfd compressor
             let module = Module(fileName: fileName)
             let infoPath = "\(CCMappings.bundlesPath)\(fileName)/Info.plist"
@@ -371,7 +377,6 @@ func applyChanges(customisations: CustomisationList) -> (Bool, [String:Bool]) {
                     infoPlist.setValue(newName, forKey: "CFBundleName")
                 }
                 
-                successMap["KModule - \(module.description)"] = (PlistHelpers.writeDictToPlist(dict: infoPlist, path: infoPath))
                 
                 let decompressedID = CCMappings.smallIDBasedModuleIDs[module.bundleID] as? String ?? module.bundleID
                 if let backupDMS = backupDMS, let backupSize = backupDMS[decompressedID] as? [String: Any] {
@@ -387,6 +392,8 @@ func applyChanges(customisations: CustomisationList) -> (Bool, [String:Bool]) {
                     
     //                emptyDMS[customisation.module.bundleID] = backupSize
                 }
+                successMap["KModule - \(module.description)"] = (PlistHelpers.writeDictToPlist(dict: infoPlist, path: infoPath))
+
             } else {
                 successMap["KModule - \(module.description)"] = false
 

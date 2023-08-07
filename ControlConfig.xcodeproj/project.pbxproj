@@ -40,7 +40,6 @@
 		7D6CFADD2A7E6A0D0038E142 /* iOS16_CCBackup.zip in Resources */ = {isa = PBXBuildFile; fileRef = 7D6CFADC2A7E6A0D0038E142 /* iOS16_CCBackup.zip */; };
 		7D7956AF29BFCD9B00D7CFCD /* WelcomeSheet in Frameworks */ = {isa = PBXBuildFile; productRef = 7D7956AE29BFCD9B00D7CFCD /* WelcomeSheet */; };
 		7D7956B129BFCE5300D7CFCD /* FirstLaunchSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D7956B029BFCE5300D7CFCD /* FirstLaunchSheetView.swift */; };
-		7D8B829A29E354C5001D4166 /* ReorderModulesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D8B829929E354C5001D4166 /* ReorderModulesListView.swift */; };
 		7DBE8ED629B919C700A36AA6 /* BackupManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DBE8ED529B919C700A36AA6 /* BackupManager.swift */; };
 		7DDD2FA329AEB2F90064A7FC /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DDD2FA229AEB2F90064A7FC /* SettingsView.swift */; };
 		7DDD2FA529AEB35E0064A7FC /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DDD2FA429AEB35E0064A7FC /* AppState.swift */; };
@@ -162,7 +161,6 @@
 		7D63C1262A64752D0066AB5A /* CAPropertyInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CAPropertyInfo.h; sourceTree = "<group>"; };
 		7D6CFADC2A7E6A0D0038E142 /* iOS16_CCBackup.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = iOS16_CCBackup.zip; sourceTree = "<group>"; };
 		7D7956B029BFCE5300D7CFCD /* FirstLaunchSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstLaunchSheetView.swift; sourceTree = "<group>"; };
-		7D8B829929E354C5001D4166 /* ReorderModulesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReorderModulesListView.swift; sourceTree = "<group>"; };
 		7DBE8ED429B7EC0E00A36AA6 /* ControlConfig.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ControlConfig.entitlements; sourceTree = "<group>"; };
 		7DBE8ED529B919C700A36AA6 /* BackupManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupManager.swift; sourceTree = "<group>"; };
 		7DDD2FA229AEB2F90064A7FC /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -245,6 +243,48 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7D1273F02A819A6400FDEBE0 /* Main Views */ = {
+			isa = PBXGroup;
+			children = (
+				7D201BFA299C23100023D649 /* MainModuleView.swift */,
+				7DDD2FA229AEB2F90064A7FC /* SettingsView.swift */,
+				7D201BFD299C23860023D649 /* AddModuleView.swift */,
+				7D52218729BBC2B9002FD2A7 /* BackupView.swift */,
+				7D63C1172A63538D0066AB5A /* ExploreView.swift */,
+			);
+			path = "Main Views";
+			sourceTree = "<group>";
+		};
+		7D1273F12A819A6D00FDEBE0 /* Editing Views */ = {
+			isa = PBXGroup;
+			children = (
+				7D3BAB7A29B4BE760024C9C9 /* EditCCColorsView.swift */,
+				7D201BFF299C238D0023D649 /* EditModuleView.swift */,
+			);
+			path = "Editing Views";
+			sourceTree = "<group>";
+		};
+		7D1273F22A819AA300FDEBE0 /* Other Stuff */ = {
+			isa = PBXGroup;
+			children = (
+				D6E552D829B3E7760083E6A5 /* AppListView.swift */,
+				7D7956B029BFCE5300D7CFCD /* FirstLaunchSheetView.swift */,
+				7DF5F6A12A7EF27B00BBC7A0 /* DebugActionsMenu.swift */,
+			);
+			path = "Other Stuff";
+			sourceTree = "<group>";
+		};
+		7D1273F32A819AE300FDEBE0 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				7DF5FE2029E767C300809050 /* ImagePicker.swift */,
+				7D3BAB7829B4BE2E0024C9C9 /* UIViewBlurEffect.swift */,
+				7D63C1192A6405A50066AB5A /* FancyIconToggle.swift */,
+				7D201C01299C25190023D649 /* CustomisationCard.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
 		7D201BE5299C19900023D649 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -263,17 +303,12 @@
 			children = (
 				7D59D958299A94370049302B /* CustomPrint.swift */,
 				7D201BED299C1D1C0023D649 /* TypeExtensions.swift */,
-				7D201BEF299C1D470023D649 /* MDCSwift.swift */,
-				7D201BF1299C1DE30023D649 /* MDCWrappers.swift */,
-				7D291E8E29C8DF64007B9444 /* padding_newMethod.swift */,
 				D6E552D029B3E32F0083E6A5 /* ApplicationManager.swift */,
 				D625E8A22991CF8600D5A5B0 /* Haptic++.swift */,
 				D625E8A12991CF8600D5A5B0 /* Alert++.swift */,
 				7D201BF3299C1E280023D649 /* PlistHelpers.swift */,
 				7D201BF8299C22680023D649 /* TickToggleStyle.swift */,
 				7D3BAB7629B3855A0024C9C9 /* ColorTools.swift */,
-				7D3BAB7829B4BE2E0024C9C9 /* UIViewBlurEffect.swift */,
-				7D63C1192A6405A50066AB5A /* FancyIconToggle.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -290,20 +325,11 @@
 		7D201BFC299C23140023D649 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				7D1273F32A819AE300FDEBE0 /* Components */,
+				7D1273F22A819AA300FDEBE0 /* Other Stuff */,
+				7D1273F12A819A6D00FDEBE0 /* Editing Views */,
+				7D1273F02A819A6400FDEBE0 /* Main Views */,
 				7D63C1272A6477830066AB5A /* Icon Editing */,
-				7D201BFA299C23100023D649 /* MainModuleView.swift */,
-				7D3BAB7A29B4BE760024C9C9 /* EditCCColorsView.swift */,
-				7DF5FE2029E767C300809050 /* ImagePicker.swift */,
-				7D8B829929E354C5001D4166 /* ReorderModulesListView.swift */,
-				7D201BFD299C23860023D649 /* AddModuleView.swift */,
-				7D63C1172A63538D0066AB5A /* ExploreView.swift */,
-				7D201BFF299C238D0023D649 /* EditModuleView.swift */,
-				D6E552D829B3E7760083E6A5 /* AppListView.swift */,
-				7D201C01299C25190023D649 /* CustomisationCard.swift */,
-				7DDD2FA229AEB2F90064A7FC /* SettingsView.swift */,
-				7D7956B029BFCE5300D7CFCD /* FirstLaunchSheetView.swift */,
-				7D52218729BBC2B9002FD2A7 /* BackupView.swift */,
-				7DF5F6A12A7EF27B00BBC7A0 /* DebugActionsMenu.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -534,6 +560,9 @@
 		D625E8932991CEFF00D5A5B0 /* Exploit */ = {
 			isa = PBXGroup;
 			children = (
+				7D291E8E29C8DF64007B9444 /* padding_newMethod.swift */,
+				7D201BEF299C1D470023D649 /* MDCSwift.swift */,
+				7D201BF1299C1DE30023D649 /* MDCWrappers.swift */,
 				D625E8982991CF2A00D5A5B0 /* grant_full_disk_access.h */,
 				D625E89C2991CF2A00D5A5B0 /* grant_full_disk_access.m */,
 				7D61BA222A7C2D1D001F9000 /* fun */,
@@ -724,7 +753,6 @@
 				7D201BF2299C1DE30023D649 /* MDCWrappers.swift in Sources */,
 				7D201BFE299C23860023D649 /* AddModuleView.swift in Sources */,
 				7D201BE7299C19A20023D649 /* Module.swift in Sources */,
-				7D8B829A29E354C5001D4166 /* ReorderModulesListView.swift in Sources */,
 				7D3BAB7929B4BE2E0024C9C9 /* UIViewBlurEffect.swift in Sources */,
 				7D201BF0299C1D470023D649 /* MDCSwift.swift in Sources */,
 				7D201C00299C238D0023D649 /* EditModuleView.swift in Sources */,

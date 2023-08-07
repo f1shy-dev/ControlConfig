@@ -14,7 +14,7 @@ class AppState: Codable, ObservableObject {
     @Published var enableConsole: Bool {
         didSet {
             saveToUserDefaults()
-            consoleManager.isVisible = enableConsole
+//            consoleManager.isVisible = enableConsole
         }
     }
 
@@ -129,6 +129,6 @@ class AppState: Codable, ObservableObject {
         {
             return state
         }
-        return AppState(enableConsole: true, useLegacyRespring: false, debugMode:true, enableExperimentalFeatures: true)
+        return AppState(enableConsole: false, useLegacyRespring: false, debugMode:false, enableExperimentalFeatures: false)
     }
 }
