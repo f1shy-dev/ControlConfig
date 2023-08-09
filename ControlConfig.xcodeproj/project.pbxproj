@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		7D09760D2995714D004E6087 /* ModuleOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D09760C2995714D004E6087 /* ModuleOperations.swift */; };
+		7D1273F52A8250E700FDEBE0 /* TutorialSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D1273F42A8250E700FDEBE0 /* TutorialSheetView.swift */; };
+		7D1273FB2A826FFC00FDEBE0 /* cowlite-tutorial.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 7D1273FA2A826F7600FDEBE0 /* cowlite-tutorial.mp4 */; };
+		7D1273FD2A829FD900FDEBE0 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D1273FC2A829FD900FDEBE0 /* NotificationManager.swift */; };
 		7D201BE7299C19A20023D649 /* Module.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201BE6299C19A20023D649 /* Module.swift */; };
 		7D201BE9299C1A2B0023D649 /* Customisation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201BE8299C1A2B0023D649 /* Customisation.swift */; };
 		7D201BEB299C1AB60023D649 /* CustomisationsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201BEA299C1AB60023D649 /* CustomisationsList.swift */; };
@@ -40,6 +43,7 @@
 		7D6CFADD2A7E6A0D0038E142 /* iOS16_CCBackup.zip in Resources */ = {isa = PBXBuildFile; fileRef = 7D6CFADC2A7E6A0D0038E142 /* iOS16_CCBackup.zip */; };
 		7D7956AF29BFCD9B00D7CFCD /* WelcomeSheet in Frameworks */ = {isa = PBXBuildFile; productRef = 7D7956AE29BFCD9B00D7CFCD /* WelcomeSheet */; };
 		7D7956B129BFCE5300D7CFCD /* FirstLaunchSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D7956B029BFCE5300D7CFCD /* FirstLaunchSheetView.swift */; };
+		7D8F69AD2A82E141000D8BDF /* CustomisationSetCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D8F69AC2A82E141000D8BDF /* CustomisationSetCodable.swift */; };
 		7DBE8ED629B919C700A36AA6 /* BackupManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DBE8ED529B919C700A36AA6 /* BackupManager.swift */; };
 		7DDD2FA329AEB2F90064A7FC /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DDD2FA229AEB2F90064A7FC /* SettingsView.swift */; };
 		7DDD2FA529AEB35E0064A7FC /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DDD2FA429AEB35E0064A7FC /* AppState.swift */; };
@@ -96,6 +100,9 @@
 
 /* Begin PBXFileReference section */
 		7D09760C2995714D004E6087 /* ModuleOperations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModuleOperations.swift; sourceTree = "<group>"; };
+		7D1273F42A8250E700FDEBE0 /* TutorialSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialSheetView.swift; sourceTree = "<group>"; };
+		7D1273FA2A826F7600FDEBE0 /* cowlite-tutorial.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cowlite-tutorial.mp4"; sourceTree = "<group>"; };
+		7D1273FC2A829FD900FDEBE0 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		7D201BE6299C19A20023D649 /* Module.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Module.swift; sourceTree = "<group>"; };
 		7D201BE8299C1A2B0023D649 /* Customisation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Customisation.swift; sourceTree = "<group>"; };
 		7D201BEA299C1AB60023D649 /* CustomisationsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomisationsList.swift; sourceTree = "<group>"; };
@@ -161,6 +168,7 @@
 		7D63C1262A64752D0066AB5A /* CAPropertyInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CAPropertyInfo.h; sourceTree = "<group>"; };
 		7D6CFADC2A7E6A0D0038E142 /* iOS16_CCBackup.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = iOS16_CCBackup.zip; sourceTree = "<group>"; };
 		7D7956B029BFCE5300D7CFCD /* FirstLaunchSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstLaunchSheetView.swift; sourceTree = "<group>"; };
+		7D8F69AC2A82E141000D8BDF /* CustomisationSetCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomisationSetCodable.swift; sourceTree = "<group>"; };
 		7DBE8ED429B7EC0E00A36AA6 /* ControlConfig.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ControlConfig.entitlements; sourceTree = "<group>"; };
 		7DBE8ED529B919C700A36AA6 /* BackupManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupManager.swift; sourceTree = "<group>"; };
 		7DDD2FA229AEB2F90064A7FC /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -249,6 +257,7 @@
 				7D201BFA299C23100023D649 /* MainModuleView.swift */,
 				7DDD2FA229AEB2F90064A7FC /* SettingsView.swift */,
 				7D201BFD299C23860023D649 /* AddModuleView.swift */,
+				7D1273F42A8250E700FDEBE0 /* TutorialSheetView.swift */,
 				7D52218729BBC2B9002FD2A7 /* BackupView.swift */,
 				7D63C1172A63538D0066AB5A /* ExploreView.swift */,
 			);
@@ -294,6 +303,7 @@
 				7DDD2FA429AEB35E0064A7FC /* AppState.swift */,
 				7DBE8ED529B919C700A36AA6 /* BackupManager.swift */,
 				7D63C11B2A643BFD0066AB5A /* IconPack.swift */,
+				7D8F69AC2A82E141000D8BDF /* CustomisationSetCodable.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -309,6 +319,7 @@
 				7D201BF3299C1E280023D649 /* PlistHelpers.swift */,
 				7D201BF8299C22680023D649 /* TickToggleStyle.swift */,
 				7D3BAB7629B3855A0024C9C9 /* ColorTools.swift */,
+				7D1273FC2A829FD900FDEBE0 /* NotificationManager.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -515,6 +526,7 @@
 		D625E8682991CD3000D5A5B0 /* ControlConfig */ = {
 			isa = PBXGroup;
 			children = (
+				7D1273FA2A826F7600FDEBE0 /* cowlite-tutorial.mp4 */,
 				7D6CFADC2A7E6A0D0038E142 /* iOS16_CCBackup.zip */,
 				7D63C1202A6447240066AB5A /* Private Headers */,
 				7DF5FE1D29E75E8700809050 /* IconFiles */,
@@ -704,6 +716,7 @@
 			files = (
 				7DF5FE3E29E98BA400809050 /* Connectivity.car in Resources */,
 				7DF5FE3F29E98BA500809050 /* Empty_200x200.car in Resources */,
+				7D1273FB2A826FFC00FDEBE0 /* cowlite-tutorial.mp4 in Resources */,
 				7D6CFADD2A7E6A0D0038E142 /* iOS16_CCBackup.zip in Resources */,
 				7DF5FE4029E98BA600809050 /* GuidedAccess.car in Resources */,
 				7DF5FE5229E99EAB00809050 /* NFC.car in Resources */,
@@ -747,6 +760,7 @@
 				7D63C1182A63538D0066AB5A /* ExploreView.swift in Sources */,
 				7D201BEB299C1AB60023D649 /* CustomisationsList.swift in Sources */,
 				7DBE8ED629B919C700A36AA6 /* BackupManager.swift in Sources */,
+				7D1273F52A8250E700FDEBE0 /* TutorialSheetView.swift in Sources */,
 				D625E86A2991CD3000D5A5B0 /* ControlConfigApp.swift in Sources */,
 				7D52218829BBC2B9002FD2A7 /* BackupView.swift in Sources */,
 				7D3BAB7729B3855A0024C9C9 /* ColorTools.swift in Sources */,
@@ -772,6 +786,7 @@
 				7D2919FF2A7F9E9300ACC16E /* offsets.m in Sources */,
 				7D3BAB7B29B4BE760024C9C9 /* EditCCColorsView.swift in Sources */,
 				7D201BF4299C1E280023D649 /* PlistHelpers.swift in Sources */,
+				7D8F69AD2A82E141000D8BDF /* CustomisationSetCodable.swift in Sources */,
 				7DDD2FA529AEB35E0064A7FC /* AppState.swift in Sources */,
 				D6E552D129B3E3300083E6A5 /* ApplicationManager.swift in Sources */,
 				7D201BFB299C23100023D649 /* MainModuleView.swift in Sources */,
@@ -782,6 +797,7 @@
 				7D61BA512A7C2D1D001F9000 /* proc.c in Sources */,
 				D6E552D929B3E7760083E6A5 /* AppListView.swift in Sources */,
 				7DDD2FA329AEB2F90064A7FC /* SettingsView.swift in Sources */,
+				7D1273FD2A829FD900FDEBE0 /* NotificationManager.swift in Sources */,
 				7DF5F6A22A7EF27B00BBC7A0 /* DebugActionsMenu.swift in Sources */,
 				7D61BA4E2A7C2D1D001F9000 /* krw.m in Sources */,
 			);
@@ -951,7 +967,7 @@
 				CODE_SIGN_ENTITLEMENTS = ControlConfig/ControlConfig.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = "KfdExploit-Testing-9";
+				CURRENT_PROJECT_VERSION = "KfdExploit-Testing-10";
 				DEVELOPMENT_ASSET_PATHS = "\"ControlConfig/Preview Content\"";
 				DEVELOPMENT_TEAM = ZV2PLXMRSB;
 				ENABLE_PREVIEWS = YES;
@@ -973,7 +989,7 @@
 				);
 				MARKETING_VERSION = 1.0.0;
 				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.f1shy-dev.ControlConfigXE";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.f1shy-dev.ControlConfigXEX";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -996,7 +1012,7 @@
 				CODE_SIGN_ENTITLEMENTS = ControlConfig/ControlConfig.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = "KfdExploit-Testing-9";
+				CURRENT_PROJECT_VERSION = "KfdExploit-Testing-10";
 				DEVELOPMENT_ASSET_PATHS = "\"ControlConfig/Preview Content\"";
 				DEVELOPMENT_TEAM = ZV2PLXMRSB;
 				ENABLE_PREVIEWS = YES;

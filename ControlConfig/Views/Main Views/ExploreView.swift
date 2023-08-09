@@ -2,7 +2,7 @@
 //  ExploreView.swift
 //  ControlConfig
 //
-//  Created by Vrishank Agarwal on 15/07/2023.
+//  Created by f1shy-dev on 15/07/2023.
 //
 
 import SwiftUI

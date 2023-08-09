@@ -358,11 +358,12 @@ func applyChanges(customisations: CustomisationList) -> (Bool, [String:Bool]) {
         let custom_modules = customisations.list.map { $0.module.fileName }
         for fileName in keys.filter({ key in
             let fn = CCMappings.fileNameBasedSmallIDs[key] as? String
-            
-            if (!["ios15", "ptrace", "mute"].map{fn?.contains($0)}.allSatisfy{$0 == true}) { return false }
-            return !custom_modules.contains(key)
-            
+            let mapped = ["ios15", "ptrace", "mute"].map{fn?.contains($0)}
+            if (!mapped.allSatisfy{$0 == false}) { return false }
+
+            return !custom_modules.contains(key)            
         }) {
+            print(fileName)
             //budget kfd compressor
             let module = Module(fileName: fileName)
             let infoPath = "\(CCMappings.bundlesPath)\(fileName)/Info.plist"

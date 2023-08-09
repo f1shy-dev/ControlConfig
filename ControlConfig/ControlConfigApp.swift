@@ -98,6 +98,7 @@ struct ControlConfigApp: App {
                                     if !UserDefaults.standard.bool(forKey: "shownFirstOpen") {
                                         showingFirstLaunchSheet = true
                                     }
+                                    requestNotificationAuth()
                                 }
                             }
 //                            #endif

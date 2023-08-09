@@ -53,6 +53,41 @@ class OtherCustomisations: ObservableObject, Codable {
     }
 }
 
+class CustomisationSet: Codable, ObservableObject, Hashable, Identifiable {
+    var id: String { bundleID }
+    let bundleID: String
+    let name: String
+    let publisher: String?
+    @Published var moduleColor: Color?
+    @Published var moduleBlur: Int?
+    @Published var moduleBGColor: Color?
+    @Published var moduleBGBlur: Int?
+    @Published var enableCustomColors: Bool
+    @Published var list: [Customisation] { didSet {
+        print("list didset")
+    }}
+    
+    init(bundleID: String, name: String, publisher: String? = nil, moduleColor: Color? = nil, moduleBlur: Int? = nil, moduleBGColor: Color? = nil, moduleBGBlur: Int? = nil, enableCustomColors: Bool = false, list: [Customisation]) {
+        self.bundleID = bundleID
+        self.name = name
+        self.publisher = publisher
+        self.moduleColor = moduleColor
+        self.moduleBlur = moduleBlur
+        self.moduleBGColor = moduleBGColor
+        self.moduleBGBlur = moduleBGBlur
+        self.enableCustomColors = enableCustomColors
+        self.list = list
+    }
+    
+    static func == (lhs: CustomisationSet, rhs: CustomisationSet) -> Bool {
+        lhs.id == rhs.id
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+}
+
 class CustomisationList: ObservableObject {
     
     var list: [Customisation] {
@@ -103,21 +138,7 @@ class CustomisationList: ObservableObject {
                     Module(fileName: mo)
                 }), at: 0)
             }
-        } else {
-            temp_modules.insert(contentsOf: [
-                "ConnectivityModule.bundle",
-                "MediaControlsModule.bundle",
-                "OrientationLockModule.bundle",
-                "AirPlayMirroringModule.bundle",
-                "DisplayModule.bundle",
-                "MediaControlsAudioModule.bundle",
-                "FocusUIModule.bundle",
-                "HomeControlCenterModule.bundle",
-            ].map({ mo in
-                Module(fileName: mo)
-            }), at: 0)
         }
-        
         //safety net for duplicate modules from the file or idfk
         var seen = Set<Module>()
         temp_modules = temp_modules.filter{ seen.insert($0).inserted }.filter{ $0.fileName.trimmingCharacters(in: .whitespacesAndNewlines) != "" }

@@ -2,7 +2,7 @@
 //  CAMLEditorView.swift
 //  ControlConfig
 //
-//  Created by Vrishank Agarwal on 16/07/2023.
+//  Created by f1shy-dev on 16/07/2023.
 //
 
 import SwiftUI

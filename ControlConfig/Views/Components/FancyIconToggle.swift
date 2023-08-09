@@ -2,7 +2,7 @@
 //  FancyIconToggle.swift
 //  ControlConfig
 //
-//  Created by Vrishank Agarwal on 16/07/2023.
+//  Created by f1shy-dev on 16/07/2023.
 //
 
 struct NoPressButtonStyle: ButtonStyle {

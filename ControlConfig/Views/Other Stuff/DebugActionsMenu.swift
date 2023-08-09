@@ -2,7 +2,7 @@
 //  DebugActionsMenu.swift
 //  ControlConfig
 //
-//  Created by Vrishank Agarwal on 05/08/2023.
+//  Created by f1shy-dev on 05/08/2023.
 //
 
 import SwiftUI
@@ -72,6 +72,24 @@ struct DebugActionsMenu: View {
 //                    print(CCSModuleSettingsProvider.sharedProvider())
 //                }
             }
+            
+            Section {
+                ForEach(AppState.shared.currentSet.list, id: \.module.fileName) { item in
+                    Text(item.module.description)
+                }
+                
+                Button("Push new module") {
+                    AppState.shared.currentSet.objectWillChange.send()
+                    AppState.shared.currentSet.list.append(Customisation(module: Module(fileName: "UwU\(Int.random(in: 1000..<9999)).bundle")))
+                }
+                
+                Button("Push new color") {
+                    AppState.shared.currentSet.enableCustomColors = !AppState.shared.currentSet.enableCustomColors
+                }
+            } header: {
+                Text("CCStesting")
+            }
+
         }
     }
 }

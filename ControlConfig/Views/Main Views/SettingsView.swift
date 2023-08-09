@@ -28,54 +28,66 @@ struct SettingsView: View {
         NavigationView {
             Form {
                 Section {
-                    Toggle("Use old respring", isOn: $appState.useLegacyRespring)
+                    Toggle("Use legacy respring", isOn: $appState.useLegacyRespring)
+                    Picker("SpringBoard Language", selection: $appState.sbRegionCode) {
+                        ForEach(CCMappings.hardcodedRegions, id: \.self) { region in
+                            Text(region).tag(region)
+                        }
+                    }
+                    .pickerStyle(.automatic)
+                    .id(appState.sbRegionCode)
+                    Toggle("Enable tip notifications", isOn: $appState.enableTipNotifications)
                 } header: {
-                    Label("Respring", systemImage: "arrow.counterclockwise")
+                    Label("General", systemImage: "gear")
                 } footer: {
-                    Label("Only enable if respringing doesn't work.", systemImage: "info.circle")
+                    Label("Only enable legacy respring if frontboard/backboard respringing don't work.", systemImage: "info.circle")
                 }
 
-                Picker("SpringBoard Language", selection: $appState.sbRegionCode) {
-                    ForEach(CCMappings.hardcodedRegions, id: \.self) { region in
-                        Text(region).tag(region)
-                    }
-                }
-                .pickerStyle(.automatic)
-                .id(appState.sbRegionCode)
+
 //                .onReceive(self.customisation.$mode) { _ in
 //                    customisation.objectWillChange.send()
 //                }
 
                 if activeExploit == .KFD {
-                    Section(header:Label("KFD Exploit Configuration", systemImage: "qrcode"), footer:Label("Only applies to 16.2 and above - requires restart of app to change/apply (ControlConfig runs kopen when you hit Apply for the first time) KFD State (0 means not kopen): \(kfd)", systemImage: "info.circle")) {
-                        Picker(selection: $appState.puaf_pages_index, label: Text("puaf pages:")) {
+                    Section(header:Label("KFD Exploit Configuration", systemImage: "slider.horizontal.3"), footer:Label("Only applies to 16.2 and above - requires restart of app to change/apply (ControlConfig runs kopen when you hit Apply for the first time) KFD State (0 means not kopen): \(kfd)", systemImage: "info.circle")) {
+                        Picker(selection: $appState.puaf_pages_index, label: Text("PUAF Pages")) {
                             ForEach(0 ..< puaf_pages_options.count, id: \.self) {
                                 Text(String(self.puaf_pages_options[$0]))
                             }
                         }.disabled(kfd != 0)
                         
-                        Picker(selection: $appState.puaf_method, label: Text("puaf method:")) {
+                        Picker(selection: $appState.puaf_method, label: Text("PUAF Method")) {
                             ForEach(0 ..< puaf_method_options.count, id: \.self) {
                                 Text(self.puaf_method_options[$0])
                             }
                         }.disabled(kfd != 0)
                         
                         
-                        Picker(selection: $appState.kread_method, label: Text("kread method:")) {
+                        Picker(selection: $appState.kread_method, label: Text("Read Method")) {
                             ForEach(0 ..< kread_method_options.count, id: \.self) {
                                 Text(self.kread_method_options[$0])
                             }
                         }.disabled(kfd != 0)
                         
-                        Picker(selection: $appState.kwrite_method, label: Text("kwrite method:")) {
+                        Picker(selection: $appState.kwrite_method, label: Text("Write Method")) {
                             ForEach(0 ..< kwrite_method_options.count, id: \.self) {
                                 Text(self.kwrite_method_options[$0])
                             }
                         }.disabled(kfd != 0)
                         
+                        Button {
+                            appState.puaf_pages_index = 7
+                            appState.puaf_method = 1
+                            appState.kread_method = 1
+                            appState.kwrite_method = 1
+                        } label: {
+                            Label("Reset to defaults", systemImage: "arrow.clockwise")
+                        }
+
+                        
                     }
                 }
-                Section(header: Label("Debug", systemImage: "ladybug"), footer: Label("Settings meant for people who know what they're doing. Only touch anything here if the developers explicitly told you to.", systemImage: "info.circle")) {
+                Section(header: Label("Debug", systemImage: "ladybug")) {
                     Button("Export app logs") {
                         let encoder = JSONEncoder()
                         encoder.outputFormatting = .prettyPrinted
