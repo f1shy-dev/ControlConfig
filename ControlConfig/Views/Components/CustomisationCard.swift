@@ -15,10 +15,10 @@ struct CustomisationCard: View {
     @Environment(\.editMode) private var editMode
 //    @State var customisationList: CustomisationList
     @ObservedObject var customisation: Customisation
-    @ObservedObject var appState: AppState
+    @EnvironmentObject var appState: AppState
     var deleteCustomisation: (_ item: Customisation) -> Void
-    var saveToUserDefaults: () -> Void
-    var sendUpdateToList: () -> Void
+//    var saveToUserDefaults: () -> Void
+//    var sendUpdateToList: () -> Void
 
     var body: some View {
         HStack {
@@ -102,9 +102,9 @@ struct CustomisationCard: View {
 //        .padding([.top])
 //        .frame(maxWidth: .infinity)
         .sheet(isPresented: $showingEditSheet, onDismiss: {
-            saveToUserDefaults()
+            appState.currentSet.objectWillChange.send()
         }) {
-            EditModuleView(customisation: customisation, appState: appState, saveToUserDefaults: saveToUserDefaults)
+            EditModuleView(customisation: customisation)
                 .headerProminence(.standard)
         }
 //        .confirmationDialog("Are you sure you want to delete the customisation \"\(customisation.module.description)\"?", isPresented: $showingDeleteConfirmation, titleVisibility: .visible) {
@@ -138,7 +138,8 @@ struct CustomisationCard_Previews: PreviewProvider {
     static var previews: some View {
         List {
             ForEach((1...10).reversed(), id: \.self) {_ in
-                CustomisationCard(customisation: Customisation(module: Module(fileName: "uwu")), appState: AppState.shared, deleteCustomisation: {item in}, saveToUserDefaults: {}, sendUpdateToList: {})            .listRowInsets(EdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8 ))
+                CustomisationCard(customisation: Customisation(module: Module(fileName: "uwu")), deleteCustomisation: {item in})
+                    .listRowInsets(EdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8 ))
 
             }
         }

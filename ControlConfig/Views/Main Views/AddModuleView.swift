@@ -10,11 +10,11 @@ import SwiftUI
 
 struct AddModuleView: View {
     @Environment(\.dismiss) var dismiss
-    @ObservedObject var customisations: CustomisationList
+    @EnvironmentObject var appState: AppState
 
     var body: some View {
         let filteredModules = fetchModules().filter { module in
-            if (customisations.list.contains { customisation in
+            if (appState.currentSet.list.contains { customisation in
                 customisation.module.fileName == module.fileName
             }) { return false }
             return true
@@ -61,7 +61,7 @@ struct AddModuleView: View {
                     }
                     .contentShape(Rectangle())
                     .onTapGesture {
-                        customisations.addCustomisation(item: Customisation(module: module))
+                        appState.currentSet.list.append(Customisation(module: module))
                         dismiss()
                     }
 //                    }

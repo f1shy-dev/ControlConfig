@@ -10,7 +10,7 @@ import AssetCatalogWrapper
 import SwiftUI
 
 struct RenditionEditorView: View {
-    @ObservedObject var customisations: CustomisationList
+    @EnvironmentObject var appState: AppState
     @State var catalog: CUICatalog
     @State var rendition: Rendition
     @State var filePath: URL

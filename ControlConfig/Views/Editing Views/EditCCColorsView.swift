@@ -30,14 +30,12 @@ struct SingleBlurModule: View {
 }
 
 struct EditCCColorsView: View {
-    @State private var selectedWallpaper = "iPhone SE"
-    @ObservedObject var state: OtherCustomisations
-    var saveOCToUserDefaults: () -> Void
+    @State private var selectedWallpaper = "iOS 16 WWDC"
+    @EnvironmentObject var appState: AppState
 
     var body: some View {
-        let _ = saveOCToUserDefaults()
         List {
-            Toggle("Enable Custom CC Colors", isOn: $state.enableCustomColors.toUnwrapped(defaultValue: false))
+            Toggle("Enable Custom Colors", isOn: $appState.currentSet.enableCustomColors)
         
             Section(header: Label("Preview", systemImage: "eye"), footer: Text("Note: This preview isn't 100% accurate to what the actual control center will look like.")) {
                 HStack {
@@ -45,7 +43,7 @@ struct EditCCColorsView: View {
 //                    Spacer(minLength: 0)
 
                     ForEach(["lock.rotation", "flashlight.off.fill", "timer", "camera.fill"], id: \.self) { img in
-                        SingleBlurModule(color: state.moduleColor, image: img, intensity: $state.moduleBlur)
+                        SingleBlurModule(color: appState.currentSet.moduleColor, image: img, intensity: $appState.currentSet.moduleBlur)
                     }
                     Spacer()
                 }
@@ -55,8 +53,8 @@ struct EditCCColorsView: View {
                     Image("PreviewWall \(selectedWallpaper)")
                         .resizable()
                         .scaledToFill()
-                        .blur(radius: CGFloat(state.moduleBGBlur ?? 50))
-                    state.moduleBGColor
+                        .blur(radius: CGFloat(appState.currentSet.moduleBGBlur ?? 50))
+                    appState.currentSet.moduleBGColor
 
                 })
 
@@ -65,28 +63,28 @@ struct EditCCColorsView: View {
                         Text(option)
                     }
                 }
-            }.listRowSeparator(.hidden).disabled(!(state.enableCustomColors ?? false))
+            }.listRowSeparator(.hidden).disabled(!appState.currentSet.enableCustomColors)
             Section(header: Label("Control Center Background", systemImage: "paintbrush")) {
-                ColorPicker("Colour (with opacity)", selection: $state.moduleBGColor.toUnwrapped(defaultValue: .gray))
+                ColorPicker("Colour (with opacity)", selection: $appState.currentSet.moduleBGColor.toUnwrapped(defaultValue: .gray))
                 HStack {
-                    Text("Blur (\(state.moduleBGBlur ?? 50))")
+                    Text("Blur (\(appState.currentSet.moduleBGBlur ?? 50))")
                     Spacer()
-                    Slider(value: $state.moduleBGBlur.toUnwrapped(defaultValue: 50).doubleBinding, in: 0 ... 100, step: 1) {
+                    Slider(value: $appState.currentSet.moduleBGBlur.toUnwrapped(defaultValue: 50).doubleBinding, in: 0 ... 100, step: 1) {
                         Text("Blur")
                     } minimumValueLabel: { Text("0") } maximumValueLabel: { Text("100") }.frame(width: 150)
                 }
-            }.disabled(!(state.enableCustomColors ?? false))
+            }.disabled(!appState.currentSet.enableCustomColors)
 
             Section(header: Label("Module Colour", systemImage: "paintbrush")) {
-                ColorPicker("Colour (with opacity)", selection: $state.moduleColor.toUnwrapped(defaultValue: .gray))
+                ColorPicker("Colour (with opacity)", selection: $appState.currentSet.moduleColor.toUnwrapped(defaultValue: .gray))
                 HStack {
-                    Text("Blur (\(state.moduleBlur ?? 50))")
+                    Text("Blur (\(appState.currentSet.moduleBlur ?? 50))")
                     Spacer()
-                    Slider(value: $state.moduleBlur.toUnwrapped(defaultValue: 50).doubleBinding, in: 0 ... 100, step: 1) {
+                    Slider(value: $appState.currentSet.moduleBlur.toUnwrapped(defaultValue: 50).doubleBinding, in: 0 ... 100, step: 1) {
                         Text("Blur")
                     } minimumValueLabel: { Text("0") } maximumValueLabel: { Text("100") }.frame(width: 150)
                 }
-            }.disabled(!(state.enableCustomColors ?? false))
+            }.disabled(!appState.currentSet.enableCustomColors)
         }.navigationBarTitle("Edit CC Colours").navigationBarTitleDisplayMode(.inline)
     }
 }

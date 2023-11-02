@@ -25,15 +25,12 @@ struct LabelTextField: View {
 struct EditModuleView: View {
     @Environment(\.dismiss) var dismiss
     @ObservedObject var customisation: Customisation
-    @ObservedObject var appState: AppState
+    @EnvironmentObject var appState: AppState
     @State private var selectedMode: CustomisationMode
     @State var showingAppPickerSheet: Bool = false
-    var saveToUserDefaults: () -> Void
 
-    init(customisation: Customisation, appState: AppState, saveToUserDefaults: @escaping () -> Void) {
+    init(customisation: Customisation) {
         self.customisation = customisation
-        self.saveToUserDefaults = saveToUserDefaults
-        self.appState = appState
         _selectedMode = State(initialValue: customisation.mode)
     }
 
@@ -51,7 +48,7 @@ struct EditModuleView: View {
                     .pickerStyle(.automatic)
                     .id(customisation)
                     .onReceive(self.customisation.$mode) { _ in
-                        customisation.objectWillChange.send()
+                        appState.currentSet.objectWillChange.send()
                     }
                 }
 
@@ -88,7 +85,7 @@ struct EditModuleView: View {
                         .pickerStyle(.automatic)
                         .id(customisation)
                         .onReceive(self.customisation.$customAction) { _ in
-                            customisation.objectWillChange.send()
+                            appState.currentSet.objectWillChange.send()
                         }
                     }
                 case .DefaultFunction:
@@ -109,7 +106,7 @@ struct EditModuleView: View {
                     .pickerStyle(.automatic)
                     .id(customisation)
                     .onReceive(self.customisation.$customSizeMode) { _ in
-                        customisation.objectWillChange.send()
+                        appState.currentSet.objectWillChange.send()
                     }
 
                     switch customisation.customSizeMode {
@@ -147,7 +144,6 @@ struct EditModuleView: View {
             .toolbar {
                 ToolbarItem {
                     Button(action: {
-                        saveToUserDefaults()
                         dismiss()
                     }, label: {
                         Label("Close", systemImage: "xmark")

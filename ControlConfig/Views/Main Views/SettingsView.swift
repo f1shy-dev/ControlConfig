@@ -13,8 +13,7 @@ import WelcomeSheet
 
 struct SettingsView: View {
     @Environment(\.dismiss) var dismiss
-    @ObservedObject var appState: AppState
-    @ObservedObject var customisations: CustomisationList
+    @EnvironmentObject var appState: AppState
     @State var showFirstLaunchSheet = false
     @State var showPrintActionsSheet = false
     @State var camlCALayer: CALayer?
@@ -49,7 +48,7 @@ struct SettingsView: View {
 //                }
 
                 if activeExploit == .KFD {
-                    Section(header:Label("KFD Exploit Configuration", systemImage: "slider.horizontal.3"), footer:Label("Only applies to 16.2 and above - requires restart of app to change/apply (ControlConfig runs kopen when you hit Apply for the first time) KFD State (0 means not kopen): \(kfd)", systemImage: "info.circle")) {
+                    Section(header:Label("KFD Exploit Configuration", systemImage: "slider.horizontal.3"), footer:Label("ControlConfig runs kopen when you hit Apply for the first time\n\nKFD State (0 means not kopen): \(kfd)", systemImage: "info.circle")) {
                         Picker(selection: $appState.puaf_pages_index, label: Text("PUAF Pages")) {
                             ForEach(0 ..< puaf_pages_options.count, id: \.self) {
                                 Text(String(self.puaf_pages_options[$0]))
@@ -87,17 +86,31 @@ struct SettingsView: View {
                         
                     }
                 }
+                
+                if activeExploit == .KFD{
+                    Section(header: Label("KFD Hybrid Apply", systemImage: "repeat"), footer:Label("Hybrid Apply overwrites files before and during the respring process multiple times, to improve the chance of your tweaks applying. Access it by holding down on Apply in the main screen.", systemImage: "info.circle")) {
+                    
+                        Stepper(value: $appState.hybrid_apply_pre_tries.doubleBinding, in: 0 ... 10, step: 1) {
+                            Text("Applies Before Respring (\(appState.hybrid_apply_pre_tries))")
+                        }
+                    
+                    
+              
+                        Stepper(value: $appState.hybrid_apply_after_tries.doubleBinding, in: 0 ... 10, step: 1) {
+                            Text("Applies After Respring (\(appState.hybrid_apply_after_tries))")
+                        }
+                        
+                        
+                        Toggle("Kclose after hybrid apply", isOn: $appState.hybrid_apply_kclose_when_done)
+                    }
+                }
                 Section(header: Label("Debug", systemImage: "ladybug")) {
                     Button("Export app logs") {
                         let encoder = JSONEncoder()
                         encoder.outputFormatting = .prettyPrinted
-                        if let encoded = try? encoder.encode(customisations.list) {
-                            if customisations.list.isEmpty {
-                                print("customisation list EMPTY")
-                            } else {
-                                print("customisation list")
+                        if let encoded = try? encoder.encode(appState) {
+                                print("[AppState JSON Encoded]")
                                 print(String(data: encoded, encoding: .utf8)!)
-                            }
                         }
 
                         print("""
@@ -136,6 +149,11 @@ struct SettingsView: View {
                         }.sheet(isPresented: $showPrintActionsSheet) {
                            DebugActionsMenu()
                         }
+                        
+                        if #available(iOS 16.0, *) {
+                            Toggle("⚠️ Force KFD Exploit", isOn: $appState.force_kfd_exploit)
+                        }
+
                     }
                 }
 //                Section {} header: {

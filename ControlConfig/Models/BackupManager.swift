@@ -97,12 +97,10 @@ class BackupManager {
                     if let id = backupInfo["id"] as? String,
                        let backup = self.loadBackup(id: id)
                     {
-//                        print(backup)
                         self.backups.append(backup)
                         self.backups = Array(Set(self.backups))
                     }
                 }
-//                print("loaded \(self.backups.count) backups.")
             }
         }
         
@@ -113,9 +111,16 @@ class BackupManager {
                     let backupFolderURL = URL(fileURLWithPath: self.backupFolder)
                     do {
                         let backupURL = backupFolderURL.appendingPathComponent("bundled_backup_16")
-                        if FileManager.default.fileExists(atPath: backupURL.path) {
-                            try FileManager.default.removeItem(at: backupURL)
+                        if FileManager.default.fileExists(atPath: backupFolderURL.path) {
+                            try FileManager.default.removeItem(at: backupFolderURL)
                         }
+                        do {
+                            try FileManager.default.createDirectory(
+                                atPath: backupURL.path, withIntermediateDirectories: true, attributes: nil)
+                        } catch {
+                            print("Error creating backup folder: \(error)")
+                        }
+                        
                         try FileManager.default.unzipItem(at: bundledBackupURL, to: backupURL)
                         if let backup = self.loadBackup(id: "bundled_backup_16") {
                             self.backups.append(backup)
@@ -198,6 +203,8 @@ class BackupManager {
             dictionary["cm_modulesBackground"] = cm_modulesBackground != nil
             dictionary["cm_moduleFill"] = cm_moduleFill != nil
             dictionary["cm_moduleStroke"] = cm_moduleStroke != nil
+        
+        print("bStatus", dictionary)
 
 
         if let moduleConfiguration = moduleConfiguration,
@@ -299,15 +306,12 @@ class BackupManager {
         print("backupFolder", backupFolder)
 
         for file in [
-            CCMappings.moduleAllowedListPath, CCMappings().dmsPath
+            CCMappings.moduleAllowedListPath, CCMappings().dmsPath, CCMappings.moduleConfigurationPath, CCMappings.moduleConfiguration_ccsupportPath
         ] {
             // copy file if it exists
             if FileManager.default.fileExists(atPath: file) {
                 self.copyBackupFile(from: file, id: backupId)
             }
-        }
-        for file in [CCMappings.moduleConfigurationPath, CCMappings.moduleConfiguration_ccsupportPath] {
-            
         }
 
         // copy corematerial.framework folder to backupFolder

@@ -74,14 +74,15 @@ func fetchModules() -> [Module] {
 
 
 
-func applyChanges(customisations: CustomisationList) -> (Bool, [String:Bool]) {
+func applyChanges() -> (Bool, [String:Bool]) {
+    let currentSet = AppState.shared.currentSet
     print() // emoji seperation
     var emptyDMS: [String: Any] = [:]
     var successMap: [String: Bool] = [:]
     let backupDMS = BackupManager.shared.latestBackup?.defaultModuleSettings
     
     var compressedAllowList: [String] = []
-    for customisation in customisations.list {
+    for customisation in currentSet.list {
         let infoPath = "\(CCMappings.bundlesPath)\(customisation.module.fileName)/Info.plist"
         let infoPlist = NSMutableDictionary()
 //        let originalPlist = PlistHelpers.plistToDict(path: infoPath)
@@ -355,7 +356,7 @@ func applyChanges(customisations: CustomisationList) -> (Bool, [String:Bool]) {
 
     
     if activeExploit == .KFD, let keys = CCMappings.fileNameBasedSmallIDs.allKeys as? [String] {
-        let custom_modules = customisations.list.map { $0.module.fileName }
+        let custom_modules = currentSet.list.map { $0.module.fileName }
         for fileName in keys.filter({ key in
             let fn = CCMappings.fileNameBasedSmallIDs[key] as? String
             let mapped = ["ios15", "ptrace", "mute"].map{fn?.contains($0)}
@@ -406,7 +407,7 @@ func applyChanges(customisations: CustomisationList) -> (Bool, [String:Bool]) {
 //    revert modules
     
     let notAddedModules = fetchModules().filter { mod in
-        !customisations.list.contains(where: {$0.module.fileName == mod.fileName})
+        !currentSet.list.contains(where: {$0.module.fileName == mod.fileName})
     }.filter{mod in
         CCMappings().hiddenModulesToPatch.contains(mod.fileName)
     }
@@ -460,13 +461,13 @@ func applyChanges(customisations: CustomisationList) -> (Bool, [String:Bool]) {
 
     
     
-    if customisations.otherCustomisations.enableCustomColors == true {
+    if currentSet.enableCustomColors == true {
         print("⚙️ Writing colour recipes")
-        if let c = customisations.otherCustomisations.moduleColor, let b = customisations.otherCustomisations.moduleBlur {
+        if let c = currentSet.moduleColor, let b = currentSet.moduleBlur {
             successMap["Colours - Module"] = (ColorTools.applyMaterialRecipe(filePath: CCMappings.moduleMaterialRecipePath, color: c, blur: b, includeSpecificsForCCModules: true))
         }
         
-        if let cB = customisations.otherCustomisations.moduleBGColor, let bB = customisations.otherCustomisations.moduleBGBlur {
+        if let cB = currentSet.moduleBGColor, let bB = currentSet.moduleBGBlur {
             successMap["Colours - Module Background"] = (ColorTools.applyMaterialRecipe(filePath: CCMappings.moduleBackgroundMaterialRecipePath, color: cB, blur: bB, includeSpecificsForCCModules: false))
         }
     }
@@ -476,7 +477,7 @@ func applyChanges(customisations: CustomisationList) -> (Bool, [String:Bool]) {
             let moduleConf = NSMutableDictionary()
             moduleConf["disabled-module-identifiers"] = []
             moduleConf["userenabled-fixed-module-identifiers"] = []
-            moduleConf["module-identifiers"] = customisations.list.filter {!$0.module.fileName.contains("ConferenceControlCenterModule")}.map {
+            moduleConf["module-identifiers"] = currentSet.list.filter {!$0.module.fileName.contains("ConferenceControlCenterModule")}.map {
                 CCMappings.fileNameBasedSmallIDs[$0.module.fileName] as? String ?? $0.module.bundleID  } as [String]
             moduleConf["version"] = 1
 

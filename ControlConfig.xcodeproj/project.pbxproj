@@ -13,7 +13,7 @@
 		7D1273FD2A829FD900FDEBE0 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D1273FC2A829FD900FDEBE0 /* NotificationManager.swift */; };
 		7D201BE7299C19A20023D649 /* Module.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201BE6299C19A20023D649 /* Module.swift */; };
 		7D201BE9299C1A2B0023D649 /* Customisation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201BE8299C1A2B0023D649 /* Customisation.swift */; };
-		7D201BEB299C1AB60023D649 /* CustomisationsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201BEA299C1AB60023D649 /* CustomisationsList.swift */; };
+		7D201BEB299C1AB60023D649 /* CustomisationSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201BEA299C1AB60023D649 /* CustomisationSet.swift */; };
 		7D201BEE299C1D1C0023D649 /* TypeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201BED299C1D1C0023D649 /* TypeExtensions.swift */; };
 		7D201BF0299C1D470023D649 /* MDCSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201BEF299C1D470023D649 /* MDCSwift.swift */; };
 		7D201BF2299C1DE30023D649 /* MDCWrappers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D201BF1299C1DE30023D649 /* MDCWrappers.swift */; };
@@ -43,7 +43,7 @@
 		7D6CFADD2A7E6A0D0038E142 /* iOS16_CCBackup.zip in Resources */ = {isa = PBXBuildFile; fileRef = 7D6CFADC2A7E6A0D0038E142 /* iOS16_CCBackup.zip */; };
 		7D7956AF29BFCD9B00D7CFCD /* WelcomeSheet in Frameworks */ = {isa = PBXBuildFile; productRef = 7D7956AE29BFCD9B00D7CFCD /* WelcomeSheet */; };
 		7D7956B129BFCE5300D7CFCD /* FirstLaunchSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D7956B029BFCE5300D7CFCD /* FirstLaunchSheetView.swift */; };
-		7D8F69AD2A82E141000D8BDF /* CustomisationSetCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D8F69AC2A82E141000D8BDF /* CustomisationSetCodable.swift */; };
+		7D8F69AF2A8563EC000D8BDF /* ApplyAndReorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D8F69AE2A8563EC000D8BDF /* ApplyAndReorder.swift */; };
 		7DBE8ED629B919C700A36AA6 /* BackupManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DBE8ED529B919C700A36AA6 /* BackupManager.swift */; };
 		7DDD2FA329AEB2F90064A7FC /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DDD2FA229AEB2F90064A7FC /* SettingsView.swift */; };
 		7DDD2FA529AEB35E0064A7FC /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DDD2FA429AEB35E0064A7FC /* AppState.swift */; };
@@ -105,7 +105,7 @@
 		7D1273FC2A829FD900FDEBE0 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		7D201BE6299C19A20023D649 /* Module.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Module.swift; sourceTree = "<group>"; };
 		7D201BE8299C1A2B0023D649 /* Customisation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Customisation.swift; sourceTree = "<group>"; };
-		7D201BEA299C1AB60023D649 /* CustomisationsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomisationsList.swift; sourceTree = "<group>"; };
+		7D201BEA299C1AB60023D649 /* CustomisationSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomisationSet.swift; sourceTree = "<group>"; };
 		7D201BED299C1D1C0023D649 /* TypeExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeExtensions.swift; sourceTree = "<group>"; };
 		7D201BEF299C1D470023D649 /* MDCSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MDCSwift.swift; sourceTree = "<group>"; };
 		7D201BF1299C1DE30023D649 /* MDCWrappers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MDCWrappers.swift; sourceTree = "<group>"; };
@@ -168,7 +168,7 @@
 		7D63C1262A64752D0066AB5A /* CAPropertyInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CAPropertyInfo.h; sourceTree = "<group>"; };
 		7D6CFADC2A7E6A0D0038E142 /* iOS16_CCBackup.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = iOS16_CCBackup.zip; sourceTree = "<group>"; };
 		7D7956B029BFCE5300D7CFCD /* FirstLaunchSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstLaunchSheetView.swift; sourceTree = "<group>"; };
-		7D8F69AC2A82E141000D8BDF /* CustomisationSetCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomisationSetCodable.swift; sourceTree = "<group>"; };
+		7D8F69AE2A8563EC000D8BDF /* ApplyAndReorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyAndReorder.swift; sourceTree = "<group>"; };
 		7DBE8ED429B7EC0E00A36AA6 /* ControlConfig.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ControlConfig.entitlements; sourceTree = "<group>"; };
 		7DBE8ED529B919C700A36AA6 /* BackupManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupManager.swift; sourceTree = "<group>"; };
 		7DDD2FA229AEB2F90064A7FC /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -299,11 +299,10 @@
 			children = (
 				7D201BE6299C19A20023D649 /* Module.swift */,
 				7D201BE8299C1A2B0023D649 /* Customisation.swift */,
-				7D201BEA299C1AB60023D649 /* CustomisationsList.swift */,
+				7D201BEA299C1AB60023D649 /* CustomisationSet.swift */,
 				7DDD2FA429AEB35E0064A7FC /* AppState.swift */,
 				7DBE8ED529B919C700A36AA6 /* BackupManager.swift */,
 				7D63C11B2A643BFD0066AB5A /* IconPack.swift */,
-				7D8F69AC2A82E141000D8BDF /* CustomisationSetCodable.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -329,6 +328,7 @@
 			children = (
 				7D09760C2995714D004E6087 /* ModuleOperations.swift */,
 				7D201BF6299C1FAC0023D649 /* StaticCCMappings.swift */,
+				7D8F69AE2A8563EC000D8BDF /* ApplyAndReorder.swift */,
 			);
 			path = "Control Center";
 			sourceTree = "<group>";
@@ -758,7 +758,7 @@
 				7DF5FE2329E81FEC00809050 /* RenditionEditorView.swift in Sources */,
 				7D7956B129BFCE5300D7CFCD /* FirstLaunchSheetView.swift in Sources */,
 				7D63C1182A63538D0066AB5A /* ExploreView.swift in Sources */,
-				7D201BEB299C1AB60023D649 /* CustomisationsList.swift in Sources */,
+				7D201BEB299C1AB60023D649 /* CustomisationSet.swift in Sources */,
 				7DBE8ED629B919C700A36AA6 /* BackupManager.swift in Sources */,
 				7D1273F52A8250E700FDEBE0 /* TutorialSheetView.swift in Sources */,
 				D625E86A2991CD3000D5A5B0 /* ControlConfigApp.swift in Sources */,
@@ -770,6 +770,7 @@
 				7D3BAB7929B4BE2E0024C9C9 /* UIViewBlurEffect.swift in Sources */,
 				7D201BF0299C1D470023D649 /* MDCSwift.swift in Sources */,
 				7D201C00299C238D0023D649 /* EditModuleView.swift in Sources */,
+				7D8F69AF2A8563EC000D8BDF /* ApplyAndReorder.swift in Sources */,
 				7D201BF7299C1FAC0023D649 /* StaticCCMappings.swift in Sources */,
 				7D201C02299C25190023D649 /* CustomisationCard.swift in Sources */,
 				7DF5FE2129E767C300809050 /* ImagePicker.swift in Sources */,
@@ -786,7 +787,6 @@
 				7D2919FF2A7F9E9300ACC16E /* offsets.m in Sources */,
 				7D3BAB7B29B4BE760024C9C9 /* EditCCColorsView.swift in Sources */,
 				7D201BF4299C1E280023D649 /* PlistHelpers.swift in Sources */,
-				7D8F69AD2A82E141000D8BDF /* CustomisationSetCodable.swift in Sources */,
 				7DDD2FA529AEB35E0064A7FC /* AppState.swift in Sources */,
 				D6E552D129B3E3300083E6A5 /* ApplicationManager.swift in Sources */,
 				7D201BFB299C23100023D649 /* MainModuleView.swift in Sources */,
@@ -967,7 +967,7 @@
 				CODE_SIGN_ENTITLEMENTS = ControlConfig/ControlConfig.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = "KfdExploit-Testing-10";
+				CURRENT_PROJECT_VERSION = "KfdPublic-P11-1";
 				DEVELOPMENT_ASSET_PATHS = "\"ControlConfig/Preview Content\"";
 				DEVELOPMENT_TEAM = ZV2PLXMRSB;
 				ENABLE_PREVIEWS = YES;
@@ -987,7 +987,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0.1;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.f1shy-dev.ControlConfigXEX";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1012,7 +1012,7 @@
 				CODE_SIGN_ENTITLEMENTS = ControlConfig/ControlConfig.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = "KfdExploit-Testing-10";
+				CURRENT_PROJECT_VERSION = "KfdPublic-P11-1";
 				DEVELOPMENT_ASSET_PATHS = "\"ControlConfig/Preview Content\"";
 				DEVELOPMENT_TEAM = ZV2PLXMRSB;
 				ENABLE_PREVIEWS = YES;
@@ -1032,7 +1032,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0.1;
 				OTHER_LDFLAGS = "$(inherited)";
 				"OTHER_LDFLAGS[arch=*]" = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.f1shy-dev.ControlConfig";

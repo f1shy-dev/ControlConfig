@@ -9,17 +9,16 @@ import Combine
 import Foundation
 
 class AppState: Codable, ObservableObject {
-    static let shared = AppState.loadFromUserDefaults()
+    static let shared = AppState.loadFromDisk()
 
-    @Published var enableTipNotifications: Bool { didSet { saveToUserDefaults() } }
-    @Published var enableConsole: Bool { didSet { saveToUserDefaults() } }
-    @Published var useLegacyRespring: Bool { didSet { saveToUserDefaults() } }
-    @Published var enableExperimentalFeatures: Bool { didSet { saveToUserDefaults() } }
-    @Published var sbRegionCode: String { didSet { saveToUserDefaults() } }
+    @Published var enableTipNotifications: Bool = true
+    @Published var enableConsole: Bool = false
+    @Published var useLegacyRespring: Bool = false
+    @Published var enableExperimentalFeatures: Bool = false
+    @Published var sbRegionCode: String
 
-    @Published var debugMode: Bool {
+    @Published var debugMode: Bool = false {
         didSet {
-            saveToUserDefaults()
             if debugMode == false {
                 enableConsole = false
                 enableExperimentalFeatures = false
@@ -27,29 +26,52 @@ class AppState: Codable, ObservableObject {
         }
     }
 
-    @Published var puaf_pages_index = 7 { didSet { saveToUserDefaults() } }
-    @Published var puaf_pages = 0 { didSet { saveToUserDefaults() } }
-    @Published var puaf_method = 1 { didSet { saveToUserDefaults() } }
-    @Published var kread_method = 1 { didSet { saveToUserDefaults() } }
-    @Published var kwrite_method = 1 { didSet { saveToUserDefaults() } }
-    @Published var currentSet = CustomisationSet(bundleID: "com.uwuset", name: "ComLabs", list: [Customisation(module: Module(fileName: "Fake.bundle"))]) {
+    @Published var puaf_pages_index = 7
+    @Published var puaf_pages = 0
+    @Published var puaf_method = 1
+    @Published var kread_method = 1
+    @Published var kwrite_method = 1
+    
+    @Published var hybrid_apply_pre_tries = 2
+    @Published var hybrid_apply_after_tries = 5
+    @Published var hybrid_apply_kclose_when_done = true
+    @Published var force_kfd_exploit = false {
         didSet {
-            print("hooked/s")
-            saveToUserDefaults()
+            sendNotification(identifier: "force-kfd", title: "Debug: Force KFD", subtitle: "Please relaunch app to continue", secondsLater: 1, isRepeating: false)
+            self.saveToDisk()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                exit(1)
+            }
         }
     }
     
-    private var subscribers: Set<AnyCancellable> = []
+    @Published var currentSet: CustomisationSet
+    var savedSets: [CustomisationSet]
+    var sets: [CustomisationSet] {
+        [currentSet] + savedSets
+    }
     
-
-    private init(enableTipNotifications: Bool, enableConsole: Bool, useLegacyRespring: Bool, debugMode: Bool, enableExperimentalFeatures: Bool) {
+    @Published var currentIconPack: ExtractedIconPack?
+    var savedIconPacks: [ExtractedIconPack]
+    var iconPacks: [ExtractedIconPack] {
+        if let current = currentIconPack {
+            return savedIconPacks + [current]
+        } else { return savedIconPacks }
+    }
+    
+    private var cancellable: AnyCancellable?
+    
+    private init(enableTipNotifications: Bool, enableConsole: Bool, useLegacyRespring: Bool, debugMode: Bool, enableExperimentalFeatures: Bool, savedSets: [CustomisationSet], currentSet: CustomisationSet, savedIconPacks: [ExtractedIconPack], currentIconPack: ExtractedIconPack?) {
         self.enableTipNotifications = enableTipNotifications
         self.enableConsole = enableConsole
         self.debugMode = debugMode
         self.useLegacyRespring = useLegacyRespring
         self.enableExperimentalFeatures = enableExperimentalFeatures
-//        consoleManager.isVisible = enableConsole
-
+        self.savedSets = savedSets
+        self.currentSet = currentSet
+        self.savedIconPacks = savedIconPacks
+        self.currentIconPack = currentIconPack
+        
         let deviceLanguageCode = Locale.current.languageCode ?? ""
         if CCMappings.hardcodedRegions.contains(deviceLanguageCode) { self.sbRegionCode = deviceLanguageCode }
         else if let regionCode = Locale.current.regionCode, CCMappings.hardcodedRegions.contains("\(deviceLanguageCode)_\(regionCode)") {
@@ -57,15 +79,17 @@ class AppState: Codable, ObservableObject {
         } else {
             self.sbRegionCode = "en"
         }
-        
-        self.$currentSet.sink(receiveCompletion: { completion in
-            print("Completion event: \(completion)")
-        }, receiveValue: { updatedCurrentSet in
-            print("Sink triggered with updated currentSet: \(updatedCurrentSet)")
-        })
-        .store(in: &subscribers)
+
+        self._init_sink()
     }
     
+    func _init_sink() {
+        self.cancellable = self.currentSet.objectWillChange.sink { _ in
+            print("[sink] currentset objectwillchange")
+            self.objectWillChange.send()
+        }
+    }
+
     enum CodingKeys: CodingKey {
         case enableTipNotifications
         case enableConsole
@@ -78,75 +102,37 @@ class AppState: Codable, ObservableObject {
         case puaf_method
         case kread_method
         case kwrite_method
+        case hybrid_apply_pre_tries
+        case hybrid_apply_after_tries
+        case hybrid_apply_kclose_when_done
+        case force_kfd_exploit
         case currentSet
+        case savedSets
+        case currentIconPack
+        case savedIconPacks
     }
-
-//    enum CodingKeys: String, CodingKey {
-//        case enableTipNotifications
-//        case enableConsole
-//        case useLegacyRespring
-//        case debugMode
-//        case enableExperimentalFeatures
-//        case sbRegionCode
-//
-//        case puaf_pages_index
-//        case puaf_pages
-//        case puaf_method
-//        case kread_method
-//        case kwrite_method
-//    }
-//
-//    required init(from decoder: Decoder) throws {
-//        let container = try decoder.container(keyedBy: CodingKeys.self)
-//        self.enableTipNotifications = try container.decode(Bool.self, forKey: .enableTipNotifications)
-//        self.enableConsole = try container.decode(Bool.self, forKey: .enableConsole)
-//        self.useLegacyRespring = try container.decode(Bool.self, forKey: .useLegacyRespring)
-//        self.debugMode = try container.decode(Bool.self, forKey: .debugMode)
-//        self.sbRegionCode = try container.decode(String.self, forKey: .sbRegionCode)
-//        self.enableExperimentalFeatures = try container.decode(Bool.self, forKey: .enableExperimentalFeatures)
-//
-//        self.puaf_pages_index = try container.decode(Int.self, forKey: .puaf_pages_index)
-//        self.puaf_pages = try container.decode(Int.self, forKey: .puaf_pages)
-//        self.puaf_method = try container.decode(Int.self, forKey: .puaf_method)
-//        self.kread_method = try container.decode(Int.self, forKey: .kread_method)
-//        self.kwrite_method = try container.decode(Int.self, forKey: .kwrite_method)
-////        consoleManager.isVisible = enableConsole
-//    }
-//
-//    public func encode(to encoder: Encoder) throws {
-//        var container = encoder.container(keyedBy: CodingKeys.self)
-//
-//        try container.encode(enableTipNotifications, forKey: .enableTipNotifications)
-//        try container.encode(enableConsole, forKey: .enableConsole)
-//        try container.encode(useLegacyRespring, forKey: .useLegacyRespring)
-//        try container.encode(debugMode, forKey: .debugMode)
-//        try container.encode(sbRegionCode, forKey: .sbRegionCode)
-//        try container.encode(enableExperimentalFeatures, forKey: .enableExperimentalFeatures)
-//
-//        try container.encode(puaf_pages_index, forKey: .puaf_pages_index)
-//        try container.encode(puaf_pages, forKey: .puaf_pages)
-//        try container.encode(puaf_method, forKey: .puaf_method)
-//        try container.encode(kread_method, forKey: .kread_method)
-//        try container.encode(kwrite_method, forKey: .kwrite_method)
-//    }
-
-
-    func saveToUserDefaults() {
-        print("💾 Saving app state to defaults...")
-        let encoder = JSONEncoder()
-        if let encoded = try? encoder.encode(self) {
-            UserDefaults.standard.set(encoded, forKey: "appState")
-        }
-    }
-
-    private static func loadFromUserDefaults() -> AppState {
-        print("load usd, appstate")
-        if let data = UserDefaults.standard.data(forKey: "appState"),
-           let state = try? JSONDecoder().decode(AppState.self, from: data)
-        {
-            return state
-        }
+    
+    func saveToDisk() {
+        _debug_savedAppState_counter += 1
+        print("💾 [\(_debug_savedAppState_counter)] Saving app state...")
         
-        return AppState(enableTipNotifications: true,enableConsole: false, useLegacyRespring: false, debugMode:false, enableExperimentalFeatures: false)
+        do {
+            let encodedData = try JSONEncoder().encode(self)
+            try encodedData.write(to: URL.documents.appendingPathComponent("app_state.json"))
+        } catch let error {
+            print("Failed to save app state. Error: \(error.localizedDescription)")
+        }
+    }
+    
+    private static func loadFromDisk() -> AppState {
+        do {
+            let data = try Data(contentsOf: URL.documents.appendingPathComponent("app_state.json"))
+            let state = try JSONDecoder().decode(AppState.self, from: data)
+            state._init_sink()
+            state.currentSet._init_sink()
+            return state
+        } catch {
+            return AppState(enableTipNotifications: true,enableConsole: false, useLegacyRespring: false, debugMode:false, enableExperimentalFeatures: false,savedSets: [], currentSet: CustomisationSet(bundleID: UUID().uuidString, name: "Default"), savedIconPacks: [], currentIconPack: nil)
+        }
     }
 }

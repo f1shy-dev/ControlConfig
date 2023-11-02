@@ -15,25 +15,22 @@ struct MainModuleView: View {
     @State private var showingAddNewSheet = false
     @State private var showingSettingsSheet = false
     @State private var showingTutorialSheet = false
-
-    @ObservedObject var customisations = CustomisationList.loadFromUserDefaults()
-    @ObservedObject var appState = AppState.shared
+    @EnvironmentObject var appState: AppState
 
     var body: some View {
         NavigationView {
             VStack {
                 List {
-//                    Section(header: Label("General Customisations", systemImage: "paintbrush.pointed")) {
                     Section {
                         NavigationLink {
-                            EditCCColorsView(state: customisations.otherCustomisations, saveOCToUserDefaults: customisations.saveToUserDefaults)
+                            EditCCColorsView()
                         } label: {
                             Label("Edit CC Colours", systemImage: "paintbrush")
                         }
 
                         if appState.enableExperimentalFeatures {
                             NavigationLink {
-                                AllIconsEditorView(customisations: customisations)
+                                AllIconsEditorView()
                             } label: {
                                 Label("CC Icons Editor", systemImage: "paintbrush")
                             }
@@ -52,25 +49,7 @@ struct MainModuleView: View {
                         }
                         if activeExploit == .KFD {
                             Button {
-                                DispatchQueue.global(qos: .userInitiated).async {
-                                    let success = applyChanges(customisations: customisations)
-                                    DispatchQueue.main.async {
-                                        if success.0 {
-                                            Haptic.shared.notify(.success)
-                                            xpc_crash("com.apple.Preferences")
-                                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                                                if let url = URL(string: "App-prefs:ControlCenter") {
-                                                    UIApplication.shared.open(url)
-                                                }
-                                            }
-                                            sendNotification(title: "Don't see your modules?", subtitle: "Come back and hit apply again.\n\nYou can hide these tips in app settings.", secondsLater: 2, isRepeating: false)
-                                        } else {
-                                            Haptic.shared.notify(.error)
-                                            let failed = success.1.filter { $0.value == false }.map { $0.key }.joined(separator: "\n")
-                                            UIApplication.shared.alert(title: "⛔️ Error", body: "An error occured while applying your modules and customisiations. The write operations that failed are: \n\n\(failed)\n\nPlease adjust any relevant settings and try again, and if it still does not work then try rebooting your device. If it still does not work, please report this to the developer and provide any logs/details of what you tried.")
-                                        }
-                                    }
-                                }
+                                applyAndOpenReorder()
                             } label: {
                                 Label("Apply and open reorder menu", systemImage:"link")
                             }
@@ -86,13 +65,10 @@ struct MainModuleView: View {
                         }
                     }
 
-  
-//                        Section(header: Label("Module Customisations", systemImage: "app.dashed")) {
-                        Section(header:                HStack {
+                    Section(header: HStack {
                             Text(activeExploit == .MDC ? "Modules" : "Customisations")
                             Spacer()
                             Button {
-//                                UIApplication.shared.alert(title: "Info - Modules", body:"Unlike older versions of the app, this list of modules here mirrors what you would see in iOS Settings.\n\nThis means that you can now reorder your modules in-app, by either holding and moving the items around in the modules list, or by going into re-order mode by pressing Edit at the top left of the screen.\n\nThis makes everything easier and faster, and you don't have to mess with the order in settings anymore.")
                                 showingTutorialSheet.toggle()
                             } label: {
                                 Image(systemName: "info.circle")
@@ -100,25 +76,21 @@ struct MainModuleView: View {
                                 TutorialSheetView()
                             }
                         
-                        }, footer:  Text(customisations.list.isEmpty ? "You don't have any \(activeExploit == .MDC ? "control center modules" : "customisations") yet - press the \(Image(systemName: "plus.app")) button below to add one!\n\nNot sure what to do? Check out the tutorial (press the \(Image(systemName: "info.circle")) button)": "")
+                        }, footer: Text(appState.currentSet.list.isEmpty ? "You don't have any \(activeExploit == .MDC ? "control center modules" : "customisations") yet - press the \(Image(systemName: "plus.app")) button below to add one!\n\nNot sure what to do? Check out the tutorial (press the \(Image(systemName: "info.circle")) button)": "")
                             ){
-                            ForEach(customisations.list, id: \.module.bundleID) { item in
+                            ForEach(appState.currentSet.list, id: \.module.bundleID) { item in
 
-                                CustomisationCard(customisation: item, appState: appState, deleteCustomisation: customisations.deleteCustomisation, saveToUserDefaults: customisations.saveToUserDefaults) {
-                                    customisations.objectWillChange.send()
-                                }.moveDisabled(activeExploit == .KFD)
+                                CustomisationCard(customisation: item, deleteCustomisation: {item in
+                                    appState.currentSet.list.removeAll(where: {$0.module.fileName == item.module.fileName})
+                                }).moveDisabled(activeExploit == .KFD)
                             }.onMove { from, to in
                                 if activeExploit == .MDC {
-                                    customisations.list.move(fromOffsets: from, toOffset: to)
-                                    customisations.saveToUserDefaults()
-                                    customisations.objectWillChange.send()
+                                    appState.currentSet.list.move(fromOffsets: from, toOffset: to)
                                 }
                             }
                             .onDelete { idxset in
                                 withAnimation {
-                                    customisations.list.remove(atOffsets: idxset)
-                                    customisations.saveToUserDefaults()
-                                    customisations.objectWillChange.send()
+                                    appState.currentSet.list.remove(atOffsets: idxset)
                                 }
                             }
                         }.headerProminence(.increased)
@@ -126,10 +98,8 @@ struct MainModuleView: View {
                 }
                 .listRowInsets(.none)
             }
-//            }
             .frame(maxWidth: .infinity)
             .navigationTitle("ControlConfig")
-//            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarLeading) {
                     Button(action: {
@@ -137,22 +107,20 @@ struct MainModuleView: View {
                     }, label: {
                         Label("Settings", systemImage: "gear")
                     }).sheet(isPresented: $showingSettingsSheet, onDismiss: {
-                        appState.saveToUserDefaults()
+                        appState.saveToDisk()
                     }) {
-                        SettingsView(appState: appState, customisations: customisations)
+                        SettingsView()
                     }
                 }
-                ToolbarItemGroup {
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
                     if activeExploit == .MDC {
                         EditButton()
                     }
                 }
-            }
-            .toolbar {
                 ToolbarItemGroup(placement: .bottomBar) {
                     Button(action: {
                         DispatchQueue.global(qos: .userInitiated).async {
-                            let success = applyChanges(customisations: customisations)
+                            let success = applyChanges()
                             DispatchQueue.main.async {
                                 if success.0 {
                                     let smsg = success.1.count == 0 ? "Everything's already applied (nothing changed on disk)." : "\(success.1.count) operation\(success.1.count < 2 ? "": "s") were completed successfully."
@@ -161,7 +129,6 @@ struct MainModuleView: View {
                                 } else {
                                     Haptic.shared.notify(.error)
                                     let failed = success.1.filter { $0.value == false }.map { $0.key }.joined(separator: "\n")
-//                                    UIApplication.shared.alert(title: "⛔️ Error", body: "An error occurred when writing to the file(s). First please try rebooting your device, and if it does not work, please report this to the developer and provide any logs/details of what you tried.")
                                     UIApplication.shared.alert(title: "⛔️ Error", body: "An error occured while applying your modules and customisiations. The write operations that failed are: \n\n\(failed)\n\nPlease adjust any relevant settings and try again, and if it still does not work then try rebooting your device. If it still does not work, please report this to the developer and provide any logs/details of what you tried.")
                                 }
                             }
@@ -186,15 +153,35 @@ struct MainModuleView: View {
                                 }
                             }.disabled(kfd != 0)
                             Button("Hybrid Apply") {
-                                for _ in 1...3 {
-                                    applyChanges(customisations: customisations)
+                                var applies:[Bool] = []
+                                var lastApply: [String:Bool] = [:]
+                                for _ in 1...appState.hybrid_apply_pre_tries {
+                                    let res = applyChanges()
+                                    applies.append(res.0)
+                                    lastApply = res.1
                                 }
-                                MDC.respring(method: .frontboard)
-                                for _ in 1...7 {
-                                    applyChanges(customisations: customisations)
+                                if applies.contains(where: {$0 == false}) {
+                                    Haptic.shared.notify(.error)
+                                    let failed = lastApply.filter { $0.value == false }.map { $0.key }.joined(separator: "\n")
+                                    UIApplication.shared.alert(title: "⛔️ Error", body: "An error occured while applying your modules and customisiations. The write operations that failed are: \n\n\(failed)\n\nPlease adjust any relevant settings and try again, and if it still does not work then try rebooting your device. If it still does not work, please report this to the developer and provide any logs/details of what you tried.")
+                                } else {
+                                    MDC.respring(method: .frontboard)
+                                    for _ in 1...appState.hybrid_apply_after_tries {
+                                        applies.append(applyChanges().0)
+                                    }
+                                    if applies.allSatisfy({$0 == true}) {
+                                        sendNotification(identifier: "success-hybrid",title: "✅ Applied \(appState.hybrid_apply_pre_tries)+\(appState.hybrid_apply_after_tries) times - Didn't work?", subtitle: "Come back and hit apply again.", secondsLater: 1, isRepeating: false)
+                                        if appState.hybrid_apply_kclose_when_done {
+                                            do_kclose()
+                                            exit(1)
+                                        }
+                                    } else {
+                                        let failed = lastApply.filter { $0.value == false }.map { $0.key }.joined(separator: "\n")
+                                        UserDefaults.standard.set("An error occured while applying your modules and customisiations using Hybrid Apply (failed after respring). The write operations that failed are: \n\n\(failed)\n\nPlease adjust any relevant settings and try again, and if it still does not work then try rebooting your device. If it still does not work, please report this to the developer and provide any logs/details of what you tried.", forKey: "last-hybrid-failure-log")
+                                        sendNotification(identifier: "failed-hybrid",title: "⛔️ Failed to apply!", subtitle: "Tap for more info...", secondsLater: 1, isRepeating: false)
+                                    }
+
                                 }
-                                do_kclose()
-                                exit(1)
                             }
                         }
                     }
@@ -209,7 +196,7 @@ struct MainModuleView: View {
                         Label("Add Module", systemImage: "plus.app")
 
                     }).sheet(isPresented: $showingAddNewSheet) {
-                        AddModuleView(customisations: customisations)
+                        AddModuleView()
                     }
 
                     Spacer()

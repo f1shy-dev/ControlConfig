@@ -68,6 +68,9 @@ struct DebugActionsMenu: View {
                     let dict = readCCModuleConf()
                     print(dict)
                 }
+                Button("xpc crash settings") {
+                    xpc_crash("com.apple.Preferences")
+                }
 //                Button("secret") {
 //                    print(CCSModuleSettingsProvider.sharedProvider())
 //                }

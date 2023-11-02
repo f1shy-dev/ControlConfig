@@ -14,7 +14,7 @@ let emptyApp = SBApp(bundleIdentifier: "", name: "", bundleURL: URL(string: "/")
 struct AppListView: View {
     @ObservedObject var customisation: Customisation
     @State private var searchText = ""
-    @ObservedObject var appState: AppState = .shared
+    @EnvironmentObject var appState: AppState
     @Environment(\.dismiss) var dismiss
 
     @State var allApps = [emptyApp]

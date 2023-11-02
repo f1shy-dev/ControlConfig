@@ -10,15 +10,16 @@ import LocalConsole
 import SwiftUI
 import WelcomeSheet
 
-let appVersion = ((Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown") + " (" + (Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown") + ")")
 let consoleManager = LCManager.shared
-let isiOSSixteen = ProcessInfo().operatingSystemVersion.majorVersion == 16
 var kfd: UInt64 = 0
+var _debug_savedAppState_counter = 0
 enum ActiveExploit { case MDC, KFD }
 var activeExploit: ActiveExploit = .MDC
 enum PatchStage {
     case Detecting, NotSupported, UnableToEscape(err: String), TooOld, Escaped, LoadingBackups
 }
+let appVersion = ((Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown") + " (" + (Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown") + ")")
+let isiOSSixteen = ProcessInfo().operatingSystemVersion.majorVersion == 16
 
 struct BareLoading: View {
     var icon: String
@@ -55,12 +56,13 @@ struct BareLoading: View {
 
 @main
 struct ControlConfigApp: App {
+    @UIApplicationDelegateAdaptor private var appDelegate: NotificationHandlerAppDelegate
     @State var showingBackupSheet = false
     @State var showingFirstLaunchSheet = false
     @State var backupStage: BackupStage = .YetToRespring
     @State var localPatchState: PatchStage = .Detecting
     @State private var rotationAngle: Double = 0
-    @ObservedObject var appState = AppState.shared
+    @StateObject var appState = AppState.shared
     
     var body: some Scene {
         WindowGroup {
@@ -149,8 +151,16 @@ struct ControlConfigApp: App {
                     localPatchState = .LoadingBackups
                     activeExploit = .KFD
                     #else
+                    
+                    
+                    if #available(iOS 16.0, *), appState.force_kfd_exploit {
+                        print("⚠️ iOS \(UIDevice.current.systemVersion) - KFD FORCED")
+                        activeExploit = .KFD
+                        localPatchState = .LoadingBackups
+                        return
+                    }
 //                    should be 16.3
-                    if #available(iOS 16.0, *) {
+                    if #available(iOS 16.3, *) {
                         if #available(iOS 16.5.1, *) {
                             if UIDevice.current.systemVersion == "16.6", splitted.count >= 4, splitted[4] == "20G5026e" {
                                 print("✅ iOS 16.6b1 - KFD supported")
@@ -245,6 +255,9 @@ struct ControlConfigApp: App {
                             }
                         }
                     }
+                }.environmentObject(appState)
+                .onReceive(appState.objectWillChange) { val in
+                    appState.saveToDisk()
                 }
         }
     }

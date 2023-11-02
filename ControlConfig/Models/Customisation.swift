@@ -83,39 +83,6 @@ class Customisation: Codable, ObservableObject, Hashable {
 
     @Published var customAction: CustomAction = .Respring
 
-    var description: String {
-        var str: [String] = []
-        if mode == .AppLauncher {
-            if let app = launchAppBundleID {
-                str.append("Opens \"\(app)\"")
-            }
-        }
-
-        if mode == .WorkflowLauncher {
-            if let shortcut = launchShortcutName {
-                str.append("Runs shortcut \"\(shortcut)\"")
-            }
-        }
-
-        if mode == .CustomAction {
-            str.append("Runs custom action")
-        }
-
-        if customSizeMode == .BothWays || customSizeMode == .Individual {
-            str.append("Custom size")
-        }
-
-        if !(customName?.isEmpty ?? true) || (disableOnHoldWidget ?? false) {
-            str.append("Extras")
-        }
-
-        if str.count > 0 {
-            return str.joined(separator: ", ")
-        }
-
-        return "Doesn't do anything..."
-    }
-
     enum CodingKeys: String, CodingKey {
         case isEnabled
         case module
@@ -139,57 +106,5 @@ class Customisation: Codable, ObservableObject, Hashable {
 
         case hideAirplayText
         case hideFocusUIText
-    }
-
-    required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.module = try container.decode(Module.self, forKey: .module)
-        self.mode = try container.decode(CustomisationMode.self, forKey: .mode)
-        self.isEnabled = try container.decode(Bool.self, forKey: .isEnabled)
-
-        self.launchAppBundleID = try? container.decode(String.self, forKey: .launchAppBundleID)
-        self.launchAppURLScheme = try? container.decode(String.self, forKey: .launchAppURLScheme)
-        self.disableOnHoldWidget = try? container.decode(Bool.self, forKey: .disableOnHoldWidget)
-        self.launchShortcutName = try? container.decode(String.self, forKey: .launchShortcutName)
-        self.customWidthPortrait = try? container.decode(Int.self, forKey: .customWidthPortrait)
-        self.customHeightPortrait = try? container.decode(Int.self, forKey: .customHeightPortrait)
-        self.customWidthLandscape = try? container.decode(Int.self, forKey: .customWidthLandscape)
-        self.customHeightLandscape = try? container.decode(Int.self, forKey: .customHeightLandscape)
-        self.customWidthBothWays = try? container.decode(Int.self, forKey: .customWidthBothWays)
-        self.customHeightBothWays = try? container.decode(Int.self, forKey: .customHeightBothWays)
-        self.customName = try? container.decode(String.self, forKey: .customName)
-        self.hideAirplayText = try container.decode(Bool.self, forKey: .hideAirplayText)
-        self.hideFocusUIText = try container.decode(Bool.self, forKey: .hideFocusUIText)
-        // not optionals -
-        self.customAction = try container.decode(CustomAction.self, forKey: .customAction)
-        self.customSizeMode = try container.decode(SizeMode.self, forKey: .customSizeMode)
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(module, forKey: .module)
-        try container.encode(mode, forKey: .mode)
-        try container.encode(isEnabled, forKey: .isEnabled)
-
-        try? container.encode(launchAppBundleID, forKey: .launchAppBundleID)
-        try? container.encode(launchAppURLScheme, forKey: .launchAppURLScheme)
-        try? container.encode(disableOnHoldWidget, forKey: .disableOnHoldWidget)
-        try? container.encode(launchShortcutName, forKey: .launchShortcutName)
-
-        try? container.encode(customWidthPortrait, forKey: .customWidthPortrait)
-        try? container.encode(customHeightPortrait, forKey: .customHeightPortrait)
-
-        try? container.encode(customWidthLandscape, forKey: .customWidthLandscape)
-        try? container.encode(customHeightLandscape, forKey: .customHeightLandscape)
-
-        try? container.encode(customWidthBothWays, forKey: .customWidthBothWays)
-        try? container.encode(customHeightBothWays, forKey: .customHeightBothWays)
-
-        try? container.encode(customSizeMode, forKey: .customSizeMode)
-        try? container.encode(customName, forKey: .customName)
-        try? container.encode(customAction, forKey: .customAction)
-
-        try? container.encode(hideFocusUIText, forKey: .hideFocusUIText)
-        try? container.encode(hideAirplayText, forKey: .hideAirplayText)
     }
 }

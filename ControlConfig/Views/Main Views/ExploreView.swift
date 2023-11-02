@@ -15,13 +15,17 @@ struct ExploreView: View {
         List {
             Section(header: HStack{
                 Text(selected == 0 ? "Icons": "Layouts").animation(.easeInOut)
-                Spacer()
-                FancyIconToggle(selected: $selected, leftIcon: "photo.stack", rightIcon: "grid")
+                if activeExploit == .MDC {
+                    Spacer()
+                    FancyIconToggle(selected: $selected, leftIcon: "photo.stack", rightIcon: "grid")
+                }
             }) {
                 if selected == 0 {
                     Text("Icons explore page >w<")
                 } else {
-                    Text("Layouts explore page :3")
+                    if activeExploit == .MDC {
+                        Text("Layouts explore page :3")
+                    }
                 }
             }
         }.headerProminence(.increased).navigationTitle("Explore")

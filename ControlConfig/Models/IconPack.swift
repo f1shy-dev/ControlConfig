@@ -8,30 +8,103 @@
 import Foundation
 import ZIPFoundation
 
-struct Icon: Codable {
-    let source: String
+struct CARIcon: Codable {
+    let sourceFile: String
     let sizeX: Int
     let sizeY: Int
     let padding: Int
 }
 
+struct CAMLIcon: Codable {
+    let indexCAMLFile: String
+    let mainXMLFile: String
+}
+
+enum Icon: Codable {
+    case caml(CAMLIcon)
+    case car(CARIcon)
+    
+    enum CodingKeys: CodingKey {
+        case caml
+        case car
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        switch self {
+        case .caml(let camlIcon):
+            try container.encode(camlIcon, forKey: .caml)
+        case .car(let carIcon):
+            try container.encode(carIcon, forKey: .car)
+        }
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        if let camlIcon = try container.decodeIfPresent(CAMLIcon.self, forKey: .caml) {
+            self = .caml(camlIcon)
+        } else if let carIcon = try container.decodeIfPresent(CARIcon.self, forKey: .car) {
+            self = .car(carIcon)
+        } else {
+            throw DecodingError.dataCorruptedError(forKey: .caml, in: container, debugDescription: "Invalid Icon type")
+        }
+    }
+}
+
 struct ModuleIconSet: Codable {
-    let main: Int
+    let moduleFileName: String
+    let mainVariant: Int
     let icons: [Icon]
 }
 
 struct IconPack: Codable {
+    var id: String { bundleID }
+    let bundleID: String
     let name: String
-    let type: String
-    let udid: String
+    let publisher: String?
     let moduleIcons: [String: ModuleIconSet]
 }
 
-struct ExtractedIconPack {
-    let pack: IconPack
-    let assetsFolder: String
-    var assetsFolderURL: URL {
-        URL(fileURLWithPath: self.assetsFolder)
+struct ExtractedIconPack: Codable {
+    let isImported: Bool
+    var pack: IconPack
+    let extractedFolder: URL
+    var assetsFolder: URL {
+        self.extractedFolder.appendingPathComponent("assets")
+    }
+    
+    init(isImported: Bool, extractedFolder: URL) throws {
+        self.isImported = isImported
+        self.extractedFolder = extractedFolder
+        
+        let packJSONURL = extractedFolder.appendingPathComponent("pack.json")
+        let packJSONData = try Data(contentsOf: packJSONURL)
+        self.pack = try JSONDecoder().decode(IconPack.self, from: packJSONData)
+    }
+    
+    enum CodingKeys: CodingKey {
+        case isImported
+        case extractedFolder
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.isImported = try container.decode(Bool.self, forKey: .isImported)
+        self.extractedFolder = try container.decode(URL.self, forKey: .extractedFolder)
+        
+        let packJSONURL = extractedFolder.appendingPathComponent("pack.json")
+        let packJSONData = try Data(contentsOf: packJSONURL)
+        self.pack = try JSONDecoder().decode(IconPack.self, from: packJSONData)
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(self.isImported, forKey: .isImported)
+        try container.encode(self.extractedFolder, forKey: .extractedFolder)
+        
+        let packJSONData = try JSONEncoder().encode(self.pack)
+        let packJSONURL = extractedFolder.appendingPathComponent("pack.json")
+        try packJSONData.write(to: packJSONURL)
     }
 }
 
@@ -49,22 +122,22 @@ class IconPackZipHelper {
         let packJSONURL = tempDirectoryURL.appendingPathComponent("pack.json")
         try packJSONData.write(to: packJSONURL)
         
-        // Copy the assets folder to the temporary directory
-        let assetsDestinationURL = tempDirectoryURL.appendingPathComponent("assets")
-        try FileManager.default.copyItem(at: iconPack.assetsFolderURL, to: assetsDestinationURL)
-        
-        // Create a zip archive
+        try FileManager.default.copyItem(at: iconPack.assetsFolder, to: tempDirectoryURL.appendingPathComponent("assets"))
         try FileManager.default.zipItem(at: tempDirectoryURL, to: zipURL)
-        
-        // Cleanup: remove the temporary directory
         try FileManager.default.removeItem(at: tempDirectoryURL)
     }
     
     // Import IconPack from a zip file
-    static func importIconPack(from zipURL: URL, assetsFolder: String) throws -> ExtractedIconPack {
+    static func importIconPack(from zipURL: URL) throws -> ExtractedIconPack {
         // Create a temporary directory to extract the files
         let tempDirectoryURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         try FileManager.default.createDirectory(at: tempDirectoryURL, withIntermediateDirectories: true, attributes: nil)
+        
+        let iconPackFolderURL =  URL.documents.appendingPathComponent("icon_packs")
+        if !FileManager.default.fileExists(atPath: iconPackFolderURL.path) {
+            try FileManager.default.createDirectory(at: iconPackFolderURL, withIntermediateDirectories: true)
+        }
+    
         
         // Extract the zip archive
         try FileManager.default.unzipItem(at: zipURL, to: tempDirectoryURL)
@@ -73,15 +146,15 @@ class IconPackZipHelper {
         let packJSONURL = tempDirectoryURL.appendingPathComponent("pack.json")
         let packJSONData = try Data(contentsOf: packJSONURL)
         let iconPack = try JSONDecoder().decode(IconPack.self, from: packJSONData)
-        let extractedPack = ExtractedIconPack(pack: iconPack, assetsFolder: assetsFolder)
+        let extractionFolder = iconPackFolderURL.appendingPathComponent(iconPack.bundleID)
+        if FileManager.default.fileExists(atPath: extractionFolder.path) {
+            throw "Icon pack already exists..."
+        }
+        let extractedPack = try ExtractedIconPack(isImported: true, extractedFolder: extractionFolder)
+
+        try FileManager.default.copyItem(at: tempDirectoryURL, to: extractedPack.extractedFolder)
         
-        // Copy the assets folder to the specified destination
-        let assetsSourceURL = tempDirectoryURL.appendingPathComponent("assets")
-        try FileManager.default.copyItem(at: assetsSourceURL, to: extractedPack.assetsFolderURL)
-        
-        // Cleanup: remove the temporary directory
         try FileManager.default.removeItem(at: tempDirectoryURL)
-        
         return extractedPack
     }
 }

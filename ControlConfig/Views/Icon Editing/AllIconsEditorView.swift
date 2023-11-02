@@ -17,7 +17,7 @@ struct AssetCatalog {
 }
 
 struct AllIconsEditorView: View {
-    @ObservedObject var customisations: CustomisationList
+    @EnvironmentObject var appState: AppState
     @State var catalogs: [AssetCatalog] = []
 
     var body: some View {
@@ -89,7 +89,7 @@ struct AllIconsEditorView: View {
                     ForEach(car.collection.filter { ren in
                         ren.type == .image && ren.name == "AppIcon"
                     }, id: \.self) { rendition in
-                        NavigationLink(destination: RenditionEditorView(customisations: customisations, catalog: car.catalog, rendition: rendition, filePath: car.filePath)) {
+                        NavigationLink(destination: RenditionEditorView(catalog: car.catalog, rendition: rendition, filePath: car.filePath)) {
                             HStack {
                                 VStack(alignment: .leading) {
                                     Text(car.module.description)
@@ -219,7 +219,7 @@ struct AllIconsEditorView: View {
                         ForEach(car.collection.filter { ren in
                             ren.type == .image && ren.name != "SettingsIcon" && ren.name != "AppIcon"
                         }, id: \.self) { rendition in
-                            NavigationLink(destination: RenditionEditorView(customisations: customisations, catalog: car.catalog, rendition: rendition, filePath: car.filePath)) {
+                            NavigationLink(destination: RenditionEditorView(catalog: car.catalog, rendition: rendition, filePath: car.filePath)) {
                                 HStack {
                                     VStack(alignment: .leading) {
                                         Text(rendition.name)
